@@ -37,7 +37,9 @@ null                        {   printf("%s\n",yytext);  }
 \=                          {   printf("%s\n",yytext);  }
 
 
-"/*"([^*]*|[*]*)"*/"        ;  /* https://stackoverflow.com/questions/25395251/detecting-and-skipping-line-comments-with-flex */
+[/][*][^*]*[*]+([^*/][^*]*[*]+)*[/]       { /* DO NOTHING */ } /*https://stackoverflow.com/questions/25395251/detecting-and-skipping-line-comments-with-flex */
+[/][*]                                    { exit(1); }
+
 
 [A-Za-z]+[A-Za-z0-9]*       {
                                 //TODO fix asdasds_sdsf case
