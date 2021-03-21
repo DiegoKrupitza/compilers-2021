@@ -2,7 +2,7 @@
 /******* defintion *******/
 /************************/
             int num_lines = 1;
-
+%s comment
 %%
 if                          {   printf("%s\n",yytext);  }
 int                         {   printf("%s\n",yytext);  }
@@ -36,7 +36,8 @@ null                        {   printf("%s\n",yytext);  }
 \<                          {   printf("%s\n",yytext);  }
 \=                          {   printf("%s\n",yytext);  }
 
-\/\*[^*]*[^\/]\*\/          ;
+
+"/*"([^*]*|[*]*)"*/"        ;  /* https://stackoverflow.com/questions/25395251/detecting-and-skipping-line-comments-with-flex */
 
 [A-Za-z]+[A-Za-z0-9]*       {
                                 //TODO fix asdasds_sdsf case
