@@ -69,7 +69,7 @@ Class                   :   CLASS ID
                         ;
 
 MemeberLoop             :   Member ';' MemeberLoop
-                        | 
+                        |   
                         ;
 
 ImplementsLoop          :   ImplementsLoop ID
@@ -100,18 +100,16 @@ Stats                   :   Stat ';' Stats
                         ;
 
 Stat                    :   RETURN Expr
-                        |   IF Expr THEN Stats OptionalElse END
+                        |   IF Expr THEN Stats END
+                        |   IF Expr THEN Stats ELSE Stats END
                         |   WHILE Expr DO Stats END
                         |   VAR ID ':' Type ASSIGNOP Expr
                         |   ID ASSIGNOP Expr
                         |   Expr
                         ;
 
-OptionalElse            :   ELSE Stats
-                        |   
-                        ;
-
-Expr                    :   OptionaNot Term
+Expr                    :   Term
+                        |   OptionaNot Term
                         |   Term OptionalPlusTerm
                         |   Term OptionalMalTerm
                         |   Term OptionalAndTerm
@@ -120,19 +118,19 @@ Expr                    :   OptionaNot Term
                         ;
 
 OptionaNot              :   NOT OptionaNot
-                        |   
+                        |   NOT
                         ;
 
 OptionalPlusTerm        :   '+' Term OptionalPlusTerm
-                        |
+                        |   '+' Term
                         ;
 
 OptionalMalTerm         :   '*' Term OptionalMalTerm
-                        |
+                        |   '*' Term
                         ;
 
 OptionalAndTerm         :   AND Term OptionalAndTerm
-                        |  
+                        |   AND Term
                         ;
 
 SpecialOperation        :   '-'
@@ -145,15 +143,16 @@ Term                    :   '(' Expr ')'
                         |   THIS
                         |   NULL_VAL ID
                         |   ID
-                        |   Term '.' ID '(' OptionalParamsExpr ')'
+                        |   Term '.' ID '(' ')'
+                        |   Term '.' ID '(' ParamsExpr ')'
                         ;
 
-OptionalParamsExpr      :   ExprLoopOptParamsExpr Expr
-                        |   
+ParamsExpr              :   Expr
+                        |   ParamsExprLoop Expr
                         ;
 
-ExprLoopOptParamsExpr   :   Expr ',' ExprLoopOptParamsExpr
-                        |   Expr ','
+ParamsExprLoop          :   Expr ','
+                        |   ParamsExprLoop Expr ',' 
                         ;
 
 %%

@@ -4,28 +4,11 @@ Rules useless in parser due to conflicts
 
    25 ParsLoop: %empty
 
-   63 ExprLoopOptParamsExpr: Expr ','
-
 
 State 19 conflicts: 2 shift/reduce
 State 35 conflicts: 2 shift/reduce
 State 43 conflicts: 1 shift/reduce
-State 52 conflicts: 5 shift/reduce
 State 54 conflicts: 1 shift/reduce
-State 59 conflicts: 5 shift/reduce
-State 60 conflicts: 5 shift/reduce
-State 61 conflicts: 5 shift/reduce
-State 66 conflicts: 5 shift/reduce
-State 71 conflicts: 5 reduce/reduce
-State 73 conflicts: 5 shift/reduce
-State 84 conflicts: 5 shift/reduce
-State 99 conflicts: 5 shift/reduce
-State 100 conflicts: 5 shift/reduce
-State 112 conflicts: 5 shift/reduce
-State 115 conflicts: 5 shift/reduce
-State 116 conflicts: 5 shift/reduce
-State 121 conflicts: 5 shift/reduce
-State 125 conflicts: 7 shift/reduce, 5 reduce/reduce
 
 
 Grammar
@@ -77,16 +60,15 @@ Grammar
    28      | %empty
 
    29 Stat: RETURN Expr
-   30     | IF Expr THEN Stats OptionalElse END
-   31     | WHILE Expr DO Stats END
-   32     | VAR ID ':' Type ASSIGNOP Expr
-   33     | ID ASSIGNOP Expr
-   34     | Expr
+   30     | IF Expr THEN Stats END
+   31     | IF Expr THEN Stats ELSE Stats END
+   32     | WHILE Expr DO Stats END
+   33     | VAR ID ':' Type ASSIGNOP Expr
+   34     | ID ASSIGNOP Expr
+   35     | Expr
 
-   35 OptionalElse: ELSE Stats
-   36             | %empty
-
-   37 Expr: OptionaNot Term
+   36 Expr: Term
+   37     | OptionaNot Term
    38     | Term OptionalPlusTerm
    39     | Term OptionalMalTerm
    40     | Term OptionalAndTerm
@@ -94,16 +76,16 @@ Grammar
    42     | NEW ID
 
    43 OptionaNot: NOT OptionaNot
-   44           | %empty
+   44           | NOT
 
    45 OptionalPlusTerm: '+' Term OptionalPlusTerm
-   46                 | %empty
+   46                 | '+' Term
 
    47 OptionalMalTerm: '*' Term OptionalMalTerm
-   48                | %empty
+   48                | '*' Term
 
    49 OptionalAndTerm: AND Term OptionalAndTerm
-   50                | %empty
+   50                | AND Term
 
    51 SpecialOperation: '-'
    52                 | '<'
@@ -114,51 +96,52 @@ Grammar
    56     | THIS
    57     | NULL_VAL ID
    58     | ID
-   59     | Term '.' ID '(' OptionalParamsExpr ')'
+   59     | Term '.' ID '(' ')'
+   60     | Term '.' ID '(' ParamsExpr ')'
 
-   60 OptionalParamsExpr: ExprLoopOptParamsExpr Expr
-   61                   | %empty
+   61 ParamsExpr: Expr
+   62           | ParamsExprLoop Expr
 
-   62 ExprLoopOptParamsExpr: Expr ',' ExprLoopOptParamsExpr
-   63                      | Expr ','
+   63 ParamsExprLoop: Expr ','
+   64               | ParamsExprLoop Expr ','
 
 
 Terminals, with rules where they appear
 
 $end (0) 0
-'(' (40) 8 19 54 59
-')' (41) 8 19 54 59
-'*' (42) 47
-'+' (43) 45
-',' (44) 11 24 62 63
+'(' (40) 8 19 54 59 60
+')' (41) 8 19 54 59 60
+'*' (42) 47 48
+'+' (43) 45 46
+',' (44) 11 24 63 64
 '-' (45) 51
-'.' (46) 59
-':' (58) 5 8 13 18 26 32
+'.' (46) 59 60
+':' (58) 5 8 13 18 26 33
 ';' (59) 3 4 14 27
 '<' (60) 52
 '=' (61) 53
 error (256)
-ID (258) 5 8 13 16 18 19 21 26 32 33 42 57 58 59
+ID (258) 5 8 13 16 18 19 21 26 33 34 42 57 58 59 60
 NUM (259) 55
 INTERFACE (260) 5
 CLASS (261) 13
 IMPLEMENTS (262) 13
-VAR (263) 18 32
+VAR (263) 18 33
 METHOD (264) 19
 INT (265) 20
 RETURN (266) 29
-IF (267) 30
-THEN (268) 30
-ELSE (269) 35
-WHILE (270) 31
-DO (271) 31
-NOT (272) 43
-AND (273) 49
+IF (267) 30 31
+THEN (268) 30 31
+ELSE (269) 31
+WHILE (270) 32
+DO (271) 32
+NOT (272) 43 44
+AND (273) 49 50
 NEW (274) 42
 THIS (275) 56
 NULL_VAL (276) 57
-END (277) 5 13 19 30 31
-ASSIGNOP (278) 32 33
+END (277) 5 13 19 30 31 32
+ASSIGNOP (278) 33 34
 
 
 Nonterminals, with rules where they appear
@@ -188,7 +171,7 @@ ImplementsLoop (45)
 Member (46)
     on left: 18 19, on right: 14
 Type (47)
-    on left: 20 21, on right: 8 9 11 18 26 32
+    on left: 20 21, on right: 8 9 11 18 26 33
 Pars (48)
     on left: 22 23, on right: 19
 ParsLoop (49)
@@ -196,30 +179,29 @@ ParsLoop (49)
 Par (50)
     on left: 26, on right: 22 24
 Stats (51)
-    on left: 27 28, on right: 19 27 30 31 35
+    on left: 27 28, on right: 19 27 30 31 32
 Stat (52)
-    on left: 29 30 31 32 33 34, on right: 27
-OptionalElse (53)
-    on left: 35 36, on right: 30
-Expr (54)
-    on left: 37 38 39 40 41 42, on right: 29 30 31 32 33 34 54 60 62
-    63
-OptionaNot (55)
+    on left: 29 30 31 32 33 34 35, on right: 27
+Expr (53)
+    on left: 36 37 38 39 40 41 42, on right: 29 30 31 32 33 34 35 54
+    61 62 63 64
+OptionaNot (54)
     on left: 43 44, on right: 37 43
-OptionalPlusTerm (56)
+OptionalPlusTerm (55)
     on left: 45 46, on right: 38 45
-OptionalMalTerm (57)
+OptionalMalTerm (56)
     on left: 47 48, on right: 39 47
-OptionalAndTerm (58)
+OptionalAndTerm (57)
     on left: 49 50, on right: 40 49
-SpecialOperation (59)
+SpecialOperation (58)
     on left: 51 52 53, on right: 41
-Term (60)
-    on left: 54 55 56 57 58 59, on right: 37 38 39 40 41 45 47 49 59
-OptionalParamsExpr (61)
-    on left: 60 61, on right: 59
-ExprLoopOptParamsExpr (62)
-    on left: 62 63, on right: 60 62
+Term (59)
+    on left: 54 55 56 57 58 59 60, on right: 36 37 38 39 40 41 45 46
+    47 48 49 50 59 60
+ParamsExpr (60)
+    on left: 61 62, on right: 60
+ParamsExprLoop (61)
+    on left: 63 64, on right: 62 64
 
 
 State 0
@@ -681,11 +663,6 @@ State 52
     NULL_VAL  shift, and go to state 65
     '('       shift, and go to state 66
 
-    ID        [reduce using rule 44 (OptionaNot)]
-    NUM       [reduce using rule 44 (OptionaNot)]
-    THIS      [reduce using rule 44 (OptionaNot)]
-    NULL_VAL  [reduce using rule 44 (OptionaNot)]
-    '('       [reduce using rule 44 (OptionaNot)]
     $default  reduce using rule 28 (Stats)
 
     Stats       go to state 67
@@ -723,7 +700,7 @@ State 55
 
 State 56
 
-   33 Stat: ID . ASSIGNOP Expr
+   34 Stat: ID . ASSIGNOP Expr
    58 Term: ID .
 
     ASSIGNOP  shift, and go to state 73
@@ -740,7 +717,7 @@ State 57
 
 State 58
 
-   32 Stat: VAR . ID ':' Type ASSIGNOP Expr
+   33 Stat: VAR . ID ':' Type ASSIGNOP Expr
 
     ID  shift, and go to state 74
 
@@ -757,12 +734,6 @@ State 59
     NULL_VAL  shift, and go to state 65
     '('       shift, and go to state 66
 
-    ID        [reduce using rule 44 (OptionaNot)]
-    NUM       [reduce using rule 44 (OptionaNot)]
-    THIS      [reduce using rule 44 (OptionaNot)]
-    NULL_VAL  [reduce using rule 44 (OptionaNot)]
-    '('       [reduce using rule 44 (OptionaNot)]
-
     Expr        go to state 76
     OptionaNot  go to state 70
     Term        go to state 71
@@ -770,7 +741,8 @@ State 59
 
 State 60
 
-   30 Stat: IF . Expr THEN Stats OptionalElse END
+   30 Stat: IF . Expr THEN Stats END
+   31     | IF . Expr THEN Stats ELSE Stats END
 
     ID        shift, and go to state 75
     NUM       shift, and go to state 57
@@ -779,12 +751,6 @@ State 60
     THIS      shift, and go to state 64
     NULL_VAL  shift, and go to state 65
     '('       shift, and go to state 66
-
-    ID        [reduce using rule 44 (OptionaNot)]
-    NUM       [reduce using rule 44 (OptionaNot)]
-    THIS      [reduce using rule 44 (OptionaNot)]
-    NULL_VAL  [reduce using rule 44 (OptionaNot)]
-    '('       [reduce using rule 44 (OptionaNot)]
 
     Expr        go to state 77
     OptionaNot  go to state 70
@@ -793,7 +759,7 @@ State 60
 
 State 61
 
-   31 Stat: WHILE . Expr DO Stats END
+   32 Stat: WHILE . Expr DO Stats END
 
     ID        shift, and go to state 75
     NUM       shift, and go to state 57
@@ -802,12 +768,6 @@ State 61
     THIS      shift, and go to state 64
     NULL_VAL  shift, and go to state 65
     '('       shift, and go to state 66
-
-    ID        [reduce using rule 44 (OptionaNot)]
-    NUM       [reduce using rule 44 (OptionaNot)]
-    THIS      [reduce using rule 44 (OptionaNot)]
-    NULL_VAL  [reduce using rule 44 (OptionaNot)]
-    '('       [reduce using rule 44 (OptionaNot)]
 
     Expr        go to state 78
     OptionaNot  go to state 70
@@ -817,6 +777,7 @@ State 61
 State 62
 
    43 OptionaNot: NOT . OptionaNot
+   44           | NOT .
 
     NOT  shift, and go to state 62
 
@@ -858,12 +819,6 @@ State 66
     NULL_VAL  shift, and go to state 65
     '('       shift, and go to state 66
 
-    ID        [reduce using rule 44 (OptionaNot)]
-    NUM       [reduce using rule 44 (OptionaNot)]
-    THIS      [reduce using rule 44 (OptionaNot)]
-    NULL_VAL  [reduce using rule 44 (OptionaNot)]
-    '('       [reduce using rule 44 (OptionaNot)]
-
     Expr        go to state 82
     OptionaNot  go to state 70
     Term        go to state 71
@@ -885,9 +840,9 @@ State 68
 
 State 69
 
-   34 Stat: Expr .
+   35 Stat: Expr .
 
-    $default  reduce using rule 34 (Stat)
+    $default  reduce using rule 35 (Stat)
 
 
 State 70
@@ -905,11 +860,13 @@ State 70
 
 State 71
 
-   38 Expr: Term . OptionalPlusTerm
+   36 Expr: Term .
+   38     | Term . OptionalPlusTerm
    39     | Term . OptionalMalTerm
    40     | Term . OptionalAndTerm
    41     | Term . SpecialOperation Term
-   59 Term: Term . '.' ID '(' OptionalParamsExpr ')'
+   59 Term: Term . '.' ID '(' ')'
+   60     | Term . '.' ID '(' ParamsExpr ')'
 
     AND  shift, and go to state 86
     '.'  shift, and go to state 87
@@ -919,22 +876,7 @@ State 71
     '<'  shift, and go to state 91
     '='  shift, and go to state 92
 
-    THEN      reduce using rule 46 (OptionalPlusTerm)
-    THEN      [reduce using rule 48 (OptionalMalTerm)]
-    THEN      [reduce using rule 50 (OptionalAndTerm)]
-    DO        reduce using rule 46 (OptionalPlusTerm)
-    DO        [reduce using rule 48 (OptionalMalTerm)]
-    DO        [reduce using rule 50 (OptionalAndTerm)]
-    ')'       reduce using rule 46 (OptionalPlusTerm)
-    ')'       [reduce using rule 48 (OptionalMalTerm)]
-    ')'       [reduce using rule 50 (OptionalAndTerm)]
-    ','       reduce using rule 46 (OptionalPlusTerm)
-    ','       [reduce using rule 48 (OptionalMalTerm)]
-    ','       [reduce using rule 50 (OptionalAndTerm)]
-    ';'       reduce using rule 46 (OptionalPlusTerm)
-    ';'       [reduce using rule 48 (OptionalMalTerm)]
-    ';'       [reduce using rule 50 (OptionalAndTerm)]
-    $default  reduce using rule 46 (OptionalPlusTerm)
+    $default  reduce using rule 36 (Expr)
 
     OptionalPlusTerm  go to state 93
     OptionalMalTerm   go to state 94
@@ -951,7 +893,7 @@ State 72
 
 State 73
 
-   33 Stat: ID ASSIGNOP . Expr
+   34 Stat: ID ASSIGNOP . Expr
 
     ID        shift, and go to state 75
     NUM       shift, and go to state 57
@@ -961,12 +903,6 @@ State 73
     NULL_VAL  shift, and go to state 65
     '('       shift, and go to state 66
 
-    ID        [reduce using rule 44 (OptionaNot)]
-    NUM       [reduce using rule 44 (OptionaNot)]
-    THIS      [reduce using rule 44 (OptionaNot)]
-    NULL_VAL  [reduce using rule 44 (OptionaNot)]
-    '('       [reduce using rule 44 (OptionaNot)]
-
     Expr        go to state 97
     OptionaNot  go to state 70
     Term        go to state 71
@@ -974,7 +910,7 @@ State 73
 
 State 74
 
-   32 Stat: VAR ID . ':' Type ASSIGNOP Expr
+   33 Stat: VAR ID . ':' Type ASSIGNOP Expr
 
     ':'  shift, and go to state 98
 
@@ -995,14 +931,15 @@ State 76
 
 State 77
 
-   30 Stat: IF Expr . THEN Stats OptionalElse END
+   30 Stat: IF Expr . THEN Stats END
+   31     | IF Expr . THEN Stats ELSE Stats END
 
     THEN  shift, and go to state 99
 
 
 State 78
 
-   31 Stat: WHILE Expr . DO Stats END
+   32 Stat: WHILE Expr . DO Stats END
 
     DO  shift, and go to state 100
 
@@ -1058,11 +995,6 @@ State 84
     NULL_VAL  shift, and go to state 65
     '('       shift, and go to state 66
 
-    ID        [reduce using rule 44 (OptionaNot)]
-    NUM       [reduce using rule 44 (OptionaNot)]
-    THIS      [reduce using rule 44 (OptionaNot)]
-    NULL_VAL  [reduce using rule 44 (OptionaNot)]
-    '('       [reduce using rule 44 (OptionaNot)]
     $default  reduce using rule 28 (Stats)
 
     Stats       go to state 102
@@ -1075,7 +1007,8 @@ State 84
 State 85
 
    37 Expr: OptionaNot Term .
-   59 Term: Term . '.' ID '(' OptionalParamsExpr ')'
+   59 Term: Term . '.' ID '(' ')'
+   60     | Term . '.' ID '(' ParamsExpr ')'
 
     '.'  shift, and go to state 87
 
@@ -1085,6 +1018,7 @@ State 85
 State 86
 
    49 OptionalAndTerm: AND . Term OptionalAndTerm
+   50                | AND . Term
 
     ID        shift, and go to state 75
     NUM       shift, and go to state 57
@@ -1097,7 +1031,8 @@ State 86
 
 State 87
 
-   59 Term: Term '.' . ID '(' OptionalParamsExpr ')'
+   59 Term: Term '.' . ID '(' ')'
+   60     | Term '.' . ID '(' ParamsExpr ')'
 
     ID  shift, and go to state 104
 
@@ -1105,6 +1040,7 @@ State 87
 State 88
 
    45 OptionalPlusTerm: '+' . Term OptionalPlusTerm
+   46                 | '+' . Term
 
     ID        shift, and go to state 75
     NUM       shift, and go to state 57
@@ -1118,6 +1054,7 @@ State 88
 State 89
 
    47 OptionalMalTerm: '*' . Term OptionalMalTerm
+   48                | '*' . Term
 
     ID        shift, and go to state 75
     NUM       shift, and go to state 57
@@ -1185,14 +1122,14 @@ State 96
 
 State 97
 
-   33 Stat: ID ASSIGNOP Expr .
+   34 Stat: ID ASSIGNOP Expr .
 
-    $default  reduce using rule 33 (Stat)
+    $default  reduce using rule 34 (Stat)
 
 
 State 98
 
-   32 Stat: VAR ID ':' . Type ASSIGNOP Expr
+   33 Stat: VAR ID ':' . Type ASSIGNOP Expr
 
     ID   shift, and go to state 24
     INT  shift, and go to state 25
@@ -1202,7 +1139,8 @@ State 98
 
 State 99
 
-   30 Stat: IF Expr THEN . Stats OptionalElse END
+   30 Stat: IF Expr THEN . Stats END
+   31     | IF Expr THEN . Stats ELSE Stats END
 
     ID        shift, and go to state 56
     NUM       shift, and go to state 57
@@ -1216,11 +1154,6 @@ State 99
     NULL_VAL  shift, and go to state 65
     '('       shift, and go to state 66
 
-    ID        [reduce using rule 44 (OptionaNot)]
-    NUM       [reduce using rule 44 (OptionaNot)]
-    THIS      [reduce using rule 44 (OptionaNot)]
-    NULL_VAL  [reduce using rule 44 (OptionaNot)]
-    '('       [reduce using rule 44 (OptionaNot)]
     $default  reduce using rule 28 (Stats)
 
     Stats       go to state 109
@@ -1232,7 +1165,7 @@ State 99
 
 State 100
 
-   31 Stat: WHILE Expr DO . Stats END
+   32 Stat: WHILE Expr DO . Stats END
 
     ID        shift, and go to state 56
     NUM       shift, and go to state 57
@@ -1246,11 +1179,6 @@ State 100
     NULL_VAL  shift, and go to state 65
     '('       shift, and go to state 66
 
-    ID        [reduce using rule 44 (OptionaNot)]
-    NUM       [reduce using rule 44 (OptionaNot)]
-    THIS      [reduce using rule 44 (OptionaNot)]
-    NULL_VAL  [reduce using rule 44 (OptionaNot)]
-    '('       [reduce using rule 44 (OptionaNot)]
     $default  reduce using rule 28 (Stats)
 
     Stats       go to state 110
@@ -1277,7 +1205,9 @@ State 102
 State 103
 
    49 OptionalAndTerm: AND Term . OptionalAndTerm
-   59 Term: Term . '.' ID '(' OptionalParamsExpr ')'
+   50                | AND Term .
+   59 Term: Term . '.' ID '(' ')'
+   60     | Term . '.' ID '(' ParamsExpr ')'
 
     AND  shift, and go to state 86
     '.'  shift, and go to state 87
@@ -1289,7 +1219,8 @@ State 103
 
 State 104
 
-   59 Term: Term '.' ID . '(' OptionalParamsExpr ')'
+   59 Term: Term '.' ID . '(' ')'
+   60     | Term '.' ID . '(' ParamsExpr ')'
 
     '('  shift, and go to state 112
 
@@ -1297,7 +1228,9 @@ State 104
 State 105
 
    45 OptionalPlusTerm: '+' Term . OptionalPlusTerm
-   59 Term: Term . '.' ID '(' OptionalParamsExpr ')'
+   46                 | '+' Term .
+   59 Term: Term . '.' ID '(' ')'
+   60     | Term . '.' ID '(' ParamsExpr ')'
 
     '.'  shift, and go to state 87
     '+'  shift, and go to state 88
@@ -1310,7 +1243,9 @@ State 105
 State 106
 
    47 OptionalMalTerm: '*' Term . OptionalMalTerm
-   59 Term: Term . '.' ID '(' OptionalParamsExpr ')'
+   48                | '*' Term .
+   59 Term: Term . '.' ID '(' ')'
+   60     | Term . '.' ID '(' ParamsExpr ')'
 
     '.'  shift, and go to state 87
     '*'  shift, and go to state 89
@@ -1323,7 +1258,8 @@ State 106
 State 107
 
    41 Expr: Term SpecialOperation Term .
-   59 Term: Term . '.' ID '(' OptionalParamsExpr ')'
+   59 Term: Term . '.' ID '(' ')'
+   60     | Term . '.' ID '(' ParamsExpr ')'
 
     '.'  shift, and go to state 87
 
@@ -1332,25 +1268,23 @@ State 107
 
 State 108
 
-   32 Stat: VAR ID ':' Type . ASSIGNOP Expr
+   33 Stat: VAR ID ':' Type . ASSIGNOP Expr
 
     ASSIGNOP  shift, and go to state 115
 
 
 State 109
 
-   30 Stat: IF Expr THEN Stats . OptionalElse END
+   30 Stat: IF Expr THEN Stats . END
+   31     | IF Expr THEN Stats . ELSE Stats END
 
     ELSE  shift, and go to state 116
-
-    $default  reduce using rule 36 (OptionalElse)
-
-    OptionalElse  go to state 117
+    END   shift, and go to state 117
 
 
 State 110
 
-   31 Stat: WHILE Expr DO Stats . END
+   32 Stat: WHILE Expr DO Stats . END
 
     END  shift, and go to state 118
 
@@ -1364,7 +1298,8 @@ State 111
 
 State 112
 
-   59 Term: Term '.' ID '(' . OptionalParamsExpr ')'
+   59 Term: Term '.' ID '(' . ')'
+   60     | Term '.' ID '(' . ParamsExpr ')'
 
     ID        shift, and go to state 75
     NUM       shift, and go to state 57
@@ -1373,19 +1308,13 @@ State 112
     THIS      shift, and go to state 64
     NULL_VAL  shift, and go to state 65
     '('       shift, and go to state 66
+    ')'       shift, and go to state 119
 
-    ID        [reduce using rule 44 (OptionaNot)]
-    NUM       [reduce using rule 44 (OptionaNot)]
-    THIS      [reduce using rule 44 (OptionaNot)]
-    NULL_VAL  [reduce using rule 44 (OptionaNot)]
-    '('       [reduce using rule 44 (OptionaNot)]
-    $default  reduce using rule 61 (OptionalParamsExpr)
-
-    Expr                   go to state 119
-    OptionaNot             go to state 70
-    Term                   go to state 71
-    OptionalParamsExpr     go to state 120
-    ExprLoopOptParamsExpr  go to state 121
+    Expr            go to state 120
+    OptionaNot      go to state 70
+    Term            go to state 71
+    ParamsExpr      go to state 121
+    ParamsExprLoop  go to state 122
 
 
 State 113
@@ -1404,7 +1333,7 @@ State 114
 
 State 115
 
-   32 Stat: VAR ID ':' Type ASSIGNOP . Expr
+   33 Stat: VAR ID ':' Type ASSIGNOP . Expr
 
     ID        shift, and go to state 75
     NUM       shift, and go to state 57
@@ -1414,20 +1343,14 @@ State 115
     NULL_VAL  shift, and go to state 65
     '('       shift, and go to state 66
 
-    ID        [reduce using rule 44 (OptionaNot)]
-    NUM       [reduce using rule 44 (OptionaNot)]
-    THIS      [reduce using rule 44 (OptionaNot)]
-    NULL_VAL  [reduce using rule 44 (OptionaNot)]
-    '('       [reduce using rule 44 (OptionaNot)]
-
-    Expr        go to state 122
+    Expr        go to state 123
     OptionaNot  go to state 70
     Term        go to state 71
 
 
 State 116
 
-   35 OptionalElse: ELSE . Stats
+   31 Stat: IF Expr THEN Stats ELSE . Stats END
 
     ID        shift, and go to state 56
     NUM       shift, and go to state 57
@@ -1441,14 +1364,9 @@ State 116
     NULL_VAL  shift, and go to state 65
     '('       shift, and go to state 66
 
-    ID        [reduce using rule 44 (OptionaNot)]
-    NUM       [reduce using rule 44 (OptionaNot)]
-    THIS      [reduce using rule 44 (OptionaNot)]
-    NULL_VAL  [reduce using rule 44 (OptionaNot)]
-    '('       [reduce using rule 44 (OptionaNot)]
     $default  reduce using rule 28 (Stats)
 
-    Stats       go to state 123
+    Stats       go to state 124
     Stat        go to state 68
     Expr        go to state 69
     OptionaNot  go to state 70
@@ -1457,36 +1375,46 @@ State 116
 
 State 117
 
-   30 Stat: IF Expr THEN Stats OptionalElse . END
+   30 Stat: IF Expr THEN Stats END .
 
-    END  shift, and go to state 124
+    $default  reduce using rule 30 (Stat)
 
 
 State 118
 
-   31 Stat: WHILE Expr DO Stats END .
+   32 Stat: WHILE Expr DO Stats END .
 
-    $default  reduce using rule 31 (Stat)
+    $default  reduce using rule 32 (Stat)
 
 
 State 119
 
-   62 ExprLoopOptParamsExpr: Expr . ',' ExprLoopOptParamsExpr
-   63                      | Expr . ','
+   59 Term: Term '.' ID '(' ')' .
 
-    ','  shift, and go to state 125
+    $default  reduce using rule 59 (Term)
 
 
 State 120
 
-   59 Term: Term '.' ID '(' OptionalParamsExpr . ')'
+   61 ParamsExpr: Expr .
+   63 ParamsExprLoop: Expr . ','
 
-    ')'  shift, and go to state 126
+    ','  shift, and go to state 125
+
+    $default  reduce using rule 61 (ParamsExpr)
 
 
 State 121
 
-   60 OptionalParamsExpr: ExprLoopOptParamsExpr . Expr
+   60 Term: Term '.' ID '(' ParamsExpr . ')'
+
+    ')'  shift, and go to state 126
+
+
+State 122
+
+   62 ParamsExpr: ParamsExprLoop . Expr
+   64 ParamsExprLoop: ParamsExprLoop . Expr ','
 
     ID        shift, and go to state 75
     NUM       shift, and go to state 57
@@ -1495,87 +1423,59 @@ State 121
     THIS      shift, and go to state 64
     NULL_VAL  shift, and go to state 65
     '('       shift, and go to state 66
-
-    ID        [reduce using rule 44 (OptionaNot)]
-    NUM       [reduce using rule 44 (OptionaNot)]
-    THIS      [reduce using rule 44 (OptionaNot)]
-    NULL_VAL  [reduce using rule 44 (OptionaNot)]
-    '('       [reduce using rule 44 (OptionaNot)]
 
     Expr        go to state 127
     OptionaNot  go to state 70
     Term        go to state 71
 
 
-State 122
-
-   32 Stat: VAR ID ':' Type ASSIGNOP Expr .
-
-    $default  reduce using rule 32 (Stat)
-
-
 State 123
 
-   35 OptionalElse: ELSE Stats .
+   33 Stat: VAR ID ':' Type ASSIGNOP Expr .
 
-    $default  reduce using rule 35 (OptionalElse)
+    $default  reduce using rule 33 (Stat)
 
 
 State 124
 
-   30 Stat: IF Expr THEN Stats OptionalElse END .
+   31 Stat: IF Expr THEN Stats ELSE Stats . END
 
-    $default  reduce using rule 30 (Stat)
+    END  shift, and go to state 128
 
 
 State 125
 
-   62 ExprLoopOptParamsExpr: Expr ',' . ExprLoopOptParamsExpr
-   63                      | Expr ',' .
+   63 ParamsExprLoop: Expr ',' .
 
-    ID        shift, and go to state 75
-    NUM       shift, and go to state 57
-    NOT       shift, and go to state 62
-    NEW       shift, and go to state 63
-    THIS      shift, and go to state 64
-    NULL_VAL  shift, and go to state 65
-    '('       shift, and go to state 66
-
-    ID        [reduce using rule 44 (OptionaNot)]
-    ID        [reduce using rule 63 (ExprLoopOptParamsExpr)]
-    NUM       [reduce using rule 44 (OptionaNot)]
-    NUM       [reduce using rule 63 (ExprLoopOptParamsExpr)]
-    NOT       [reduce using rule 63 (ExprLoopOptParamsExpr)]
-    NEW       [reduce using rule 63 (ExprLoopOptParamsExpr)]
-    THIS      [reduce using rule 44 (OptionaNot)]
-    THIS      [reduce using rule 63 (ExprLoopOptParamsExpr)]
-    NULL_VAL  [reduce using rule 44 (OptionaNot)]
-    NULL_VAL  [reduce using rule 63 (ExprLoopOptParamsExpr)]
-    '('       [reduce using rule 44 (OptionaNot)]
-    '('       [reduce using rule 63 (ExprLoopOptParamsExpr)]
-
-    Expr                   go to state 119
-    OptionaNot             go to state 70
-    Term                   go to state 71
-    ExprLoopOptParamsExpr  go to state 128
+    $default  reduce using rule 63 (ParamsExprLoop)
 
 
 State 126
 
-   59 Term: Term '.' ID '(' OptionalParamsExpr ')' .
+   60 Term: Term '.' ID '(' ParamsExpr ')' .
 
-    $default  reduce using rule 59 (Term)
+    $default  reduce using rule 60 (Term)
 
 
 State 127
 
-   60 OptionalParamsExpr: ExprLoopOptParamsExpr Expr .
+   62 ParamsExpr: ParamsExprLoop Expr .
+   64 ParamsExprLoop: ParamsExprLoop Expr . ','
 
-    $default  reduce using rule 60 (OptionalParamsExpr)
+    ','  shift, and go to state 129
+
+    $default  reduce using rule 62 (ParamsExpr)
 
 
 State 128
 
-   62 ExprLoopOptParamsExpr: Expr ',' ExprLoopOptParamsExpr .
+   31 Stat: IF Expr THEN Stats ELSE Stats END .
 
-    $default  reduce using rule 62 (ExprLoopOptParamsExpr)
+    $default  reduce using rule 31 (Stat)
+
+
+State 129
+
+   64 ParamsExprLoop: ParamsExprLoop Expr ',' .
+
+    $default  reduce using rule 64 (ParamsExprLoop)
