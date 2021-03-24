@@ -52,14 +52,15 @@ AbstraktMethodsLoop     :   AbstraktMethod AbstraktMethodsLoop
                         ;
 
 AbstraktMethod          :   ID '(' ParamTypesLoop ')' ':' Type
+                        |   ID '(' ')' ':' Type
                         ;
 
 ParamTypesLoop          :   TypesLoop Type   
-                        |
+                        |   Type
                         ;
 
-TypesLoop               :   Type ',' TypesLoop
-                        |
+TypesLoop               :   TypesLoop Type ','
+                        |   Type ',' 
                         ;
 
 Class                   :   CLASS ID
@@ -77,6 +78,7 @@ ImplementsLoop          :   ImplementsLoop ID
                         ;
 
 Member                  :   VAR ID ':' Type
+                        |   METHOD ID '(' ')' Stats END
                         |   METHOD ID '(' Pars ')' Stats END
                         ;
 
@@ -85,11 +87,11 @@ Type                    :   INT
                         ;
 
 Pars                    :   ParsLoop Par
-                        |
+                        |   Par
                         ;
 
-ParsLoop                :   Par ',' ParsLoop
-                        |
+ParsLoop                :   ParsLoop Par ','
+                        |   Par ','
                         ;
 
 Par                     :   ID ':' Type
