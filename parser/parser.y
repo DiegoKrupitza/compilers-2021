@@ -67,14 +67,24 @@ Class                   :   CLASS ID
                             IMPLEMENTS ImplementsLoop ':'
                                 MemeberLoop
                             END
+                        |   CLASS ID
+                            IMPLEMENTS ':'
+                                MemeberLoop
+                            END
+                        |   CLASS ID
+                            IMPLEMENTS ImplementsLoop ':'
+                            END
+                        |   CLASS ID
+                            IMPLEMENTS ':'
+                            END
                         ;
 
-MemeberLoop             :   Member ';' MemeberLoop
-                        |   
+MemeberLoop             :   MemeberLoop Member ';' 
+                        |   Member ';'
                         ;
 
 ImplementsLoop          :   ImplementsLoop ID
-                        | 
+                        |   ID
                         ;
 
 Member                  :   VAR ID ':' Type

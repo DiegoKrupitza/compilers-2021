@@ -2027,6 +2027,6 @@ void yyfree (void * ptr )
 void yyerror (char const *message)
 {
 
-    fprintf(stderr, "Error parsing line: %d\n%s\n", yylineno, message);
+    fprintf(stderr, "Error parsing line: %d char: %s\n%s\n", yylineno,yytext, message);
     exit(2);
 }
