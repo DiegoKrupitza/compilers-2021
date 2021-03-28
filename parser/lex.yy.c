@@ -912,62 +912,62 @@ YY_RULE_SETUP
 case 19:
 YY_RULE_SETUP
 #line 33 "scanner.l"
-{   printf("%s\n",yytext);  }
+{   return yytext[0];  }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
 #line 34 "scanner.l"
-{   printf("%s\n",yytext);  }
+{   return yytext[0];  }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
 #line 35 "scanner.l"
-{   printf("%s\n",yytext);  }
+{   return yytext[0];  }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
 #line 36 "scanner.l"
-{   printf("%s\n",yytext);  }
+{   return yytext[0];  }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
 #line 37 "scanner.l"
-{   printf("%s\n",yytext);  }
+{   return yytext[0];  }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
 #line 38 "scanner.l"
-{   return ASSIGNOP;  }
+{   return yytext[0];  }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
 #line 39 "scanner.l"
-{   printf("%s\n",yytext);  }
+{   return ASSIGNOP;  }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
 #line 40 "scanner.l"
-{   printf("%s\n",yytext);  }
+{   return yytext[0];  }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
 #line 41 "scanner.l"
-{   printf("%s\n",yytext);  }
+{   return yytext[0];  }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
 #line 42 "scanner.l"
-{   printf("%s\n",yytext);  }
+{   return yytext[0];  }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
 #line 43 "scanner.l"
-{   printf("%s\n",yytext);  }
+{   return yytext[0];  }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
 #line 44 "scanner.l"
-{   printf("%s\n",yytext);  }
+{   return yytext[0];  }
 	YY_BREAK
 case 31:
 /* rule 31 can match eol */

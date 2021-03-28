@@ -11,37 +11,37 @@
 /************************/
             int num_lines = 1;
 %%
-if                          {   return IF;  }
-int                         {   return INT;  }
-interface                   {   return INTERFACE;  }
-end                         {   return END;  }
-class                       {   return CLASS;  }
-implements                  {   return IMPLEMENTS;  }
-var                         {   return VAR;  }
-method                      {   return METHOD;  }
-return                      {   return RETURN;  }
-then                        {   return THEN;  }
-else                        {   return ELSE;  }
-while                       {   return WHILE;  }
-do                          {   return DO;  }
-not                         {   return NOT;  }
-and                         {   return AND;  }
-new                         {   return NEW;  }
-this                        {   return THIS;  }
-null                        {   return NULL_VAL;  }
+"if"                          {   return IF;  }
+"int"                         {   return INT;  }
+"interface"                   {   return INTERFACE;  }
+"end"                         {   return END;  }
+"class"                       {   return CLASS;  }
+"implements"                  {   return IMPLEMENTS;  }
+"var"                         {   return VAR;  }
+"method"                      {   return METHOD;  }
+"return"                      {   return RETURN;  }
+"then"                        {   return THEN;  }
+"else"                        {   return ELSE;  }
+"while"                       {   return WHILE;  }
+"do"                          {   return DO;  }
+"not"                         {   return NOT;  }
+"and"                         {   return AND;  }
+"new"                         {   return NEW;  }
+"this"                        {   return THIS;  }
+"null"                        {   return NULL_VAL;  }
 
-\;                          {   printf("%s\n",yytext);  }
-\:                          {   printf("%s\n",yytext);  }
-\(                          {   printf("%s\n",yytext);  }
-\)                          {   printf("%s\n",yytext);  }
-\.                          {   printf("%s\n",yytext);  }
-\,                          {   return ASSIGNOP;  }
-\:\=                        {   printf("%s\n",yytext);  }
-\+                          {   printf("%s\n",yytext);  }
-\*                          {   printf("%s\n",yytext);  }
-\-                          {   printf("%s\n",yytext);  }
-\<                          {   printf("%s\n",yytext);  }
-\=                          {   printf("%s\n",yytext);  }
+\;                          {   return yytext[0];  }
+\:                          {   return yytext[0];  }
+\(                          {   return yytext[0];  }
+\)                          {   return yytext[0];  }
+\.                          {   return yytext[0];  }
+\,                          {   return yytext[0];  }
+\:\=                        {   return ASSIGNOP;  }
+\+                          {   return yytext[0];  }
+\*                          {   return yytext[0];  }
+\-                          {   return yytext[0];  }
+\<                          {   return yytext[0];  }
+\=                          {   return yytext[0];  }
 
 
 [/][*][^*]*[*]+([^*/][^*]*[*]+)*[/]       { /* DO NOTHING */ } /*https://stackoverflow.com/questions/25395251/detecting-and-skipping-line-comments-with-flex */
