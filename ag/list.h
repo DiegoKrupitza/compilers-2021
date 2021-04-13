@@ -2,8 +2,8 @@
 
 #define VARIABLE 0
 #define PARAMETER 1
-#define INTERFACE 2
-#define CLASS 3
+#define INTERFACE_DING 2
+#define CLASS_DING 3
 #define ABSTRACT_METH 4
 #define CLASS_VAR 5
 
@@ -33,5 +33,5 @@ node_t *duplicate(node_t *);
 bool isEmpty(node_t *);
 
 void isVisible(node_t *, char *, short, int);
-void isVisibleAnyType(node_t *, char *, short, int);
+void isVisibleForZuweisungOrZugriff(node_t *list, char *name, int lineNr);
 void printItems(node_t *);

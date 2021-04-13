@@ -1,0 +1,1659 @@
+Grammar
+
+    0 $accept: yyyAugNonterm $end
+
+    1 $@1: %empty
+
+    2 yyyAugNonterm: $@1 Start
+
+    3 Start: Programm
+
+    4 Programm: ProgrammStart Programm
+    5         | %empty
+
+    6 ProgrammStart: Interface ';'
+    7              | Class ';'
+
+    8 Interface: INTERFACE ID ':' AbstraktMethodsLoop END
+
+    9 AbstraktMethodsLoop: AbstraktMethod AbstraktMethodsLoop
+   10                    | %empty
+
+   11 AbstraktMethod: ID '(' ParamTypesLoop ')' ':' Type
+   12               | ID '(' ')' ':' Type
+
+   13 ParamTypesLoop: TypesLoop Type
+   14               | Type
+
+   15 TypesLoop: TypesLoop Type ','
+   16          | Type ','
+
+   17 Class: CLASS ID IMPLEMENTS ImplementsLoop ':' MemeberLoop END
+   18      | CLASS ID IMPLEMENTS ':' MemeberLoop END
+   19      | CLASS ID IMPLEMENTS ImplementsLoop ':' END
+   20      | CLASS ID IMPLEMENTS ':' END
+
+   21 MemeberLoop: MemeberLoop Member ';'
+   22            | Member ';'
+
+   23 ImplementsLoop: ImplementsLoop ID
+   24               | ID
+
+   25 Member: VAR ID ':' Type
+   26       | METHOD ID '(' ')' StatsMethode END
+   27       | METHOD ID '(' Pars ')' StatsMethode END
+
+   28 Type: INT
+   29     | ID
+
+   30 Pars: ParsLoop Par
+   31     | Par
+
+   32 ParsLoop: ParsLoop Par ','
+   33         | Par ','
+
+   34 Par: ID ':' Type
+
+   35 StatsMethode: Stats
+
+   36 Stats: Stat ';' Stats
+   37      | %empty
+
+   38 Stat: RETURN Expr
+   39     | IF Expr THEN Stats END
+   40     | IF Expr THEN Stats ELSE Stats END
+   41     | WHILE Expr DO Stats END
+   42     | VAR ID ':' Type ASSIGNOP Expr
+   43     | ID ASSIGNOP Expr
+   44     | Expr
+
+   45 Expr: Term
+   46     | OptionaNot Term
+   47     | Term OptionalPlusTerm
+   48     | Term OptionalMalTerm
+   49     | Term OptionalAndTerm
+   50     | Term SpecialOperation Term
+   51     | NEW ID
+
+   52 OptionaNot: NOT OptionaNot
+   53           | NOT
+
+   54 OptionalPlusTerm: '+' Term OptionalPlusTerm
+   55                 | '+' Term
+
+   56 OptionalMalTerm: '*' Term OptionalMalTerm
+   57                | '*' Term
+
+   58 OptionalAndTerm: AND Term OptionalAndTerm
+   59                | AND Term
+
+   60 SpecialOperation: '-'
+   61                 | '<'
+   62                 | '='
+
+   63 Term: '(' Expr ')'
+   64     | NUM
+   65     | THIS
+   66     | NULL_VAL ID
+   67     | ID
+   68     | Term '.' ID '(' ')'
+   69     | Term '.' ID '(' ParamsExpr ')'
+
+   70 ParamsExpr: Expr
+   71           | ParamsExprLoop Expr
+
+   72 ParamsExprLoop: Expr ','
+   73               | ParamsExprLoop Expr ','
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'(' (40) 11 12 26 27 63 68 69
+')' (41) 11 12 26 27 63 68 69
+'*' (42) 56 57
+'+' (43) 54 55
+',' (44) 15 16 32 33 72 73
+'-' (45) 60
+'.' (46) 68 69
+':' (58) 8 11 12 17 18 19 20 25 34 42
+';' (59) 6 7 21 22 36
+'<' (60) 61
+'=' (61) 62
+error (256)
+INTERFACE (258) 8
+CLASS (259) 17 18 19 20
+IMPLEMENTS (260) 17 18 19 20
+VAR (261) 25 42
+METHOD (262) 26 27
+INT (263) 28
+RETURN (264) 38
+IF (265) 39 40
+THEN (266) 39 40
+ELSE (267) 40
+WHILE (268) 41
+DO (269) 41
+NOT (270) 52 53
+AND (271) 58 59
+NEW (272) 51
+THIS (273) 65
+NULL_VAL (274) 66
+END (275) 8 17 18 19 20 26 27 39 40 41
+NUM (276) 64
+ID (277) 8 11 12 17 18 19 20 23 24 25 26 27 29 34 42 43 51 66 67 68
+    69
+ASSIGNOP (278) 42 43
+
+
+Nonterminals, with rules where they appear
+
+$accept (35)
+    on left: 0
+yyyAugNonterm (36)
+    on left: 2, on right: 0
+$@1 (37)
+    on left: 1, on right: 2
+Start (38)
+    on left: 3, on right: 2
+Programm (39)
+    on left: 4 5, on right: 3 4
+ProgrammStart (40)
+    on left: 6 7, on right: 4
+Interface (41)
+    on left: 8, on right: 6
+AbstraktMethodsLoop (42)
+    on left: 9 10, on right: 8 9
+AbstraktMethod (43)
+    on left: 11 12, on right: 9
+ParamTypesLoop (44)
+    on left: 13 14, on right: 11
+TypesLoop (45)
+    on left: 15 16, on right: 13 15
+Class (46)
+    on left: 17 18 19 20, on right: 7
+MemeberLoop (47)
+    on left: 21 22, on right: 17 18 21
+ImplementsLoop (48)
+    on left: 23 24, on right: 17 19 23
+Member (49)
+    on left: 25 26 27, on right: 21 22
+Type (50)
+    on left: 28 29, on right: 11 12 13 14 15 16 25 34 42
+Pars (51)
+    on left: 30 31, on right: 27
+ParsLoop (52)
+    on left: 32 33, on right: 30 32
+Par (53)
+    on left: 34, on right: 30 31 32 33
+StatsMethode (54)
+    on left: 35, on right: 26 27
+Stats (55)
+    on left: 36 37, on right: 35 36 39 40 41
+Stat (56)
+    on left: 38 39 40 41 42 43 44, on right: 36
+Expr (57)
+    on left: 45 46 47 48 49 50 51, on right: 38 39 40 41 42 43 44 63
+    70 71 72 73
+OptionaNot (58)
+    on left: 52 53, on right: 46 52
+OptionalPlusTerm (59)
+    on left: 54 55, on right: 47 54
+OptionalMalTerm (60)
+    on left: 56 57, on right: 48 56
+OptionalAndTerm (61)
+    on left: 58 59, on right: 49 58
+SpecialOperation (62)
+    on left: 60 61 62, on right: 50
+Term (63)
+    on left: 63 64 65 66 67 68 69, on right: 45 46 47 48 49 50 54 55
+    56 57 58 59 68 69
+ParamsExpr (64)
+    on left: 70 71, on right: 69
+ParamsExprLoop (65)
+    on left: 72 73, on right: 71 73
+
+
+State 0
+
+    0 $accept: . yyyAugNonterm $end
+
+    $default  reduce using rule 1 ($@1)
+
+    yyyAugNonterm  go to state 1
+    $@1            go to state 2
+
+
+State 1
+
+    0 $accept: yyyAugNonterm . $end
+
+    $end  shift, and go to state 3
+
+
+State 2
+
+    2 yyyAugNonterm: $@1 . Start
+
+    INTERFACE  shift, and go to state 4
+    CLASS      shift, and go to state 5
+
+    $default  reduce using rule 5 (Programm)
+
+    Start          go to state 6
+    Programm       go to state 7
+    ProgrammStart  go to state 8
+    Interface      go to state 9
+    Class          go to state 10
+
+
+State 3
+
+    0 $accept: yyyAugNonterm $end .
+
+    $default  accept
+
+
+State 4
+
+    8 Interface: INTERFACE . ID ':' AbstraktMethodsLoop END
+
+    ID  shift, and go to state 11
+
+
+State 5
+
+   17 Class: CLASS . ID IMPLEMENTS ImplementsLoop ':' MemeberLoop END
+   18      | CLASS . ID IMPLEMENTS ':' MemeberLoop END
+   19      | CLASS . ID IMPLEMENTS ImplementsLoop ':' END
+   20      | CLASS . ID IMPLEMENTS ':' END
+
+    ID  shift, and go to state 12
+
+
+State 6
+
+    2 yyyAugNonterm: $@1 Start .
+
+    $default  reduce using rule 2 (yyyAugNonterm)
+
+
+State 7
+
+    3 Start: Programm .
+
+    $default  reduce using rule 3 (Start)
+
+
+State 8
+
+    4 Programm: ProgrammStart . Programm
+
+    INTERFACE  shift, and go to state 4
+    CLASS      shift, and go to state 5
+
+    $default  reduce using rule 5 (Programm)
+
+    Programm       go to state 13
+    ProgrammStart  go to state 8
+    Interface      go to state 9
+    Class          go to state 10
+
+
+State 9
+
+    6 ProgrammStart: Interface . ';'
+
+    ';'  shift, and go to state 14
+
+
+State 10
+
+    7 ProgrammStart: Class . ';'
+
+    ';'  shift, and go to state 15
+
+
+State 11
+
+    8 Interface: INTERFACE ID . ':' AbstraktMethodsLoop END
+
+    ':'  shift, and go to state 16
+
+
+State 12
+
+   17 Class: CLASS ID . IMPLEMENTS ImplementsLoop ':' MemeberLoop END
+   18      | CLASS ID . IMPLEMENTS ':' MemeberLoop END
+   19      | CLASS ID . IMPLEMENTS ImplementsLoop ':' END
+   20      | CLASS ID . IMPLEMENTS ':' END
+
+    IMPLEMENTS  shift, and go to state 17
+
+
+State 13
+
+    4 Programm: ProgrammStart Programm .
+
+    $default  reduce using rule 4 (Programm)
+
+
+State 14
+
+    6 ProgrammStart: Interface ';' .
+
+    $default  reduce using rule 6 (ProgrammStart)
+
+
+State 15
+
+    7 ProgrammStart: Class ';' .
+
+    $default  reduce using rule 7 (ProgrammStart)
+
+
+State 16
+
+    8 Interface: INTERFACE ID ':' . AbstraktMethodsLoop END
+
+    ID  shift, and go to state 18
+
+    $default  reduce using rule 10 (AbstraktMethodsLoop)
+
+    AbstraktMethodsLoop  go to state 19
+    AbstraktMethod       go to state 20
+
+
+State 17
+
+   17 Class: CLASS ID IMPLEMENTS . ImplementsLoop ':' MemeberLoop END
+   18      | CLASS ID IMPLEMENTS . ':' MemeberLoop END
+   19      | CLASS ID IMPLEMENTS . ImplementsLoop ':' END
+   20      | CLASS ID IMPLEMENTS . ':' END
+
+    ID   shift, and go to state 21
+    ':'  shift, and go to state 22
+
+    ImplementsLoop  go to state 23
+
+
+State 18
+
+   11 AbstraktMethod: ID . '(' ParamTypesLoop ')' ':' Type
+   12               | ID . '(' ')' ':' Type
+
+    '('  shift, and go to state 24
+
+
+State 19
+
+    8 Interface: INTERFACE ID ':' AbstraktMethodsLoop . END
+
+    END  shift, and go to state 25
+
+
+State 20
+
+    9 AbstraktMethodsLoop: AbstraktMethod . AbstraktMethodsLoop
+
+    ID  shift, and go to state 18
+
+    $default  reduce using rule 10 (AbstraktMethodsLoop)
+
+    AbstraktMethodsLoop  go to state 26
+    AbstraktMethod       go to state 20
+
+
+State 21
+
+   24 ImplementsLoop: ID .
+
+    $default  reduce using rule 24 (ImplementsLoop)
+
+
+State 22
+
+   18 Class: CLASS ID IMPLEMENTS ':' . MemeberLoop END
+   20      | CLASS ID IMPLEMENTS ':' . END
+
+    VAR     shift, and go to state 27
+    METHOD  shift, and go to state 28
+    END     shift, and go to state 29
+
+    MemeberLoop  go to state 30
+    Member       go to state 31
+
+
+State 23
+
+   17 Class: CLASS ID IMPLEMENTS ImplementsLoop . ':' MemeberLoop END
+   19      | CLASS ID IMPLEMENTS ImplementsLoop . ':' END
+   23 ImplementsLoop: ImplementsLoop . ID
+
+    ID   shift, and go to state 32
+    ':'  shift, and go to state 33
+
+
+State 24
+
+   11 AbstraktMethod: ID '(' . ParamTypesLoop ')' ':' Type
+   12               | ID '(' . ')' ':' Type
+
+    INT  shift, and go to state 34
+    ID   shift, and go to state 35
+    ')'  shift, and go to state 36
+
+    ParamTypesLoop  go to state 37
+    TypesLoop       go to state 38
+    Type            go to state 39
+
+
+State 25
+
+    8 Interface: INTERFACE ID ':' AbstraktMethodsLoop END .
+
+    $default  reduce using rule 8 (Interface)
+
+
+State 26
+
+    9 AbstraktMethodsLoop: AbstraktMethod AbstraktMethodsLoop .
+
+    $default  reduce using rule 9 (AbstraktMethodsLoop)
+
+
+State 27
+
+   25 Member: VAR . ID ':' Type
+
+    ID  shift, and go to state 40
+
+
+State 28
+
+   26 Member: METHOD . ID '(' ')' StatsMethode END
+   27       | METHOD . ID '(' Pars ')' StatsMethode END
+
+    ID  shift, and go to state 41
+
+
+State 29
+
+   20 Class: CLASS ID IMPLEMENTS ':' END .
+
+    $default  reduce using rule 20 (Class)
+
+
+State 30
+
+   18 Class: CLASS ID IMPLEMENTS ':' MemeberLoop . END
+   21 MemeberLoop: MemeberLoop . Member ';'
+
+    VAR     shift, and go to state 27
+    METHOD  shift, and go to state 28
+    END     shift, and go to state 42
+
+    Member  go to state 43
+
+
+State 31
+
+   22 MemeberLoop: Member . ';'
+
+    ';'  shift, and go to state 44
+
+
+State 32
+
+   23 ImplementsLoop: ImplementsLoop ID .
+
+    $default  reduce using rule 23 (ImplementsLoop)
+
+
+State 33
+
+   17 Class: CLASS ID IMPLEMENTS ImplementsLoop ':' . MemeberLoop END
+   19      | CLASS ID IMPLEMENTS ImplementsLoop ':' . END
+
+    VAR     shift, and go to state 27
+    METHOD  shift, and go to state 28
+    END     shift, and go to state 45
+
+    MemeberLoop  go to state 46
+    Member       go to state 31
+
+
+State 34
+
+   28 Type: INT .
+
+    $default  reduce using rule 28 (Type)
+
+
+State 35
+
+   29 Type: ID .
+
+    $default  reduce using rule 29 (Type)
+
+
+State 36
+
+   12 AbstraktMethod: ID '(' ')' . ':' Type
+
+    ':'  shift, and go to state 47
+
+
+State 37
+
+   11 AbstraktMethod: ID '(' ParamTypesLoop . ')' ':' Type
+
+    ')'  shift, and go to state 48
+
+
+State 38
+
+   13 ParamTypesLoop: TypesLoop . Type
+   15 TypesLoop: TypesLoop . Type ','
+
+    INT  shift, and go to state 34
+    ID   shift, and go to state 35
+
+    Type  go to state 49
+
+
+State 39
+
+   14 ParamTypesLoop: Type .
+   16 TypesLoop: Type . ','
+
+    ','  shift, and go to state 50
+
+    $default  reduce using rule 14 (ParamTypesLoop)
+
+
+State 40
+
+   25 Member: VAR ID . ':' Type
+
+    ':'  shift, and go to state 51
+
+
+State 41
+
+   26 Member: METHOD ID . '(' ')' StatsMethode END
+   27       | METHOD ID . '(' Pars ')' StatsMethode END
+
+    '('  shift, and go to state 52
+
+
+State 42
+
+   18 Class: CLASS ID IMPLEMENTS ':' MemeberLoop END .
+
+    $default  reduce using rule 18 (Class)
+
+
+State 43
+
+   21 MemeberLoop: MemeberLoop Member . ';'
+
+    ';'  shift, and go to state 53
+
+
+State 44
+
+   22 MemeberLoop: Member ';' .
+
+    $default  reduce using rule 22 (MemeberLoop)
+
+
+State 45
+
+   19 Class: CLASS ID IMPLEMENTS ImplementsLoop ':' END .
+
+    $default  reduce using rule 19 (Class)
+
+
+State 46
+
+   17 Class: CLASS ID IMPLEMENTS ImplementsLoop ':' MemeberLoop . END
+   21 MemeberLoop: MemeberLoop . Member ';'
+
+    VAR     shift, and go to state 27
+    METHOD  shift, and go to state 28
+    END     shift, and go to state 54
+
+    Member  go to state 43
+
+
+State 47
+
+   12 AbstraktMethod: ID '(' ')' ':' . Type
+
+    INT  shift, and go to state 34
+    ID   shift, and go to state 35
+
+    Type  go to state 55
+
+
+State 48
+
+   11 AbstraktMethod: ID '(' ParamTypesLoop ')' . ':' Type
+
+    ':'  shift, and go to state 56
+
+
+State 49
+
+   13 ParamTypesLoop: TypesLoop Type .
+   15 TypesLoop: TypesLoop Type . ','
+
+    ','  shift, and go to state 57
+
+    $default  reduce using rule 13 (ParamTypesLoop)
+
+
+State 50
+
+   16 TypesLoop: Type ',' .
+
+    $default  reduce using rule 16 (TypesLoop)
+
+
+State 51
+
+   25 Member: VAR ID ':' . Type
+
+    INT  shift, and go to state 34
+    ID   shift, and go to state 35
+
+    Type  go to state 58
+
+
+State 52
+
+   26 Member: METHOD ID '(' . ')' StatsMethode END
+   27       | METHOD ID '(' . Pars ')' StatsMethode END
+
+    ID   shift, and go to state 59
+    ')'  shift, and go to state 60
+
+    Pars      go to state 61
+    ParsLoop  go to state 62
+    Par       go to state 63
+
+
+State 53
+
+   21 MemeberLoop: MemeberLoop Member ';' .
+
+    $default  reduce using rule 21 (MemeberLoop)
+
+
+State 54
+
+   17 Class: CLASS ID IMPLEMENTS ImplementsLoop ':' MemeberLoop END .
+
+    $default  reduce using rule 17 (Class)
+
+
+State 55
+
+   12 AbstraktMethod: ID '(' ')' ':' Type .
+
+    $default  reduce using rule 12 (AbstraktMethod)
+
+
+State 56
+
+   11 AbstraktMethod: ID '(' ParamTypesLoop ')' ':' . Type
+
+    INT  shift, and go to state 34
+    ID   shift, and go to state 35
+
+    Type  go to state 64
+
+
+State 57
+
+   15 TypesLoop: TypesLoop Type ',' .
+
+    $default  reduce using rule 15 (TypesLoop)
+
+
+State 58
+
+   25 Member: VAR ID ':' Type .
+
+    $default  reduce using rule 25 (Member)
+
+
+State 59
+
+   34 Par: ID . ':' Type
+
+    ':'  shift, and go to state 65
+
+
+State 60
+
+   26 Member: METHOD ID '(' ')' . StatsMethode END
+
+    VAR       shift, and go to state 66
+    RETURN    shift, and go to state 67
+    IF        shift, and go to state 68
+    WHILE     shift, and go to state 69
+    NOT       shift, and go to state 70
+    NEW       shift, and go to state 71
+    THIS      shift, and go to state 72
+    NULL_VAL  shift, and go to state 73
+    NUM       shift, and go to state 74
+    ID        shift, and go to state 75
+    '('       shift, and go to state 76
+
+    $default  reduce using rule 37 (Stats)
+
+    StatsMethode  go to state 77
+    Stats         go to state 78
+    Stat          go to state 79
+    Expr          go to state 80
+    OptionaNot    go to state 81
+    Term          go to state 82
+
+
+State 61
+
+   27 Member: METHOD ID '(' Pars . ')' StatsMethode END
+
+    ')'  shift, and go to state 83
+
+
+State 62
+
+   30 Pars: ParsLoop . Par
+   32 ParsLoop: ParsLoop . Par ','
+
+    ID  shift, and go to state 59
+
+    Par  go to state 84
+
+
+State 63
+
+   31 Pars: Par .
+   33 ParsLoop: Par . ','
+
+    ','  shift, and go to state 85
+
+    $default  reduce using rule 31 (Pars)
+
+
+State 64
+
+   11 AbstraktMethod: ID '(' ParamTypesLoop ')' ':' Type .
+
+    $default  reduce using rule 11 (AbstraktMethod)
+
+
+State 65
+
+   34 Par: ID ':' . Type
+
+    INT  shift, and go to state 34
+    ID   shift, and go to state 35
+
+    Type  go to state 86
+
+
+State 66
+
+   42 Stat: VAR . ID ':' Type ASSIGNOP Expr
+
+    ID  shift, and go to state 87
+
+
+State 67
+
+   38 Stat: RETURN . Expr
+
+    NOT       shift, and go to state 70
+    NEW       shift, and go to state 71
+    THIS      shift, and go to state 72
+    NULL_VAL  shift, and go to state 73
+    NUM       shift, and go to state 74
+    ID        shift, and go to state 88
+    '('       shift, and go to state 76
+
+    Expr        go to state 89
+    OptionaNot  go to state 81
+    Term        go to state 82
+
+
+State 68
+
+   39 Stat: IF . Expr THEN Stats END
+   40     | IF . Expr THEN Stats ELSE Stats END
+
+    NOT       shift, and go to state 70
+    NEW       shift, and go to state 71
+    THIS      shift, and go to state 72
+    NULL_VAL  shift, and go to state 73
+    NUM       shift, and go to state 74
+    ID        shift, and go to state 88
+    '('       shift, and go to state 76
+
+    Expr        go to state 90
+    OptionaNot  go to state 81
+    Term        go to state 82
+
+
+State 69
+
+   41 Stat: WHILE . Expr DO Stats END
+
+    NOT       shift, and go to state 70
+    NEW       shift, and go to state 71
+    THIS      shift, and go to state 72
+    NULL_VAL  shift, and go to state 73
+    NUM       shift, and go to state 74
+    ID        shift, and go to state 88
+    '('       shift, and go to state 76
+
+    Expr        go to state 91
+    OptionaNot  go to state 81
+    Term        go to state 82
+
+
+State 70
+
+   52 OptionaNot: NOT . OptionaNot
+   53           | NOT .
+
+    NOT  shift, and go to state 70
+
+    $default  reduce using rule 53 (OptionaNot)
+
+    OptionaNot  go to state 92
+
+
+State 71
+
+   51 Expr: NEW . ID
+
+    ID  shift, and go to state 93
+
+
+State 72
+
+   65 Term: THIS .
+
+    $default  reduce using rule 65 (Term)
+
+
+State 73
+
+   66 Term: NULL_VAL . ID
+
+    ID  shift, and go to state 94
+
+
+State 74
+
+   64 Term: NUM .
+
+    $default  reduce using rule 64 (Term)
+
+
+State 75
+
+   43 Stat: ID . ASSIGNOP Expr
+   67 Term: ID .
+
+    ASSIGNOP  shift, and go to state 95
+
+    $default  reduce using rule 67 (Term)
+
+
+State 76
+
+   63 Term: '(' . Expr ')'
+
+    NOT       shift, and go to state 70
+    NEW       shift, and go to state 71
+    THIS      shift, and go to state 72
+    NULL_VAL  shift, and go to state 73
+    NUM       shift, and go to state 74
+    ID        shift, and go to state 88
+    '('       shift, and go to state 76
+
+    Expr        go to state 96
+    OptionaNot  go to state 81
+    Term        go to state 82
+
+
+State 77
+
+   26 Member: METHOD ID '(' ')' StatsMethode . END
+
+    END  shift, and go to state 97
+
+
+State 78
+
+   35 StatsMethode: Stats .
+
+    $default  reduce using rule 35 (StatsMethode)
+
+
+State 79
+
+   36 Stats: Stat . ';' Stats
+
+    ';'  shift, and go to state 98
+
+
+State 80
+
+   44 Stat: Expr .
+
+    $default  reduce using rule 44 (Stat)
+
+
+State 81
+
+   46 Expr: OptionaNot . Term
+
+    THIS      shift, and go to state 72
+    NULL_VAL  shift, and go to state 73
+    NUM       shift, and go to state 74
+    ID        shift, and go to state 88
+    '('       shift, and go to state 76
+
+    Term  go to state 99
+
+
+State 82
+
+   45 Expr: Term .
+   47     | Term . OptionalPlusTerm
+   48     | Term . OptionalMalTerm
+   49     | Term . OptionalAndTerm
+   50     | Term . SpecialOperation Term
+   68 Term: Term . '.' ID '(' ')'
+   69     | Term . '.' ID '(' ParamsExpr ')'
+
+    AND  shift, and go to state 100
+    '.'  shift, and go to state 101
+    '+'  shift, and go to state 102
+    '*'  shift, and go to state 103
+    '-'  shift, and go to state 104
+    '<'  shift, and go to state 105
+    '='  shift, and go to state 106
+
+    $default  reduce using rule 45 (Expr)
+
+    OptionalPlusTerm  go to state 107
+    OptionalMalTerm   go to state 108
+    OptionalAndTerm   go to state 109
+    SpecialOperation  go to state 110
+
+
+State 83
+
+   27 Member: METHOD ID '(' Pars ')' . StatsMethode END
+
+    VAR       shift, and go to state 66
+    RETURN    shift, and go to state 67
+    IF        shift, and go to state 68
+    WHILE     shift, and go to state 69
+    NOT       shift, and go to state 70
+    NEW       shift, and go to state 71
+    THIS      shift, and go to state 72
+    NULL_VAL  shift, and go to state 73
+    NUM       shift, and go to state 74
+    ID        shift, and go to state 75
+    '('       shift, and go to state 76
+
+    $default  reduce using rule 37 (Stats)
+
+    StatsMethode  go to state 111
+    Stats         go to state 78
+    Stat          go to state 79
+    Expr          go to state 80
+    OptionaNot    go to state 81
+    Term          go to state 82
+
+
+State 84
+
+   30 Pars: ParsLoop Par .
+   32 ParsLoop: ParsLoop Par . ','
+
+    ','  shift, and go to state 112
+
+    $default  reduce using rule 30 (Pars)
+
+
+State 85
+
+   33 ParsLoop: Par ',' .
+
+    $default  reduce using rule 33 (ParsLoop)
+
+
+State 86
+
+   34 Par: ID ':' Type .
+
+    $default  reduce using rule 34 (Par)
+
+
+State 87
+
+   42 Stat: VAR ID . ':' Type ASSIGNOP Expr
+
+    ':'  shift, and go to state 113
+
+
+State 88
+
+   67 Term: ID .
+
+    $default  reduce using rule 67 (Term)
+
+
+State 89
+
+   38 Stat: RETURN Expr .
+
+    $default  reduce using rule 38 (Stat)
+
+
+State 90
+
+   39 Stat: IF Expr . THEN Stats END
+   40     | IF Expr . THEN Stats ELSE Stats END
+
+    THEN  shift, and go to state 114
+
+
+State 91
+
+   41 Stat: WHILE Expr . DO Stats END
+
+    DO  shift, and go to state 115
+
+
+State 92
+
+   52 OptionaNot: NOT OptionaNot .
+
+    $default  reduce using rule 52 (OptionaNot)
+
+
+State 93
+
+   51 Expr: NEW ID .
+
+    $default  reduce using rule 51 (Expr)
+
+
+State 94
+
+   66 Term: NULL_VAL ID .
+
+    $default  reduce using rule 66 (Term)
+
+
+State 95
+
+   43 Stat: ID ASSIGNOP . Expr
+
+    NOT       shift, and go to state 70
+    NEW       shift, and go to state 71
+    THIS      shift, and go to state 72
+    NULL_VAL  shift, and go to state 73
+    NUM       shift, and go to state 74
+    ID        shift, and go to state 88
+    '('       shift, and go to state 76
+
+    Expr        go to state 116
+    OptionaNot  go to state 81
+    Term        go to state 82
+
+
+State 96
+
+   63 Term: '(' Expr . ')'
+
+    ')'  shift, and go to state 117
+
+
+State 97
+
+   26 Member: METHOD ID '(' ')' StatsMethode END .
+
+    $default  reduce using rule 26 (Member)
+
+
+State 98
+
+   36 Stats: Stat ';' . Stats
+
+    VAR       shift, and go to state 66
+    RETURN    shift, and go to state 67
+    IF        shift, and go to state 68
+    WHILE     shift, and go to state 69
+    NOT       shift, and go to state 70
+    NEW       shift, and go to state 71
+    THIS      shift, and go to state 72
+    NULL_VAL  shift, and go to state 73
+    NUM       shift, and go to state 74
+    ID        shift, and go to state 75
+    '('       shift, and go to state 76
+
+    $default  reduce using rule 37 (Stats)
+
+    Stats       go to state 118
+    Stat        go to state 79
+    Expr        go to state 80
+    OptionaNot  go to state 81
+    Term        go to state 82
+
+
+State 99
+
+   46 Expr: OptionaNot Term .
+   68 Term: Term . '.' ID '(' ')'
+   69     | Term . '.' ID '(' ParamsExpr ')'
+
+    '.'  shift, and go to state 101
+
+    $default  reduce using rule 46 (Expr)
+
+
+State 100
+
+   58 OptionalAndTerm: AND . Term OptionalAndTerm
+   59                | AND . Term
+
+    THIS      shift, and go to state 72
+    NULL_VAL  shift, and go to state 73
+    NUM       shift, and go to state 74
+    ID        shift, and go to state 88
+    '('       shift, and go to state 76
+
+    Term  go to state 119
+
+
+State 101
+
+   68 Term: Term '.' . ID '(' ')'
+   69     | Term '.' . ID '(' ParamsExpr ')'
+
+    ID  shift, and go to state 120
+
+
+State 102
+
+   54 OptionalPlusTerm: '+' . Term OptionalPlusTerm
+   55                 | '+' . Term
+
+    THIS      shift, and go to state 72
+    NULL_VAL  shift, and go to state 73
+    NUM       shift, and go to state 74
+    ID        shift, and go to state 88
+    '('       shift, and go to state 76
+
+    Term  go to state 121
+
+
+State 103
+
+   56 OptionalMalTerm: '*' . Term OptionalMalTerm
+   57                | '*' . Term
+
+    THIS      shift, and go to state 72
+    NULL_VAL  shift, and go to state 73
+    NUM       shift, and go to state 74
+    ID        shift, and go to state 88
+    '('       shift, and go to state 76
+
+    Term  go to state 122
+
+
+State 104
+
+   60 SpecialOperation: '-' .
+
+    $default  reduce using rule 60 (SpecialOperation)
+
+
+State 105
+
+   61 SpecialOperation: '<' .
+
+    $default  reduce using rule 61 (SpecialOperation)
+
+
+State 106
+
+   62 SpecialOperation: '=' .
+
+    $default  reduce using rule 62 (SpecialOperation)
+
+
+State 107
+
+   47 Expr: Term OptionalPlusTerm .
+
+    $default  reduce using rule 47 (Expr)
+
+
+State 108
+
+   48 Expr: Term OptionalMalTerm .
+
+    $default  reduce using rule 48 (Expr)
+
+
+State 109
+
+   49 Expr: Term OptionalAndTerm .
+
+    $default  reduce using rule 49 (Expr)
+
+
+State 110
+
+   50 Expr: Term SpecialOperation . Term
+
+    THIS      shift, and go to state 72
+    NULL_VAL  shift, and go to state 73
+    NUM       shift, and go to state 74
+    ID        shift, and go to state 88
+    '('       shift, and go to state 76
+
+    Term  go to state 123
+
+
+State 111
+
+   27 Member: METHOD ID '(' Pars ')' StatsMethode . END
+
+    END  shift, and go to state 124
+
+
+State 112
+
+   32 ParsLoop: ParsLoop Par ',' .
+
+    $default  reduce using rule 32 (ParsLoop)
+
+
+State 113
+
+   42 Stat: VAR ID ':' . Type ASSIGNOP Expr
+
+    INT  shift, and go to state 34
+    ID   shift, and go to state 35
+
+    Type  go to state 125
+
+
+State 114
+
+   39 Stat: IF Expr THEN . Stats END
+   40     | IF Expr THEN . Stats ELSE Stats END
+
+    VAR       shift, and go to state 66
+    RETURN    shift, and go to state 67
+    IF        shift, and go to state 68
+    WHILE     shift, and go to state 69
+    NOT       shift, and go to state 70
+    NEW       shift, and go to state 71
+    THIS      shift, and go to state 72
+    NULL_VAL  shift, and go to state 73
+    NUM       shift, and go to state 74
+    ID        shift, and go to state 75
+    '('       shift, and go to state 76
+
+    $default  reduce using rule 37 (Stats)
+
+    Stats       go to state 126
+    Stat        go to state 79
+    Expr        go to state 80
+    OptionaNot  go to state 81
+    Term        go to state 82
+
+
+State 115
+
+   41 Stat: WHILE Expr DO . Stats END
+
+    VAR       shift, and go to state 66
+    RETURN    shift, and go to state 67
+    IF        shift, and go to state 68
+    WHILE     shift, and go to state 69
+    NOT       shift, and go to state 70
+    NEW       shift, and go to state 71
+    THIS      shift, and go to state 72
+    NULL_VAL  shift, and go to state 73
+    NUM       shift, and go to state 74
+    ID        shift, and go to state 75
+    '('       shift, and go to state 76
+
+    $default  reduce using rule 37 (Stats)
+
+    Stats       go to state 127
+    Stat        go to state 79
+    Expr        go to state 80
+    OptionaNot  go to state 81
+    Term        go to state 82
+
+
+State 116
+
+   43 Stat: ID ASSIGNOP Expr .
+
+    $default  reduce using rule 43 (Stat)
+
+
+State 117
+
+   63 Term: '(' Expr ')' .
+
+    $default  reduce using rule 63 (Term)
+
+
+State 118
+
+   36 Stats: Stat ';' Stats .
+
+    $default  reduce using rule 36 (Stats)
+
+
+State 119
+
+   58 OptionalAndTerm: AND Term . OptionalAndTerm
+   59                | AND Term .
+   68 Term: Term . '.' ID '(' ')'
+   69     | Term . '.' ID '(' ParamsExpr ')'
+
+    AND  shift, and go to state 100
+    '.'  shift, and go to state 101
+
+    $default  reduce using rule 59 (OptionalAndTerm)
+
+    OptionalAndTerm  go to state 128
+
+
+State 120
+
+   68 Term: Term '.' ID . '(' ')'
+   69     | Term '.' ID . '(' ParamsExpr ')'
+
+    '('  shift, and go to state 129
+
+
+State 121
+
+   54 OptionalPlusTerm: '+' Term . OptionalPlusTerm
+   55                 | '+' Term .
+   68 Term: Term . '.' ID '(' ')'
+   69     | Term . '.' ID '(' ParamsExpr ')'
+
+    '.'  shift, and go to state 101
+    '+'  shift, and go to state 102
+
+    $default  reduce using rule 55 (OptionalPlusTerm)
+
+    OptionalPlusTerm  go to state 130
+
+
+State 122
+
+   56 OptionalMalTerm: '*' Term . OptionalMalTerm
+   57                | '*' Term .
+   68 Term: Term . '.' ID '(' ')'
+   69     | Term . '.' ID '(' ParamsExpr ')'
+
+    '.'  shift, and go to state 101
+    '*'  shift, and go to state 103
+
+    $default  reduce using rule 57 (OptionalMalTerm)
+
+    OptionalMalTerm  go to state 131
+
+
+State 123
+
+   50 Expr: Term SpecialOperation Term .
+   68 Term: Term . '.' ID '(' ')'
+   69     | Term . '.' ID '(' ParamsExpr ')'
+
+    '.'  shift, and go to state 101
+
+    $default  reduce using rule 50 (Expr)
+
+
+State 124
+
+   27 Member: METHOD ID '(' Pars ')' StatsMethode END .
+
+    $default  reduce using rule 27 (Member)
+
+
+State 125
+
+   42 Stat: VAR ID ':' Type . ASSIGNOP Expr
+
+    ASSIGNOP  shift, and go to state 132
+
+
+State 126
+
+   39 Stat: IF Expr THEN Stats . END
+   40     | IF Expr THEN Stats . ELSE Stats END
+
+    ELSE  shift, and go to state 133
+    END   shift, and go to state 134
+
+
+State 127
+
+   41 Stat: WHILE Expr DO Stats . END
+
+    END  shift, and go to state 135
+
+
+State 128
+
+   58 OptionalAndTerm: AND Term OptionalAndTerm .
+
+    $default  reduce using rule 58 (OptionalAndTerm)
+
+
+State 129
+
+   68 Term: Term '.' ID '(' . ')'
+   69     | Term '.' ID '(' . ParamsExpr ')'
+
+    NOT       shift, and go to state 70
+    NEW       shift, and go to state 71
+    THIS      shift, and go to state 72
+    NULL_VAL  shift, and go to state 73
+    NUM       shift, and go to state 74
+    ID        shift, and go to state 88
+    '('       shift, and go to state 76
+    ')'       shift, and go to state 136
+
+    Expr            go to state 137
+    OptionaNot      go to state 81
+    Term            go to state 82
+    ParamsExpr      go to state 138
+    ParamsExprLoop  go to state 139
+
+
+State 130
+
+   54 OptionalPlusTerm: '+' Term OptionalPlusTerm .
+
+    $default  reduce using rule 54 (OptionalPlusTerm)
+
+
+State 131
+
+   56 OptionalMalTerm: '*' Term OptionalMalTerm .
+
+    $default  reduce using rule 56 (OptionalMalTerm)
+
+
+State 132
+
+   42 Stat: VAR ID ':' Type ASSIGNOP . Expr
+
+    NOT       shift, and go to state 70
+    NEW       shift, and go to state 71
+    THIS      shift, and go to state 72
+    NULL_VAL  shift, and go to state 73
+    NUM       shift, and go to state 74
+    ID        shift, and go to state 88
+    '('       shift, and go to state 76
+
+    Expr        go to state 140
+    OptionaNot  go to state 81
+    Term        go to state 82
+
+
+State 133
+
+   40 Stat: IF Expr THEN Stats ELSE . Stats END
+
+    VAR       shift, and go to state 66
+    RETURN    shift, and go to state 67
+    IF        shift, and go to state 68
+    WHILE     shift, and go to state 69
+    NOT       shift, and go to state 70
+    NEW       shift, and go to state 71
+    THIS      shift, and go to state 72
+    NULL_VAL  shift, and go to state 73
+    NUM       shift, and go to state 74
+    ID        shift, and go to state 75
+    '('       shift, and go to state 76
+
+    $default  reduce using rule 37 (Stats)
+
+    Stats       go to state 141
+    Stat        go to state 79
+    Expr        go to state 80
+    OptionaNot  go to state 81
+    Term        go to state 82
+
+
+State 134
+
+   39 Stat: IF Expr THEN Stats END .
+
+    $default  reduce using rule 39 (Stat)
+
+
+State 135
+
+   41 Stat: WHILE Expr DO Stats END .
+
+    $default  reduce using rule 41 (Stat)
+
+
+State 136
+
+   68 Term: Term '.' ID '(' ')' .
+
+    $default  reduce using rule 68 (Term)
+
+
+State 137
+
+   70 ParamsExpr: Expr .
+   72 ParamsExprLoop: Expr . ','
+
+    ','  shift, and go to state 142
+
+    $default  reduce using rule 70 (ParamsExpr)
+
+
+State 138
+
+   69 Term: Term '.' ID '(' ParamsExpr . ')'
+
+    ')'  shift, and go to state 143
+
+
+State 139
+
+   71 ParamsExpr: ParamsExprLoop . Expr
+   73 ParamsExprLoop: ParamsExprLoop . Expr ','
+
+    NOT       shift, and go to state 70
+    NEW       shift, and go to state 71
+    THIS      shift, and go to state 72
+    NULL_VAL  shift, and go to state 73
+    NUM       shift, and go to state 74
+    ID        shift, and go to state 88
+    '('       shift, and go to state 76
+
+    Expr        go to state 144
+    OptionaNot  go to state 81
+    Term        go to state 82
+
+
+State 140
+
+   42 Stat: VAR ID ':' Type ASSIGNOP Expr .
+
+    $default  reduce using rule 42 (Stat)
+
+
+State 141
+
+   40 Stat: IF Expr THEN Stats ELSE Stats . END
+
+    END  shift, and go to state 145
+
+
+State 142
+
+   72 ParamsExprLoop: Expr ',' .
+
+    $default  reduce using rule 72 (ParamsExprLoop)
+
+
+State 143
+
+   69 Term: Term '.' ID '(' ParamsExpr ')' .
+
+    $default  reduce using rule 69 (Term)
+
+
+State 144
+
+   71 ParamsExpr: ParamsExprLoop Expr .
+   73 ParamsExprLoop: ParamsExprLoop Expr . ','
+
+    ','  shift, and go to state 146
+
+    $default  reduce using rule 71 (ParamsExpr)
+
+
+State 145
+
+   40 Stat: IF Expr THEN Stats ELSE Stats END .
+
+    $default  reduce using rule 40 (Stat)
+
+
+State 146
+
+   73 ParamsExprLoop: ParamsExprLoop Expr ',' .
+
+    $default  reduce using rule 73 (ParamsExprLoop)

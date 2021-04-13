@@ -34,8 +34,8 @@ extern int yylex();
 
 @attributes { char *name; int lineNr; } ID
 @attributes { node_t* in; } Programm
-@attributes { node_t* in; node_t* out; } ProgrammStart Interface AbstraktMethodsLoop AbstraktMethod Class MemeberLoop Member Stats Pars Par ParsLoop
-@attributes { node_t* in; } Type ParamTypesLoop TypesLoop ImplementsLoop
+@attributes { node_t* in; node_t* out; } ProgrammStart Interface AbstraktMethodsLoop AbstraktMethod Class MemeberLoop Member Stats Stat Pars Par ParsLoop
+@attributes { node_t* in; } Type ParamTypesLoop TypesLoop ImplementsLoop StatsMethode
 @attributes { node_t* ids; } Expr OptionaNot OptionalPlusTerm OptionalMalTerm OptionalAndTerm SpecialOperation Term ParamsExpr ParamsExprLoop
 
 @traversal @postorder visCheck
@@ -72,7 +72,7 @@ Interface               :   INTERFACE ID ':'
                                 AbstraktMethodsLoop
                             END
                         @{
-                            @i @AbstraktMethodsLoop.in@ = add(@Interface.in@,@ID.name@,INTERFACE,@ID.lineNr@);
+                            @i @AbstraktMethodsLoop.in@ = addDev(@Interface.in@,@ID.name@,INTERFACE_DING,@ID.lineNr@,"Interface Id hinzufuegen");
                             @i @Interface.out@ = @AbstraktMethodsLoop.out@ ;
                         @}
                         ;
@@ -91,13 +91,13 @@ AbstraktMethodsLoop     :   AbstraktMethod AbstraktMethodsLoop
 
 AbstraktMethod          :   ID '(' ParamTypesLoop ')' ':' Type
                         @{
-                            @i @AbstraktMethod.out@ = add(@AbstraktMethod.in@,@ID.name@,ABSTRACT_METH,@ID.lineNr@);
-                            @i @ParamTypesLoop.in@ = @AbstraktMethod.out@ ;
-                            @i @Type.in@ = @AbstraktMethod.out@ ;
+                            @i @AbstraktMethod.out@ = addDev(@AbstraktMethod.in@,@ID.name@,ABSTRACT_METH,@ID.lineNr@,"AbstrakteMethod methoden ID hinzufuegen (Mit params)");
+                            @i @ParamTypesLoop.in@ = @AbstraktMethod.in@ ;
+                            @i @Type.in@ = @AbstraktMethod.in@ ;
                         @}
                         |   ID '(' ')' ':' Type
                         @{
-                            @i @AbstraktMethod.out@ = add(@AbstraktMethod.in@,@ID.name@,ABSTRACT_METH,@ID.lineNr@);
+                            @i @AbstraktMethod.out@ = addDev(@AbstraktMethod.in@,@ID.name@,ABSTRACT_METH,@ID.lineNr@,"AbstrakteMethod methoden ID hinzufuegen (ohne params)");
                             @i @Type.in@ = @AbstraktMethod.in@ ;
                         @}
                         ;
@@ -129,30 +129,30 @@ Class                   :   CLASS ID
                                 MemeberLoop
                             END
                         @{
-                            @i @MemeberLoop.in@ = add(@Class.in@,@ID.name@,CLASS,@ID.lineNr@);
-                            @i @Class.out@ = add(@Class.in@,@ID.name@,CLASS,@ID.lineNr@);
+                            @i @MemeberLoop.in@ = addDev(duplicate(@Class.in@),@ID.name@,CLASS_DING,@ID.lineNr@,"CLass Id hinzufuegen für Member");
+                            @i @Class.out@ = addDev(@Class.in@,@ID.name@,CLASS_DING,@ID.lineNr@,"Add von Class out der Class id");
                             @i @ImplementsLoop.in@ = @Class.in@;
-                        }
+                        @}
                         |   CLASS ID
                             IMPLEMENTS ':'
                                 MemeberLoop
                             END
                         @{
-                            @i @MemeberLoop.in@ = add(@Class.in@,@ID.name@,CLASS,@ID.lineNr@);
-                            @i @Class.out@ = add(@Class.in@,@ID.name@,CLASS,@ID.lineNr@);
+                            @i @MemeberLoop.in@ = addDev(duplicate(@Class.in@),@ID.name@,CLASS_DING,@ID.lineNr@,"CLass Id hinzufuegen für Member2");
+                            @i @Class.out@ = addDev(@Class.in@,@ID.name@,CLASS_DING,@ID.lineNr@,"Add von Class out der Class id2");
                         @}
                         |   CLASS ID
                             IMPLEMENTS ImplementsLoop ':'
                             END
                         @{
-                            @i @Class.out@ = add(@Class.in@,@ID.name@,CLASS,@ID.lineNr@);
+                            @i @Class.out@ = addDev(@Class.in@,@ID.name@,CLASS_DING,@ID.lineNr@,"Add von Class out der Class id3");
                             @i @ImplementsLoop.in@ = @Class.in@;
                         @}
                         |   CLASS ID
                             IMPLEMENTS ':'
                             END
                         @{
-                            @i @Class.out@ = add(@Class.in@,@ID.name@,CLASS,@ID.lineNr@);
+                            @i @Class.out@ = addDev(@Class.in@,@ID.name@,CLASS_DING,@ID.lineNr@,"Add von Class out der Class id4");
                         @}
                         ;
 
@@ -172,36 +172,38 @@ MemeberLoop             :   MemeberLoop Member ';'
 ImplementsLoop          :   ImplementsLoop ID
                         @{
                             @i @ImplementsLoop.1.in@ = @ImplementsLoop.0.in@ ;
-                            @visCheck isVisible(@ImplementsLoop.0.in@,@ID.name@, INTERFACE, @ID.lineNr@);
+                            @visCheck isVisible(@ImplementsLoop.0.in@,@ID.name@, INTERFACE_DING, @ID.lineNr@);
                         @}
                         |   ID
                         @{
-                            @visCheck isVisible(@ImplementsLoop.in@,@ID.name@, INTERFACE, @ID.lineNr@);
+                            @visCheck isVisible(@ImplementsLoop.in@,@ID.name@, INTERFACE_DING, @ID.lineNr@);
                         @}
                         ;
 
 Member                  :   VAR ID ':' Type
                         @{
-                            @i @Member.out@ = add(@Member.in@,@ID.name@,CLASS_VAR,@ID.lineNr@);
+                            @i @Member.out@ = addDev(@Member.in@,@ID.name@,CLASS_VAR,@ID.lineNr@,"Id von member hinzfuegen");
                             @i @Type.in@ = @Member.in@ ; 
-                        }
-                        |   METHOD ID '(' ')' Stats END
-                        @{
-                            @visCheck isVisible(@Member.in@,@ID.name@, ABSTRACT_METH, @ID.lineNr@);
-                            @i @Stats.in@ = @Member.in@ ;
                         @}
-                        |   METHOD ID '(' Pars ')' Stats END
+                        |   METHOD ID '(' ')' StatsMethode END
                         @{
                             @visCheck isVisible(@Member.in@,@ID.name@, ABSTRACT_METH, @ID.lineNr@);
-                            @i @Pars.in@ = @Member.in@ ;
-                            @i @Stats.in@ = merge(@Member.in@, @Pars.out@);
+                            @i @StatsMethode.in@ = @Member.in@ ;
+                            @i @Member.out@ = @Member.in@;
+                        @}
+                        |   METHOD ID '(' Pars ')' StatsMethode END
+                        @{
+                            @visCheck isVisible(@Member.in@,@ID.name@, ABSTRACT_METH, @ID.lineNr@);
+                            @i @Pars.in@ = duplicate(@Member.in@);
+                            @i @Member.out@ = duplicate(@Member.in@);
+                            @i @StatsMethode.in@ = @Pars.out@ ;
                         @}
                         ;
 
 Type                    :   INT
                         |   ID
                         @{
-                            @visCheck isVisible(@Type.in@,@ID.name@, INTERFACE, @ID.lineNr@);
+                            @visCheck isVisible(@Type.in@,@ID.name@, INTERFACE_DING, @ID.lineNr@);
                         @}
                         ;
 
@@ -233,7 +235,14 @@ ParsLoop                :   ParsLoop Par ','
 
 Par                     :   ID ':' Type
                         @{
-                            @i @Par.out@ = add(@Par.in@,@ID.name@,PARAMETER,@ID.lineNr@);
+                            @i @Par.out@ = addDev(@Par.in@,@ID.name@,PARAMETER,@ID.lineNr@,"Paramter id hinzufuegen");
+                            @i @Type.in@ = @Par.in@ ; 
+                        @}
+                        ;
+
+StatsMethode            :   Stats
+                        @{
+                            @i @Stats.in@ = @StatsMethode.in@ ;
                         @}
                         ;
 
@@ -241,7 +250,7 @@ Stats                   :   Stat ';' Stats
                         @{
                             @i @Stat.in@ = @Stats.0.in@ ;
                             @i @Stats.1.in@ = @Stat.out@ ;
-                            @i @Stats.1.out@ = @Stats.0.out@;
+                            @i @Stats.0.out@ = @Stats.1.out@;
                         @}
                         |
                         @{
@@ -252,36 +261,43 @@ Stats                   :   Stat ';' Stats
 Stat                    :   RETURN Expr
                         @{
                             @i @Expr.ids@ = @Stat.in@ ;
-                        }
+                            @i @Stat.out@ = @Stat.in@ ;
+                        @}
                         |   IF Expr THEN Stats END
                         @{
                             @i @Expr.ids@ = @Stat.in@ ;
                             @i @Stats.in@ = @Stat.in@ ;
-                        }
+                            @i @Stat.out@ = @Stat.in@ ;
+                        @}
                         |   IF Expr THEN Stats ELSE Stats END
                         @{
                             @i @Expr.ids@ = @Stat.in@ ; 
                             @i @Stats.0.in@ = @Stat.in@ ;
                             @i @Stats.1.in@ = @Stat.in@ ;
+                            @i @Stat.out@ = @Stat.in@ ;
                         @}
                         |   WHILE Expr DO Stats END
                         @{
                             @i @Expr.ids@ = @Stat.in@ ;
                             @i @Stats.in@ = @Stat.in@ ;
-                        }
+                            @i @Stat.out@ = @Stat.in@ ;
+                        @}
                         |   VAR ID ':' Type ASSIGNOP Expr
                         @{
                             @i @Expr.ids@ = @Stat.in@ ;
-                            @i @Stat.out@ = add(@Stat.in@,@ID.name@,VARIABLE,@ID.lineNr@);
+                            @i @Stat.out@ = addDev(duplicate(@Stat.in@),@ID.name@,VARIABLE,@ID.lineNr@,"Var assignment in stat");
+                            @i @Type.in@ = @Stat.in@ ;
                         @}
                         |   ID ASSIGNOP Expr
                         @{
                             @visCheck isVisibleForZuweisungOrZugriff(@Stat.in@,@ID.name@,@ID.lineNr@);
                             @i @Expr.ids@ = @Stat.in@ ;
+                            @i @Stat.out@ = @Stat.in@ ;
                         @}
                         |   Expr
                         @{
                             @i @Expr.ids@ = @Stat.in@ ;
+                            @i @Stat.out@ = @Stat.in@ ;
                         @}
                         ;
 
@@ -293,7 +309,7 @@ Expr                    :   Term
                         |   Term SpecialOperation Term
                         |   NEW ID
                         @{
-                            @visCheck isVisible(@Expr.ids@,@ID.name@, CLASS, @ID.lineNr@);
+                            @visCheck isVisible(@Expr.ids@,@ID.name@, CLASS_DING, @ID.lineNr@);
                         @}
                         ;
 
@@ -323,11 +339,11 @@ Term                    :   '(' Expr ')'
                         |   THIS
                         |   NULL_VAL ID
                         @{
-                            @visCheck isVisible(@Term.ids@,@ID.name@, INTERFACE, @ID.lineNr@);
+                            @visCheck isVisible(@Term.ids@,@ID.name@, INTERFACE_DING, @ID.lineNr@);
                         @}
                         |   ID
                         @{
-                            @visCheck isVisibleForZuweisungOrZugriff(@Term.in@,@ID.name@,@ID.lineNr@);
+                            @visCheck isVisibleForZuweisungOrZugriff(@Term.ids@,@ID.name@,@ID.lineNr@);
                         @}
                         |   Term '.' ID '(' ')'
                         @{

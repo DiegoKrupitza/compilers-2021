@@ -9,8 +9,8 @@ void checkForError(node_t *node, char *name, short type, int lineNr)
 
     if (strcmp(node->name, name) == 0)
     {
-        fprintf(stderr, "Identifier '%s' on line %d conflicts with identifier on line %d\n",
-                name, lineNr, node->lineNr);
+        fprintf(stderr, "Identifier '%s' on line %d conflicts with identifier [%s] on line %d\n",
+                name, lineNr, node->name, node->lineNr);
         exit(3);
     }
 
@@ -22,6 +22,7 @@ node_t *newList()
     return (node_t *)NULL;
 }
 
+/** achtung hier wird das element zu der list hinzugefügt in memory und dann returned */
 node_t *add(node_t *list, char *name, short type, int lineNr)
 {
 
@@ -113,6 +114,14 @@ node_t *mergeDev(node_t *firstList, node_t *secondList, char *source)
     {
         fprintf(stdout, "Merging two lists from '%s'\n", source);
 
+        fprintf(stdout, "Contnet of List 1 before merge\n");
+        printItems(firstList);
+        fprintf(stdout, "-----------------\n");
+
+        fprintf(stdout, "Contnet of List 2 before merge\n");
+        printItems(secondList);
+        fprintf(stdout, "-----------------\n");
+
         node_t *items = merge(firstList, secondList);
 
         printItems(items);
@@ -172,18 +181,6 @@ bool isEmpty(node_t *list)
     return list == NULL;
 }
 
-/*
-short adjustType(short inputType)
-{
-    if (inputType == PARAMETER)
-    {
-        return VARIABLE;
-    }
-
-    return inputType;
-}
-*/
-
 void isVisible(node_t *list, char *name, short type, int lineNr)
 {
 
@@ -191,7 +188,7 @@ void isVisible(node_t *list, char *name, short type, int lineNr)
 
     while (nextNode != NULL)
     {
-        if (adjustType(nextNode->type) == type && strcmp(nextNode->name, name) == 0)
+        if (nextNode->type == type && strcmp(nextNode->name, name) == 0)
         {
             return;
         }
@@ -212,9 +209,9 @@ void isVisibleForZuweisungOrZugriff(node_t *list, char *name, int lineNr)
     {
         if (
             (
-                adjustType(nextNode->type) == CLASS_VAR ||
-                adjustType(nextNode->type) == PARAMETER ||
-                adjustType(nextNode->type) == VARIABLE) &&
+                nextNode->type == CLASS_VAR ||
+                nextNode->type == PARAMETER ||
+                nextNode->type == VARIABLE) &&
             strcmp(nextNode->name, name) == 0)
         {
             return;

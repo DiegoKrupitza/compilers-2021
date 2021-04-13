@@ -5,6 +5,8 @@
 
 #include "y.tab.h"
 
+#include "list.h"
+
 %}
 
 /**************************/
@@ -28,6 +30,10 @@ typedef struct yyyT3 *yyyP3;
 
 struct yyyT4 { node_t* in; }; 
 typedef struct yyyT4 *yyyP4; 
+
+
+struct yyyT5 { node_t* ids; }; 
+typedef struct yyyT5 *yyyP5; 
                                                       /*custom*/  
 typedef unsigned char yyyWAT; 
 typedef unsigned char yyyRCT; 
