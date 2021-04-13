@@ -204,14 +204,28 @@ void isVisible(node_t *list, char *name, short type, int lineNr)
     exit(3);
 }
 
-void isVisibleAnyType(node_t *list, char *name, short type, int lineNr)
+void isVisibleForZuweisungOrZugriff(node_t *list, char *name, int lineNr)
 {
-    isVisible(list, name, VARIABLE, lineNr);
-    isVisible(list, name, PARAMETER, lineNr);
-    isVisible(list, name, INTERFACE, lineNr);
-    isVisible(list, name, CLASS, lineNr);
-    isVisible(list, name, ABSTRACT_METH, lineNr);
-    isVisible(list, name, CLASS_VAR, lineNr);
+    node_t *nextNode = list;
+
+    while (nextNode != NULL)
+    {
+        if (
+            (
+                adjustType(nextNode->type) == CLASS_VAR ||
+                adjustType(nextNode->type) == PARAMETER ||
+                adjustType(nextNode->type) == VARIABLE) &&
+            strcmp(nextNode->name, name) == 0)
+        {
+            return;
+        }
+
+        nextNode = nextNode->next;
+    }
+
+    fprintf(stderr, "Identifier with name '%s' on line %d is not visible(ObjectVar,Var,Param) in the current scope\n",
+            name, lineNr);
+    exit(3);
 }
 
 void printItems(node_t *list)

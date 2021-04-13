@@ -36,6 +36,7 @@ extern int yylex();
 @attributes { node_t* in; } Programm
 @attributes { node_t* in; node_t* out; } ProgrammStart Interface AbstraktMethodsLoop AbstraktMethod Class MemeberLoop Member Stats Pars Par ParsLoop
 @attributes { node_t* in; } Type ParamTypesLoop TypesLoop ImplementsLoop
+@attributes { node_t* ids; } Expr OptionaNot OptionalPlusTerm OptionalMalTerm OptionalAndTerm SpecialOperation Term ParamsExpr ParamsExprLoop
 
 @traversal @postorder visCheck
 
@@ -127,12 +128,18 @@ Class                   :   CLASS ID
                             IMPLEMENTS ImplementsLoop ':'
                                 MemeberLoop
                             END
+                        @{
+                            @i @MemeberLoop.in@ = add(@Class.in@,@ID.name@,CLASS,@ID.lineNr@);
+                            @i @Class.out@ = add(@Class.in@,@ID.name@,CLASS,@ID.lineNr@);
+                            @i @ImplementsLoop.in@ = @Class.in@;
+                        }
                         |   CLASS ID
                             IMPLEMENTS ':'
                                 MemeberLoop
                             END
                         @{
-                            @i @MemeberLoop.in@ = @Class.in@ ; 
+                            @i @MemeberLoop.in@ = add(@Class.in@,@ID.name@,CLASS,@ID.lineNr@);
+                            @i @Class.out@ = add(@Class.in@,@ID.name@,CLASS,@ID.lineNr@);
                         @}
                         |   CLASS ID
                             IMPLEMENTS ImplementsLoop ':'
@@ -264,10 +271,18 @@ Stat                    :   RETURN Expr
                         }
                         |   VAR ID ':' Type ASSIGNOP Expr
                         @{
-                            @
+                            @i @Expr.ids@ = @Stat.in@ ;
+                            @i @Stat.out@ = add(@Stat.in@,@ID.name@,VARIABLE,@ID.lineNr@);
                         @}
                         |   ID ASSIGNOP Expr
+                        @{
+                            @visCheck isVisibleForZuweisungOrZugriff(@Stat.in@,@ID.name@,@ID.lineNr@);
+                            @i @Expr.ids@ = @Stat.in@ ;
+                        @}
                         |   Expr
+                        @{
+                            @i @Expr.ids@ = @Stat.in@ ;
+                        @}
                         ;
 
 Expr                    :   Term
@@ -277,6 +292,9 @@ Expr                    :   Term
                         |   Term OptionalAndTerm
                         |   Term SpecialOperation Term
                         |   NEW ID
+                        @{
+                            @visCheck isVisible(@Expr.ids@,@ID.name@, CLASS, @ID.lineNr@);
+                        @}
                         ;
 
 OptionaNot              :   NOT OptionaNot
@@ -304,9 +322,21 @@ Term                    :   '(' Expr ')'
                         |   NUM
                         |   THIS
                         |   NULL_VAL ID
+                        @{
+                            @visCheck isVisible(@Term.ids@,@ID.name@, INTERFACE, @ID.lineNr@);
+                        @}
                         |   ID
+                        @{
+                            @visCheck isVisibleForZuweisungOrZugriff(@Term.in@,@ID.name@,@ID.lineNr@);
+                        @}
                         |   Term '.' ID '(' ')'
+                        @{
+                            @visCheck isVisible(@Term.ids@,@ID.name@, ABSTRACT_METH, @ID.lineNr@);
+                        @}
                         |   Term '.' ID '(' ParamsExpr ')'
+                        @{
+                            @visCheck isVisible(@Term.ids@,@ID.name@, ABSTRACT_METH, @ID.lineNr@);
+                        @}
                         ;
 
 ParamsExpr              :   Expr
