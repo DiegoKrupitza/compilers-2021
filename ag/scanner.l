@@ -9,7 +9,6 @@
 /**************************/
 /******* defintion *******/
 /************************/
-            int num_lines = 1;
 %%
 "if"                          {   return IF;  }
 "int"                         {   return INT;  }
@@ -30,36 +29,36 @@
 "this"                        {   return THIS;  }
 "null"                        {   return NULL_VAL;  }
 
-\;                          {   return yytext[0];  }
-\:                          {   return yytext[0];  }
-\(                          {   return yytext[0];  }
-\)                          {   return yytext[0];  }
-\.                          {   return yytext[0];  }
-\,                          {   return yytext[0];  }
-\:\=                        {   return ASSIGNOP;  }
-\+                          {   return yytext[0];  }
-\*                          {   return yytext[0];  }
-\-                          {   return yytext[0];  }
-\<                          {   return yytext[0];  }
-\=                          {   return yytext[0];  }
+\;                             return ';';
+\:                             return ':';
+\(                             return '(';
+\)                             return ')';
+\.                             return '.';
+\,                             return ',';  
+\:\=                           return ASSIGNOP;
+\+                             return '+';
+\*                             return '*';
+\-                             return '-';
+\<                             return '<';
+\=                             return '=';  
 
 
 [/][*][^*]*[*]+([^*/][^*]*[*]+)*[/]       { /* DO NOTHING */ } /*https://stackoverflow.com/questions/25395251/detecting-and-skipping-line-comments-with-flex */
 [/][*]                                    { exit(1); }
 
 
-[A-Za-z]+[A-Za-z0-9]*       {yylval.id = strdup(yytext); return ID;}
+[A-Za-z]+[A-Za-z0-9]*       return ID; @{ @ID.name@ = strdup(yytext); @ID.lineNr@ = yylineno; @}
 
-\n                          {   num_lines++; }
+\n                          ;
 [ \t]                       ;
 
-[0-9][0-9a-fA-F]*H          {yylval.number = strtoul(yytext, NULL, 16); return NUM;}
+[0-9][0-9a-fA-F]*H          return NUM;
 
-[0-9]+                      {yylval.number = strtoul(yytext, NULL, 10); return NUM;}
+[0-9]+                      return NUM;
 
 
 .                           {
-                                printf("ERROR on line %d Can not lex the symbol: %s\n",num_lines,yytext);
+                                printf("ERROR on line %d Can not lex the symbol: %s\n",yylineno,yytext);
                                 exit(1);
                             }
 
