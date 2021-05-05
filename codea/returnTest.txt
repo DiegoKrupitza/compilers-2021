@@ -1,0 +1,12 @@
+interface a:
+    b(int,a):a
+end;
+
+class c implements a:
+    var d:a;
+
+    method b(e:int, f:a)
+        /* return ((not (e + f)) < this) + e + 3 + 5; */
+        return 1 +2 +3 + 4;
+    end;
+end;

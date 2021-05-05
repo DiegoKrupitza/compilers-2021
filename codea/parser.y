@@ -42,7 +42,7 @@ extern int yylex();
 @attributes { node_t* ids; } ParamsExpr ParamsExprLoop
 
 @attributes { node_t* in; node_t* out; tree_t* tree; } Stat
-@attributes { node_t* ids; tree_t* tree; } Expr OptionaNot OptionalPlusTerm OptionalMalTerm OptionalAndTerm SpecialOperation Term 
+@attributes { node_t* ids; tree_t *tree; } Expr OptionaNotTerm OptionalPlusTerm OptionalMalTerm OptionalAndTerm Term 
 
 @traversal @postorder visCheck
 
@@ -269,6 +269,8 @@ Stat                    :   RETURN Expr
                             @i @Expr.ids@ = @Stat.in@ ;
                             @i @Stat.out@ = @Stat.in@ ;
                             @i @Stat.tree@ = createNode(OP_RETURN, @Expr.tree@, NULL);
+                            @visCheck print2D(@Stat.tree@);
+                            
                         @}
                         |   IF Expr THEN Stats END
                         @{
@@ -320,15 +322,34 @@ Stat                    :   RETURN Expr
                         @}
                         ;
 
-Expr                    :   Term
+Expr                    :   OptionaNotTerm
                         @{
-                            
+                            @i @Expr.tree@ = @OptionaNotTerm.tree@ ; 
                         @}
-                        |   OptionaNot Term
                         |   Term OptionalPlusTerm
+                        @{
+                            @i @Expr.tree@ = createNode(OP_ADD, @Term.tree@, @OptionalPlusTerm.tree@); 
+                        @}
                         |   Term OptionalMalTerm
+                        @{
+                            @i @Expr.tree@ = createNode(OP_MUL, @Term.tree@, @OptionalMalTerm.tree@); 
+                        @}
                         |   Term OptionalAndTerm
-                        |   Term SpecialOperation Term
+                        @{
+                            @i @Expr.tree@ = createNode(OP_AND, @Term.tree@, @OptionalAndTerm.tree@); 
+                        @}
+                        |   Term '-' Term
+                        @{
+                            @i @Expr.tree@ = createNode(OP_MINUS, @Term.0.tree@, @Term.1.tree@); 
+                        @}
+                        |   Term '<' Term
+                        @{
+                            @i @Expr.tree@ = createNode(OP_LESS, @Term.0.tree@, @Term.1.tree@); 
+                        @}
+                        |   Term '=' Term
+                        @{
+                            @i @Expr.tree@ = createNode(OP_EQUAL, @Term.0.tree@, @Term.1.tree@); 
+                        @}
                         |   NEW ID
                         @{
                             @visCheck isVisible(@Expr.ids@,@ID.name@, CLASS_DING, @ID.lineNr@);
@@ -336,25 +357,44 @@ Expr                    :   Term
                         @}
                         ;
 
-OptionaNot              :   NOT OptionaNot
-                        |   NOT
+OptionaNotTerm          :   Term
+                        @{
+                            @i @OptionaNotTerm.tree@ = @Term.tree@ ; 
+                        @}
+                        |   NOT OptionaNotTerm
+                        @{
+                            @i @OptionaNotTerm.0.tree@ = createNode(OP_NOT, @OptionaNotTerm.1.tree@, NULL); 
+                        @}
                         ;
 
 OptionalPlusTerm        :   '+' Term OptionalPlusTerm
+                        @{
+                            @i @OptionalPlusTerm.0.tree@ = createNode(OP_ADD, @Term.tree@, @OptionalPlusTerm.tree@); 
+                        @}
                         |   '+' Term
+                        @{
+                            @i @OptionalPlusTerm.tree@ = @Term.tree@ ;
+                        @}
                         ;
 
 OptionalMalTerm         :   '*' Term OptionalMalTerm
+                        @{
+                            @i @OptionalMalTerm.0.tree@ = createNode(OP_MUL, @Term.tree@, @OptionalMalTerm.tree@); 
+                        @}
                         |   '*' Term
+                        @{
+                            @i @OptionalMalTerm.tree@ = @Term.tree@ ;
+                        @}
                         ;
 
 OptionalAndTerm         :   AND Term OptionalAndTerm
+                        @{
+                            @i @OptionalAndTerm.0.tree@ = createNode(OP_AND, @Term.tree@, @OptionalAndTerm.tree@); 
+                        @}
                         |   AND Term
-                        ;
-
-SpecialOperation        :   '-'
-                        |   '<'
-                        |   '='
+                        @{
+                            @i @OptionalAndTerm.tree@ = @Term.tree@ ;
+                        @}
                         ;
 
 Term                    :   '(' Expr ')'
@@ -372,7 +412,7 @@ Term                    :   '(' Expr ')'
                         |   NULL_VAL ID
                         @{
                             /* TODO: check what ´NULL ID` does */
-                            @i @Term.tree@ = null;
+                            @i @Term.tree@ = NULL;
                             @visCheck isVisible(@Term.ids@,@ID.name@, INTERFACE_DING, @ID.lineNr@);
                         @}
                         |   ID
@@ -385,13 +425,13 @@ Term                    :   '(' Expr ')'
                         @{
                             @visCheck isVisible(@Term.ids@,@ID.name@, ABSTRACT_METH, @ID.lineNr@);
 
-                            @i @Term.tree@ = null;
+                            @i @Term.tree@ = NULL;
                         @}
                         |   Term '.' ID '(' ParamsExpr ')'
                         @{
                             @visCheck isVisible(@Term.ids@,@ID.name@, ABSTRACT_METH, @ID.lineNr@);
 
-                            @i @Term.tree@ = null;
+                            @i @Term.tree@ = NULL;
                         @}
                         ;
 

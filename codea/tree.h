@@ -9,8 +9,8 @@ typedef enum
     OP_ADD,
     OP_MUL,
     OP_AND,
-    OP_LESS_EQUAL,
-    OP_NOT_EQUAL,
+    OP_LESS,
+    OP_EQUAL,
     OP_NOT,
     OP_MINUS,
     OP_NUMBER,
@@ -58,3 +58,11 @@ tree_t *createParamIdentifierLeaf(char *name, int parameterIndex);
 tree_t *createComplexIdentifierLeaf(char *name, int type, int parameterIndex, int offset);
 
 tree_t *createThisLeaf();
+
+void print2D(struct tree_t *root);
+
+void print2DUtil(tree_t *root, int space);
+
+tree_t *createNodeDEV(operators_t op, tree_t *left, tree_t *right);
+
+void printElem(tree_t *root);

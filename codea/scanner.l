@@ -5,6 +5,7 @@
 #include "y.tab.h"
 
 #include "list.h"
+#include "tree.h"
 
 %}
 
