@@ -8,6 +8,7 @@ all:
 
 	gcc -g -c -pedantic -Wall list.c
 	gcc -g -c -pedantic -Wall tree.c
+	gcc -g -c -pedantic -Wall code_generator.c
 
 	gcc -g list.o tree.o y.tab.o lex.yy.o -ly -ll -o ag
                                                                                                                                                                                                                  
