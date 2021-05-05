@@ -369,7 +369,7 @@ OptionaNotTerm          :   Term
 
 OptionalPlusTerm        :   '+' Term OptionalPlusTerm
                         @{
-                            @i @OptionalPlusTerm.0.tree@ = createNode(OP_ADD, @Term.tree@, @OptionalPlusTerm.tree@); 
+                            @i @OptionalPlusTerm.0.tree@ = createNode(OP_ADD, @Term.tree@, @OptionalPlusTerm.1.tree@); 
                         @}
                         |   '+' Term
                         @{
@@ -379,7 +379,7 @@ OptionalPlusTerm        :   '+' Term OptionalPlusTerm
 
 OptionalMalTerm         :   '*' Term OptionalMalTerm
                         @{
-                            @i @OptionalMalTerm.0.tree@ = createNode(OP_MUL, @Term.tree@, @OptionalMalTerm.tree@); 
+                            @i @OptionalMalTerm.0.tree@ = createNode(OP_MUL, @Term.tree@, @OptionalMalTerm.1.tree@); 
                         @}
                         |   '*' Term
                         @{
@@ -389,7 +389,7 @@ OptionalMalTerm         :   '*' Term OptionalMalTerm
 
 OptionalAndTerm         :   AND Term OptionalAndTerm
                         @{
-                            @i @OptionalAndTerm.0.tree@ = createNode(OP_AND, @Term.tree@, @OptionalAndTerm.tree@); 
+                            @i @OptionalAndTerm.0.tree@ = createNode(OP_AND, @Term.tree@, @OptionalAndTerm.1.tree@); 
                         @}
                         |   AND Term
                         @{
