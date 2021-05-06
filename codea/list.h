@@ -1,3 +1,6 @@
+#ifndef DATASTRUCTS_H
+#define DATASTRUCTS_H
+
 #include <stdbool.h>
 
 #define VARIABLE 0
@@ -39,3 +42,7 @@ void printItems(node_t *);
 int getParameterIndex(node_t *list, char *name);
 int getClassVarOffset(node_t *list, char *name);
 int getTypeOfName(node_t *list, char *name);
+
+node_t *getAllOfType(node_t *returnList, node_t *list, int type);
+
+#endif

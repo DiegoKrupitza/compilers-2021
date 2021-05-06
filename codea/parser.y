@@ -8,8 +8,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+
 #include "list.h"
 #include "tree.h"
+
+#include "code_generator.h"
 
 void yyerror(char const*);
 
@@ -36,7 +39,7 @@ extern int yylex();
 
 @attributes { long value; } NUM
 @attributes { char *name; int lineNr; } ID
-@attributes { node_t* in; } Programm
+@attributes { node_t* in; node_t* out; } Programm
 @attributes { node_t* in; node_t* out; } ProgrammStart Interface AbstraktMethodsLoop AbstraktMethod Class MemeberLoop Member Stats Pars Par ParsLoop
 @attributes { node_t* in; } Type ParamTypesLoop TypesLoop ImplementsLoop StatsMethode
 @attributes { node_t* ids; } ParamsExpr ParamsExprLoop
@@ -45,12 +48,14 @@ extern int yylex();
 @attributes { node_t* ids; tree_t *tree; } Expr OptionaNotTerm OptionalPlusTerm OptionalMalTerm OptionalAndTerm Term 
 
 @traversal @postorder visCheck
+@traversal @postorder gen
 
 %%
 
 Start                   :   Programm
                         @{
                             @i @Programm.in@ = newList();
+                            @gen generateClassTable(@Programm.out@);
                         @}
                         ;
 
@@ -58,8 +63,12 @@ Programm                :   ProgrammStart Programm
                         @{
                             @i @ProgrammStart.in@ = @Programm.0.in@ ;
                             @i @Programm.1.in@ = @ProgrammStart.out@ ;
+                            @i @Programm.0.out@ = @Programm.1.out@ ;
                         @}
                         |
+                        @{
+                            @i @Programm.out@ = @Programm.in@ ;
+                        @}
                         ;
 
 ProgrammStart           :   Interface ';'

@@ -1,3 +1,5 @@
+#include "list.h"
+
 char *getFirstRegister();
 char *getNextRegister(char *);
 char *getParameterRegister(int);
@@ -35,3 +37,6 @@ void writeLessEqualSv(char *, long, char *);
 
 void writeReturn();
 void writeReturnWithValue(char *);
+
+void generateClassTable(node_t *node);
+void generateClassTableForASingleClass(char *className, node_t *abstractMethds);

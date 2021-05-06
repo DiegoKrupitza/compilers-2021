@@ -196,7 +196,7 @@ void print2D(struct tree_t *root)
     print2DUtil(root, 0);
 }
 
-#define DEBUGPRINT 1
+#define DEBUGPRINT 0
 
 tree_t *createNodeDEV(operators_t op, tree_t *left, tree_t *right)
 {

@@ -10,7 +10,7 @@ all:
 	gcc -g -c -pedantic -Wall tree.c
 	gcc -g -c -pedantic -Wall code_generator.c
 
-	gcc -g list.o tree.o y.tab.o lex.yy.o -ly -ll -o ag
+	gcc -g list.o code_generator.o tree.o y.tab.o lex.yy.o -ly -ll -o ag
                                                                                                                                                                                                                  
 clean:    
 	rm -f ag *.o oxout.* lex.yy.c y.tab.* y.output parser

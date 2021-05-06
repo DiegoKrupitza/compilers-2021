@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "code_generator.h"
+
 char *registers[] = {"rdi", "rsi", "rdx", "rcx", "r8", "r9", "r11"};
 char *returnRegister = "rax";
 
@@ -197,4 +199,49 @@ void writeReturnWithValue(char *retRegister)
     }
 
     writeReturn();
+}
+
+void generateClassTable(node_t *node)
+{
+    //printItems(node);
+
+    //printf("\n\n");
+    // reading all the abstrakt meths
+    //printf("Abstrakts methds: \n");
+
+    node_t *abstractMethds = newList();
+    abstractMethds = getAllOfType(abstractMethds, node, ABSTRACT_METH);
+
+    //printf("\n\n");
+    // reading all the classes
+    //printf("Classes: \n");
+
+    node_t *allClasses = newList();
+    allClasses = getAllOfType(allClasses, node, CLASS_DING);
+
+    // iterate over all the classes
+    node_t *nextNode = allClasses;
+    while (nextNode != NULL)
+    {
+        generateClassTableForASingleClass(nextNode->name, abstractMethds);
+
+        nextNode = nextNode->next;
+    }
+}
+
+void generateClassTableForASingleClass(char *className, node_t *abstractMethds)
+{
+    printf("\n"); // just to have a bit more spacing
+    printf(".globl %s\n", className);
+    printf("%s:   ", className);
+
+    node_t *nextNode = abstractMethds;
+    while (nextNode != NULL)
+    {
+        printf(".quad %s_%s\n", className, nextNode->name);
+
+        nextNode = nextNode->next;
+    }
+
+    printf("\n\n");
 }

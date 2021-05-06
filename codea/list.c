@@ -300,3 +300,20 @@ int getTypeOfName(node_t *list, char *name)
     // bad diego bad diego ....
     return -1;
 }
+
+node_t *getAllOfType(node_t *returnList, node_t *list, int type)
+{
+    node_t *nextNode = list;
+
+    while (nextNode != NULL)
+    {
+        if (nextNode->type == type)
+        {
+            // add to our list
+            returnList = add(returnList, nextNode->name, nextNode->type, nextNode->lineNr);
+        }
+
+        nextNode = nextNode->next;
+    }
+    return returnList;
+}
