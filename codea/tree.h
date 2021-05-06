@@ -5,7 +5,6 @@ typedef struct burm_state *STATEPTR_TYPE;
 typedef enum
 {
     OP_RETURN = 0,
-    OP_ADDRESS_READ,
     OP_ADD,
     OP_MUL,
     OP_AND,

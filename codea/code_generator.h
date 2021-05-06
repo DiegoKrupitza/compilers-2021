@@ -40,3 +40,5 @@ void writeReturnWithValue(char *);
 
 void generateClassTable(node_t *node);
 void generateClassTableForASingleClass(char *className, node_t *abstractMethds);
+
+void generateMethodeLabel(char *classname, char *meth_name);

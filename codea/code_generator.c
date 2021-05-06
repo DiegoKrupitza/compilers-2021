@@ -4,12 +4,9 @@
 
 #include "code_generator.h"
 
-char *registers[] = {"rdi", "rsi", "rdx", "rcx", "r8", "r9", "r11"};
-char *returnRegister = "rax";
-
 char *getFirstRegister()
 {
-    return registers[0];
+    return "rax";
 }
 
 char *getNextRegister(char *lastRegister)
@@ -17,10 +14,12 @@ char *getNextRegister(char *lastRegister)
 
     if (lastRegister == NULL)
     {
-        return getFirstRegister();
+        return "rax";
     }
 
-    for (int i = 0; i < 7; i++)
+    char *registers[] = {"rax", "r11", "r10", "r9", "r8", "rcx", "rdx", "rsi", "rdi"};
+
+    for (int i = 0; i < 8; i++)
     {
         if (strcmp(registers[i], lastRegister) == 0)
         {
@@ -244,4 +243,9 @@ void generateClassTableForASingleClass(char *className, node_t *abstractMethds)
     }
 
     printf("\n\n");
+}
+
+void generateMethodeLabel(char *className, char *meth_name)
+{
+    printf("%s_%s:\n", className, meth_name);
 }

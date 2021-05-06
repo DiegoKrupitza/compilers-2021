@@ -1,0 +1,61 @@
+%{
+#include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
+
+#include "tree.h"
+#include "code_generator.h"
+%}
+
+%start stat
+%term OP_RETURN=0 OP_ADD=1 OP_MUL=2 OP_AND=3 OP_LESS=4 OP_EQUAL=5 OP_NOT=6 OP_MINUS=7 OP_NUMBER=8 OP_ID=9 OP_PARAM_ID=10 OP_CLASS_VAR_ID=11 OP_THIS=12 OP_NULL=13
+
+%%
+
+stat:   ret                             # 0 #
+
+ret:    OP_RETURN(expr)                 # 1 #   writeReturnWithValue(bnode->regStor);
+
+expr:   const                           # 1 #   writeMovev(bnode->value, bnode->regStor);
+
+expr:   OP_ADD(expr, expr)              # 1 #   writeAdd(bnode->kids[1]->regStor, bnode->kids[0]->regStor);
+expr:   OP_ADD(const, expr)             # 1 #   writeAddv(bnode->kids[0]->value, bnode->kids[1]->regStor); writeMove(bnode->kids[1]->regStor, bnode->regStor); 
+expr:   OP_ADD(expr, const)             # 1 #   writeAddv(bnode->kids[1]->value, bnode->kids[0]->regStor);
+
+expr:   OP_MUL(expr, expr)              # 1 #   writeMul(bnode->kids[1]->regStor, bnode->kids[0]->regStor);
+expr:   OP_MUL(const, expr)             # 1 #   writeMulv(bnode->kids[0]->value, bnode->kids[1]->regStor); writeMove(bnode->kids[1]->regStor, bnode->regStor);
+expr:   OP_MUL(expr, const)             # 1 #   writeMulv(bnode->kids[1]->value, bnode->kids[0]->regStor);
+
+
+expr:   OP_AND(expr, expr)              # 1 #   writeAnd(bnode->kids[1]->regStor, bnode->kids[0]->regStor);
+expr:   OP_AND(const, expr)             # 1 #   writeAndv(bnode->kids[0]->value, bnode->kids[1]->regStor); writeMove(bnode->kids[1]->regStor, bnode->regStor); 
+expr:   OP_AND(expr, const)             # 1 #   writeAndv(bnode->kids[1]->value, bnode->kids[0]->regStor);
+
+expr:   OP_LESS(expr, expr)             # 1 #   
+expr:   OP_LESS(expr, const)            # 1 #   
+
+
+expr:   OP_EQUAL(expr, expr)            # 1 #   
+expr:   OP_EQUAL(const, expr)           # 1 #   
+expr:   OP_EQUAL(expr, const)           # 1 #   
+
+expr:   OP_NOT(expr)                    # 1 #   writeNot(bnode->regStor); 
+expr:   OP_MINUS(expr)                  # 1 #   
+
+expr:   OP_ID                           # 1 #   /* TODO: in later angabe da es sich hier um normale vars handel */
+expr:   OP_PARAM_ID                     # 1 #   
+expr:   OP_CLASS_VAR_ID                 # 1 #   
+
+expr:   OP_THIS                         # 1 #   
+expr:   OP_NULL                         # 1 #   
+
+const:  OP_NUMBER                       # 0 #
+const:  OP_ADD(const, const)            # 0 #   bnode->value = bnode->kids[0]->value + bnode->kids[1]->value;
+const:  OP_MUL(const, const)            # 0 #   bnode->value = bnode->kids[0]->value * bnode->kids[1]->value;
+const:  OP_AND(const, const)            # 0 #   bnode->value = bnode->kids[0]->value & bnode->kids[1]->value;
+const:  OP_LESS_EQUAL(const, const)     # 0 #   bnode->value = bnode->kids[0]->value <= bnode->kids[1]->value ? -1 : 0;
+const:  OP_NOT_EQUAL(const, const)      # 0 #   bnode->value = bnode->kids[0]->value != bnode->kids[1]->value ? -1 : 0;
+const:  OP_NOT(const)                   # 0 #   bnode->value = ~bnode->kids[0]->value;
+const:  OP_MINUS(const)                 # 0 #   bnode->value = -bnode->kids[0]->value;
+
+%%

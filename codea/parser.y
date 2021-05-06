@@ -40,15 +40,19 @@ extern int yylex();
 @attributes { long value; } NUM
 @attributes { char *name; int lineNr; } ID
 @attributes { node_t* in; node_t* out; } Programm
-@attributes { node_t* in; node_t* out; } ProgrammStart Interface AbstraktMethodsLoop AbstraktMethod Class MemeberLoop Member Stats Pars Par ParsLoop
+@attributes { node_t* in; node_t* out; } ProgrammStart Interface AbstraktMethodsLoop AbstraktMethod Class Stats Pars Par ParsLoop
 @attributes { node_t* in; } Type ParamTypesLoop TypesLoop ImplementsLoop StatsMethode
 @attributes { node_t* ids; } ParamsExpr ParamsExprLoop
+
+@attributes { node_t* in; node_t* out; char* currentClassName; } MemeberLoop Member
 
 @attributes { node_t* in; node_t* out; tree_t* tree; } Stat
 @attributes { node_t* ids; tree_t *tree; } Expr OptionaNotTerm OptionalPlusTerm OptionalMalTerm OptionalAndTerm Term 
 
 @traversal @postorder visCheck
 @traversal @postorder gen
+
+@traversal @postorder genMeth
 
 %%
 
@@ -147,6 +151,8 @@ Class                   :   CLASS ID
                             @i @MemeberLoop.in@ = addDev(duplicate(@Class.in@),@ID.name@,CLASS_DING,@ID.lineNr@,"CLass Id hinzufuegen für Member");
                             @i @Class.out@ = addDev(@Class.in@,@ID.name@,CLASS_DING,@ID.lineNr@,"Add von Class out der Class id");
                             @i @ImplementsLoop.in@ = @Class.in@;
+
+                            @i @MemeberLoop.currentClassName@ = @ID.name@ ;
                         @}
                         |   CLASS ID
                             IMPLEMENTS ':'
@@ -155,6 +161,8 @@ Class                   :   CLASS ID
                         @{
                             @i @MemeberLoop.in@ = addDev(duplicate(@Class.in@),@ID.name@,CLASS_DING,@ID.lineNr@,"CLass Id hinzufuegen für Member2");
                             @i @Class.out@ = addDev(@Class.in@,@ID.name@,CLASS_DING,@ID.lineNr@,"Add von Class out der Class id2");
+
+                            @i @MemeberLoop.currentClassName@ = @ID.name@ ;
                         @}
                         |   CLASS ID
                             IMPLEMENTS ImplementsLoop ':'
@@ -176,11 +184,16 @@ MemeberLoop             :   MemeberLoop Member ';'
                             @i @MemeberLoop.1.in@ = @MemeberLoop.0.in@ ;
                             @i @Member.in@ = @MemeberLoop.1.out@ ;
                             @i @MemeberLoop.0.out@ = @Member.out@;
+
+                            @i @MemeberLoop.1.currentClassName@ = @MemeberLoop.0.currentClassName@ ;
+                            @i @Member.currentClassName@ = @MemeberLoop.0.currentClassName@ ;
                         @}
                         |   Member ';'
                         @{
                             @i @Member.in@ = @MemeberLoop.in@ ; 
                             @i @MemeberLoop.out@ = @Member.out@;
+
+                            @i @Member.currentClassName@ = @MemeberLoop.currentClassName@ ;
                         @}
                         ;
 
@@ -205,6 +218,8 @@ Member                  :   VAR ID ':' Type
                             @visCheck isVisible(@Member.in@,@ID.name@, ABSTRACT_METH, @ID.lineNr@);
                             @i @StatsMethode.in@ = @Member.in@ ;
                             @i @Member.out@ = @Member.in@;
+
+                            @genMeth generateMethodeLabel(@Member.currentClassName@, @ID.name@);
                         @}
                         |   METHOD ID '(' Pars ')' StatsMethode END
                         @{
@@ -212,6 +227,8 @@ Member                  :   VAR ID ':' Type
                             @i @Pars.in@ = duplicate(@Member.in@);
                             @i @Member.out@ = duplicate(@Member.in@);
                             @i @StatsMethode.in@ = @Pars.out@ ;
+
+                            @genMeth generateMethodeLabel(@Member.currentClassName@, @ID.name@);
                         @}
                         ;
 
