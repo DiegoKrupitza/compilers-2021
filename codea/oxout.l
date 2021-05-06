@@ -25,7 +25,7 @@ struct yyyT2 { char *name; int lineNr; };
 typedef struct yyyT2 *yyyP2; 
 
 
-struct yyyT3 { node_t* in; }; 
+struct yyyT3 { node_t* in; node_t* out; }; 
 typedef struct yyyT3 *yyyP3; 
 
 
