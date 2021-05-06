@@ -420,8 +420,8 @@ Term                    :   '(' Expr ')'
                         @}
                         |   NULL_VAL ID
                         @{
-                            /* TODO: check what ´NULL ID` does */
-                            @i @Term.tree@ = NULL;
+                            /* check what ´NULL ID` does */
+                            @i @Term.tree@ = createNULLLeaf();
                             @visCheck isVisible(@Term.ids@,@ID.name@, INTERFACE_DING, @ID.lineNr@);
                         @}
                         |   ID

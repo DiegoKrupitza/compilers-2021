@@ -90,6 +90,17 @@ tree_t *createThisLeaf()
     return node;
 }
 
+tree_t *createNULLLeaf()
+{
+    tree_t *node = (tree_t *)malloc(sizeof(tree_t));
+
+    node->op = OP_NULL;
+    node->kids[0] = (tree_t *)NULL;
+    node->kids[1] = (tree_t *)NULL;
+
+    return node;
+}
+
 tree_t *createNumericalLeaf(long value)
 {
     tree_t *node = (tree_t *)malloc(sizeof(tree_t));
@@ -182,6 +193,10 @@ void printElem(tree_t *root)
     else if (root->op == OP_THIS)
     {
         printf("THIS\n");
+    }
+    else if (root->op == OP_NULL)
+    {
+        printf("NULLOP\n");
     }
     else
     {
