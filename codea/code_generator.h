@@ -1,5 +1,8 @@
 #include "list.h"
 
+#define TRUE_VAL -1
+#define FALSE_VAL 0
+
 char *getFirstRegister();
 char *getNextRegister(char *);
 char *getParameterRegister(int);
@@ -50,3 +53,6 @@ char *getThisRegister();
 void writeThisMovq(char *dst);
 
 void writeNeq(char *srcDst);
+
+void writeEqualsv(long value, char *reg, char *dst);
+void writeEquals(char *reg1, char *reg2, char *dst);

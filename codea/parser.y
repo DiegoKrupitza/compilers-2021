@@ -289,7 +289,7 @@ Stats                   :   Stat ';' Stats
                             @i @Stat.in@ = @Stats.0.in@ ;
                             @i @Stats.1.in@ = @Stat.out@ ;
                             @i @Stats.0.out@ = @Stats.1.out@;
-
+                            @visCheck /* print2D(@Stat.tree@); */
                             @burm if(@Stat.tree@ != NULL) { burm_label(@Stat.tree@); burm_reduce(@Stat.tree@, 1); }
                         @}
                         |
@@ -384,10 +384,12 @@ Expr                    :   OptionaNotTerm
                         |   Term '<' Term
                         @{
                             @i @Expr.tree@ = createNode(OP_LESS, @Term.0.tree@, @Term.1.tree@); 
+                            @reg @Term.0.tree@->regStor = @Expr.tree@->regStor; @Term.1.tree@->regStor = getNextRegister(@Expr.tree@->regStor);
                         @}
                         |   Term '=' Term
                         @{
                             @i @Expr.tree@ = createNode(OP_EQUAL, @Term.0.tree@, @Term.1.tree@); 
+                            @reg @Term.0.tree@->regStor = @Expr.tree@->regStor; @Term.1.tree@->regStor = getNextRegister(@Expr.tree@->regStor);
                         @}
                         |   NEW ID
                         @{
