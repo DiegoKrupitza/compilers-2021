@@ -359,6 +359,7 @@ Stat                    :   RETURN Expr
 Expr                    :   OptionaNotTerm
                         @{
                             @i @Expr.tree@ = @OptionaNotTerm.tree@ ; 
+                            @reg @OptionaNotTerm.tree@->regStor = @Expr.tree@->regStor ;
                         @}
                         |   Term OptionalPlusTerm
                         @{
@@ -394,10 +395,12 @@ Expr                    :   OptionaNotTerm
 OptionaNotTerm          :   Term
                         @{
                             @i @OptionaNotTerm.tree@ = @Term.tree@ ; 
+                            @reg @Term.tree@->regStor = @OptionaNotTerm.tree@->regStor ;
                         @}
                         |   NOT OptionaNotTerm
                         @{
                             @i @OptionaNotTerm.0.tree@ = createNode(OP_NOT, @OptionaNotTerm.1.tree@, NULL); 
+                            @reg @OptionaNotTerm.1.tree@->regStor = @OptionaNotTerm.0.tree@->regStor;
                         @}
                         ;
 

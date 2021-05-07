@@ -1850,7 +1850,7 @@ case 43:  /***yacc rule 43***/
     switch (yyywa) {
     case 1:
  (((yyyP9)(((char *)yyyRSTopN)+yyyGNSz))->tree) = (((yyyP9)(((char *)((yyyRefN->cL)[0]))+yyyGNSz))->tree) ; 
-                            break;
+                                break;
     }
   break;
   case 1:  /**/
@@ -2030,7 +2030,7 @@ case 51:  /***yacc rule 51***/
     switch (yyywa) {
     case 1:
  (((yyyP9)(((char *)yyyRSTopN)+yyyGNSz))->tree) = (((yyyP9)(((char *)((yyyRefN->cL)[0]))+yyyGNSz))->tree) ; 
-                            break;
+                                break;
     }
   break;
   case 1:  /**/
@@ -2048,7 +2048,7 @@ case 52:  /***yacc rule 52***/
     switch (yyywa) {
     case 1:
  (((yyyP9)(((char *)yyyRSTopN)+yyyGNSz))->tree) = createNode(OP_NOT, (((yyyP9)(((char *)((yyyRefN->cL)[1]))+yyyGNSz))->tree), NULL); 
-                            break;
+                                break;
     }
   break;
   case 2:  /**/
@@ -4643,9 +4643,12 @@ case 43:
 		case 0:
 			switch(yyyPass)	{
 				case 0:
-yyyRL = 0;
+yyyRL = 0;yyySetCond(0)
+
 				case 1:
 
+if (yyyCond(0) != yyyPass) { (((yyyP9)(((char *)((yyyTSTn->cL)[0]))+yyyGNSz))->tree)->regStor = (((yyyP9)(((char *)yyyTSTn)+yyyGNSz))->tree)->regStor ;
+                        }
 				break;
 					}
 		break;
@@ -5045,9 +5048,12 @@ case 51:
 		case 0:
 			switch(yyyPass)	{
 				case 0:
-yyyRL = 0;
+yyyRL = 0;yyySetCond(0)
+
 				case 1:
 
+if (yyyCond(0) != yyyPass) { (((yyyP9)(((char *)((yyyTSTn->cL)[0]))+yyyGNSz))->tree)->regStor = (((yyyP9)(((char *)yyyTSTn)+yyyGNSz))->tree)->regStor ;
+                        }
 				break;
 					}
 		break;
@@ -5095,9 +5101,12 @@ case 52:
 		case 0:
 			switch(yyyPass)	{
 				case 0:
-yyyRL = 0;
+yyyRL = 0;yyySetCond(0)
+
 				case 1:
 
+if (yyyCond(0) != yyyPass) { (((yyyP9)(((char *)((yyyTSTn->cL)[1]))+yyyGNSz))->tree)->regStor = (((yyyP9)(((char *)yyyTSTn)+yyyGNSz))->tree)->regStor;
+                        }
 				break;
 					}
 		break;
