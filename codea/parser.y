@@ -225,7 +225,7 @@ Member                  :   VAR ID ':' Type
                             @i @StatsMethode.in@ = @Member.in@ ;
                             @i @Member.out@ = @Member.in@;
 
-                            @genMeth generateMethodeLabel(@Member.currentClassName@, @ID.name@);
+                            @burm @revorder(1) generateMethodeLabel(@Member.currentClassName@, @ID.name@);
                         @}
                         |   METHOD ID '(' Pars ')' StatsMethode END
                         @{
@@ -234,7 +234,7 @@ Member                  :   VAR ID ':' Type
                             @i @Member.out@ = duplicate(@Member.in@);
                             @i @StatsMethode.in@ = @Pars.out@ ;
 
-                            @genMeth generateMethodeLabel(@Member.currentClassName@, @ID.name@);
+                            @burm @revorder(1) generateMethodeLabel(@Member.currentClassName@, @ID.name@);
                         @}
                         ;
 

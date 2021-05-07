@@ -1,10 +1,15 @@
 interface a:
-    b(int,a):a
+    b(int,a):int
+    a2(int,a):int
 end;
 
 class c implements a:
     var adiego:int;
     var bdiego: int;
+
+    method a2()
+        return 1;
+    end;
 
     method b(e:int, f:a)
         /* return (((not (e + f)) < this) + e + 3 + 5); */
@@ -28,6 +33,6 @@ class c implements a:
         /* return 1 = 1; */
         /* return e = 1; */
         /* return ((1 = e) = (e = 5)); */
-        return 1;
+        return 2;
     end;
 end;
