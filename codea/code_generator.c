@@ -306,37 +306,50 @@ void writeVLessReg(long value, char *reg, char *dst)
 {
     fprintf(stdout, "\tcmpq\t$%ld, %%%s\t# checking if %ld less %s\n", value, reg, value, reg);
 
+    fprintf(stdout, "\tsetg\t%%%s\n", getByteRegisterName(dst));
+    writeAndv(1, dst);
+    writeMulv(-1, dst);
+
     // move if less
     //cmove
-    fprintf(stdout, "\tcmovl\t$%d, %%%s\n", TRUE_VAL, dst);
+    //fprintf(stdout, "\tcmovl\t$%d, %%%s\n", TRUE_VAL, dst);
 
     // move if greater or equal
     //cmovne
-    fprintf(stdout, "\tcmovge\t$%d, %%%s\n", FALSE_VAL, dst);
+    //fprintf(stdout, "\tcmovge\t$%d, %%%s\n", FALSE_VAL, dst);
 }
 
 void writeRegLessV(char *reg, long value, char *dst)
 {
-    fprintf(stdout, "\tcmpq\t%%%s, $%ld\t# checking if %s less %ld\n", reg, value, reg, value);
+    //fprintf(stdout, "\tcmpq\t%%%s, $%ld\t# checking if %s less %ld\n", reg, value, reg, value);
+
+    fprintf(stdout, "\tcmpq\t$%ld, %%%s\t# checking if %ld less %s (inverted because right const not allwoed) \n", value, reg, value, reg);
+    fprintf(stdout, "\tsetl\t%%%s\n", getByteRegisterName(dst));
+    writeAndv(1, dst);
+    writeMulv(-1, dst);
 
     // move if less
     //cmove
-    fprintf(stdout, "\tcmovl\t$%d, %%%s\n", TRUE_VAL, dst);
+    //fprintf(stdout, "\tcmovl\t$%d, %%%s\n", TRUE_VAL, dst);
 
     // move if greater or equal
     //cmovne
-    fprintf(stdout, "\tcmovge\t$%d, %%%s\n", FALSE_VAL, dst);
+    //fprintf(stdout, "\tcmovge\t$%d, %%%s\n", FALSE_VAL, dst);
 }
 
 void writeRegLessReg(char *reg1, char *reg2, char *dst)
 {
     fprintf(stdout, "\tcmpq\t%%%s, %%%s\t# checking if %s less %s\n", reg1, reg2, reg1, reg2);
 
+    fprintf(stdout, "\tsetg\t%%%s\n", getByteRegisterName(dst));
+    writeAndv(1, dst);
+    writeMulv(-1, dst);
+
     // move if less
     //cmove
-    fprintf(stdout, "\tcmovl\t$%d, %%%s\n", TRUE_VAL, dst);
+    //fprintf(stdout, "\tcmovl\t$%d, %%%s\n", TRUE_VAL, dst);
 
     // move if greater or equal
     //cmovne
-    fprintf(stdout, "\tcmovge\t$%d, %%%s\n", FALSE_VAL, dst);
+    //fprintf(stdout, "\tcmovge\t$%d, %%%s\n", FALSE_VAL, dst);
 }

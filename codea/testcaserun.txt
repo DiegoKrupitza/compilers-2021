@@ -190,6 +190,325 @@ RET(c.f(myObj,3,10) == 269);
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
+==========> Eingabe von /home/ublu21/u11808206/test/codea/kingD-11.0:
+interface i: 
+    f(int):int 
+    g(int):int 
+    h(int,int):int 
+    j(int,int):int 
+end;
+class c implements i:
+    method f(x:int) 
+        return x < 3; 
+    end;
+    method g(x:int) 
+        return 3 < x; 
+    end;
+    method h(x:int,y:int) 
+        return y < x; 
+    end;
+    method j(x:int,y:int) 
+        return x < y; 
+    end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_f
+.quad c_g
+.quad c_h
+.quad c_j
+
+
+c_f:
+	movq	%rsi, %rax
+	cmpq	$3, %rax	# checking if 3 less rax (inverted because right const not allwoed) 
+	setl	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	ret
+c_g:
+	movq	%rsi, %r11
+	cmpq	$3, %r11	# checking if 3 less r11
+	setge	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	ret
+c_h:
+	movq	%rdx, %rax
+	movq	%rsi, %r11
+	cmpq	%rax, %r11	# checking if rax less r11
+	setg	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	ret
+c_j:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	cmpq	%rax, %r11	# checking if rax less r11
+	setg	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; };
+extern struct vft { 
+    long (*f)(struct objectc *, long); 
+    long (*g)(struct objectc *, long); 
+    long (*h)(struct objectc *, long, long);
+    long (*j)(struct objectc *, long, long);
+} c;
+RET(c.f(0,3) == 0);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/kingD-12.0:
+interface i: 
+    g(int):int 
+end;
+class c implements i:
+    method g(x:int) 
+        return 3 < x; 
+    end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_g
+
+
+c_g:
+	movq	%rsi, %r11
+	cmpq	$3, %r11	# checking if 3 less r11
+	setge	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; };
+extern struct vft { 
+    long (*g)(struct objectc *, long); 
+} c;
+RET(c.g(0,3) == 0);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+[Error] aber das Ergebnis des Aufrufs ist falsch.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/kingD-13.0:
+interface i: 
+    f(int):int 
+    g(int):int 
+    h(int,int):int 
+    j(int,int):int 
+end;
+class c implements i:
+    method f(x:int) 
+        return x < 3; 
+    end;
+    method g(x:int) 
+        return 3 < x; 
+    end;
+    method h(x:int,y:int) 
+        return y < x; 
+    end;
+    method j(x:int,y:int) 
+        return x < y; 
+    end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_f
+.quad c_g
+.quad c_h
+.quad c_j
+
+
+c_f:
+	movq	%rsi, %rax
+	cmpq	$3, %rax	# checking if 3 less rax (inverted because right const not allwoed) 
+	setl	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	ret
+c_g:
+	movq	%rsi, %r11
+	cmpq	$3, %r11	# checking if 3 less r11
+	setge	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	ret
+c_h:
+	movq	%rdx, %rax
+	movq	%rsi, %r11
+	cmpq	%rax, %r11	# checking if rax less r11
+	setg	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	ret
+c_j:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	cmpq	%rax, %r11	# checking if rax less r11
+	setg	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; };
+extern struct vft { 
+    long (*f)(struct objectc *, long); 
+    long (*g)(struct objectc *, long); 
+    long (*h)(struct objectc *, long, long);
+    long (*j)(struct objectc *, long, long);
+} c;
+RET(c.h(0,3,3) == 0);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/kingD-14.0:
+interface i: 
+    j(int,int):int 
+end;
+class c implements i:
+    method j(x:int,y:int) 
+        return x < y; 
+    end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_j
+
+
+c_j:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	cmpq	%rax, %r11	# checking if rax less r11
+	setg	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; };
+extern struct vft {
+    long (*j)(struct objectc *, long, long);
+} c;
+RET(c.j(0,3,3) == 0);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/kingD-15.0:
+interface i: 
+    f(int):int 
+    g(int):int 
+    h(int,int):int 
+    j(int,int):int 
+end;
+class c implements i:
+    method f(x:int) 
+        return x < 3; 
+    end;
+    method g(x:int) 
+        return 3 < x; 
+    end;
+    method h(x:int,y:int) 
+        return y < x; 
+    end;
+    method j(x:int,y:int) 
+        return x < y; 
+    end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_f
+.quad c_g
+.quad c_h
+.quad c_j
+
+
+c_f:
+	movq	%rsi, %rax
+	cmpq	$3, %rax	# checking if 3 less rax (inverted because right const not allwoed) 
+	setl	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	ret
+c_g:
+	movq	%rsi, %r11
+	cmpq	$3, %r11	# checking if 3 less r11
+	setge	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	ret
+c_h:
+	movq	%rdx, %rax
+	movq	%rsi, %r11
+	cmpq	%rax, %r11	# checking if rax less r11
+	setg	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	ret
+c_j:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	cmpq	%rax, %r11	# checking if rax less r11
+	setg	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; };
+extern struct vft { 
+    long (*f)(struct objectc *, long); 
+    long (*g)(struct objectc *, long); 
+    long (*h)(struct objectc *, long, long);
+    long (*j)(struct objectc *, long, long);
+} c;
+RET(c.f(0,2) == -1 && c.g(0,4) == -1  && c.h(0,3,2) == -1  && c.j(0,2,3) == -1  && c.j(0,3,10) == -1);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
 ==========> Eingabe von /home/ublu21/u11808206/test/codea/kingD-2.0:
 interface i: f(int):int end;
 class c implements i:
@@ -237,17 +556,22 @@ c:
 
 c_f:
 	movq	%rsi, %rax
-	cmpq	%rax, $3	# checking if rax less 3
-	cmovl	$-1, %rax
-	cmovge	$0, %rax
+	cmpq	$3, %rax	# checking if 3 less rax (inverted because right const not allwoed) 
+	setl	%al
+	and	$1, %rax
+	imulq	$-1, %rax
 	ret
 
 Übersetze und linke das Testprogramm:
-testcodeaout15962.s: Assembler messages:
-testcodeaout15962.s:9: Error: operand type mismatch for `cmp'
-testcodeaout15962.s:10: Error: operand type mismatch for `cmovl'
-testcodeaout15962.s:11: Error: operand type mismatch for `cmovge'
-[Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; };
+extern struct vft { long (*f)(struct objectc *, long); } c;
+RET(c.f(0,2) == -1 && c.f(0,-1)==-1 && c.f(0,100) == 0);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
 ==========> Eingabe von /home/ublu21/u11808206/test/codea/kingD-4.0:
 interface i: f(int):int end;
 class c implements i:
@@ -266,15 +590,21 @@ c:
 c_f:
 	movq	%rsi, %r11
 	cmpq	$3, %r11	# checking if 3 less r11
-	cmovl	$-1, %rax
-	cmovge	$0, %rax
+	setge	%al
+	and	$1, %rax
+	imulq	$-1, %rax
 	ret
 
 Übersetze und linke das Testprogramm:
-testcodeaout15962.s: Assembler messages:
-testcodeaout15962.s:10: Error: operand type mismatch for `cmovl'
-testcodeaout15962.s:11: Error: operand type mismatch for `cmovge'
-[Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; };
+extern struct vft { long (*f)(struct objectc *, long); } c;
+RET(c.f(0,2) == 0 && c.f(0,-1)== 0 && c.f(0,100) == -1);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
 ==========> Eingabe von /home/ublu21/u11808206/test/codea/kingD-5.0:
 interface i: 
     f(int,int):int 
@@ -550,8 +880,9 @@ Class1_lessOrEqual:
 	movq	%rsi, %rax
 	movq	%rdx, %r11
 	cmpq	%rax, %r11	# checking if rax less r11
-	cmovl	$-1, %rax
-	cmovge	$0, %rax
+	setg	%al
+	and	$1, %rax
+	imulq	$-1, %rax
 	notq	%rax
 	movq	%rsi, %r11
 	movq	%rdx, %r10
@@ -603,10 +934,52 @@ In file included from /usr/ftp/pub/ubvl/test/codea/testmain.c:10:0:
   Class2.getNull(64) == 0 && Class2.getNull(-3)==0 && Class2.getNull(5)==0);
                                                                      ^
 /home/ublu21/u11808206/test/codea/thenotoriousj-11.call:41:69: note: expected ‘struct objectc *’ but argument is of type ‘int’
-testcodeaout15962.s: Assembler messages:
-testcodeaout15962.s:44: Error: operand type mismatch for `cmovl'
-testcodeaout15962.s:45: Error: operand type mismatch for `cmovge'
-[Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
+
+Rufe folgendes Codefragment auf:
+struct objectc { 
+	struct vft *vftc;
+};
+
+struct objectClass1 { 
+	struct vft *vftc;
+	long v1;
+	long v2;
+	struct objectc* var3;
+};
+
+struct objectClass2 { 
+	struct vft *vftc;
+};
+
+extern struct vft { 
+	long (*binaryOr)(struct objectc *, long, long);
+	long (*squareSum)(struct objectc *, long, long);
+	long (*lessOrEqual)(struct objectc *, long, long);
+	long (*determinant)(struct objectc *, long, long, long, long);
+	long (*offsetThisBy64)(struct objectc *);
+	struct objectc* (*getNull)(struct objectc *);
+} Class1, Class2;
+
+long a = 0xABCD;
+long b = 0xDEAD;
+long res = a*a+b*b;
+
+RET(Class1.binaryOr(0, 0xABCD, 0xDEAD) == (0xABCD | 0xDEAD) && Class1.binaryOr(0, 0xABCD, 0xABCD) == 0xABCD && 
+	Class1.binaryOr(0, 0, 0) == 0 && Class1.binaryOr(0, 4, 2) == 6 &&
+	Class1.squareSum(0, 3, 4) == 25 && Class1.squareSum(0, a, a) == 2*a*a &&
+	Class1.squareSum(0, 0, 0) == 0 && Class1.squareSum(0, a, b) == res &&
+
+	Class1.lessOrEqual(0, 3, 4) == -1 && Class1.lessOrEqual(0, 4, 5) == -1 &&
+	Class1.lessOrEqual(0, 0, 0) == -1 && Class1.lessOrEqual(0, 2, -2) == 0 &&
+
+	Class1.determinant(0, 3, 4, 5, 6) == -2 && Class1.determinant(0, 12, 5, 1, 8) == 91 &&
+	Class1.determinant(0, 0, 0, 0, 0) == 0 && Class1.determinant(0, 2, -2, 6, -5) == 2 &&
+
+	Class2.offsetThisBy64(0) == 64 && Class2.offsetThisBy64(-3)==61 && Class2.offsetThisBy64(5)==69 &&
+	Class2.getNull(64) == 0 && Class2.getNull(-3)==0 && Class2.getNull(5)==0);
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
 ==========> Eingabe von /home/ublu21/u11808206/test/codea/thenotoriousj-12.0:
 interface Interface1:
 	add2(int, int) : int
@@ -1357,6 +1730,6 @@ Status: korrekt
 
 Statistics: 
 ===========
-           29 Tests total
-           26 Tests passed
-           3 Tests failed
+           34 Tests total
+           33 Tests passed
+           1 Tests failed
