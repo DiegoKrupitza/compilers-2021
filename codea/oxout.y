@@ -1868,7 +1868,7 @@ case 44:  /***yacc rule 44***/
     switch (yyywa) {
     case 1:
  (((yyyP9)(((char *)yyyRSTopN)+yyyGNSz))->tree) = createNode(OP_ADD, (((yyyP9)(((char *)((yyyRefN->cL)[0]))+yyyGNSz))->tree), (((yyyP9)(((char *)((yyyRefN->cL)[1]))+yyyGNSz))->tree)); 
-                            break;
+                                break;
     }
   break;
   case 1:  /**/
@@ -2066,7 +2066,7 @@ case 53:  /***yacc rule 53***/
     switch (yyywa) {
     case 1:
  (((yyyP9)(((char *)yyyRSTopN)+yyyGNSz))->tree) = createNode(OP_ADD, (((yyyP9)(((char *)((yyyRefN->cL)[1]))+yyyGNSz))->tree), (((yyyP9)(((char *)((yyyRefN->cL)[2]))+yyyGNSz))->tree)); 
-                            break;
+                                break;
     }
   break;
   case 2:  /**/
@@ -4696,9 +4696,12 @@ case 44:
 		case 0:
 			switch(yyyPass)	{
 				case 0:
-yyyRL = 0;
+yyyRL = 0;yyySetCond(0)
+
 				case 1:
 
+if (yyyCond(0) != yyyPass) { (((yyyP9)(((char *)((yyyTSTn->cL)[0]))+yyyGNSz))->tree)->regStor = (((yyyP9)(((char *)yyyTSTn)+yyyGNSz))->tree)->regStor; (((yyyP9)(((char *)((yyyTSTn->cL)[1]))+yyyGNSz))->tree)->regStor = getNextRegister((((yyyP9)(((char *)yyyTSTn)+yyyGNSz))->tree)->regStor);
+                        }
 				break;
 					}
 		break;
@@ -5154,9 +5157,12 @@ case 53:
 		case 0:
 			switch(yyyPass)	{
 				case 0:
-yyyRL = 0;
+yyyRL = 0;yyySetCond(0)
+
 				case 1:
 
+if (yyyCond(0) != yyyPass) { (((yyyP9)(((char *)((yyyTSTn->cL)[1]))+yyyGNSz))->tree)->regStor = (((yyyP9)(((char *)yyyTSTn)+yyyGNSz))->tree)->regStor; (((yyyP9)(((char *)((yyyTSTn->cL)[2]))+yyyGNSz))->tree)->regStor = getNextRegister((((yyyP9)(((char *)yyyTSTn)+yyyGNSz))->tree)->regStor);
+                        }
 				break;
 					}
 		break;
@@ -6665,7 +6671,7 @@ char *yyyStringTab[] = {
 "StatsMethode",0,0,0,0,
 0,0,0,"RETURN",0,
 0,0,0,0,0,
-0,0,"getFirstRegister",0,0,
+0,"getNextRegister","getFirstRegister",0,0,
 0,0,"ParsLoop","Type",0,
 0,"AbstraktMethodsLoop","VARIABLE","ParamTypesLoop","ParamsExprLoop",
 0,0,0,0,0,

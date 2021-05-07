@@ -364,6 +364,7 @@ Expr                    :   OptionaNotTerm
                         |   Term OptionalPlusTerm
                         @{
                             @i @Expr.tree@ = createNode(OP_ADD, @Term.tree@, @OptionalPlusTerm.tree@); 
+                            @reg @Term.tree@->regStor = @Expr.tree@->regStor; @OptionalPlusTerm.tree@->regStor = getNextRegister(@Expr.tree@->regStor);
                         @}
                         |   Term OptionalMalTerm
                         @{
@@ -407,6 +408,7 @@ OptionaNotTerm          :   Term
 OptionalPlusTerm        :   '+' Term OptionalPlusTerm
                         @{
                             @i @OptionalPlusTerm.0.tree@ = createNode(OP_ADD, @Term.tree@, @OptionalPlusTerm.1.tree@); 
+                            @reg @Term.tree@->regStor = @OptionalPlusTerm.0.tree@->regStor; @OptionalPlusTerm.1.tree@->regStor = getNextRegister(@OptionalPlusTerm.0.tree@->regStor);
                         @}
                         |   '+' Term
                         @{
