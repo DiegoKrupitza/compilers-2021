@@ -7,6 +7,7 @@
 
 #include "list.h"
 #include "tree.h"
+#include "implemented_meth_list.h"
 
 %}
 
@@ -25,7 +26,7 @@ struct yyyT2 { char *name; int lineNr; };
 typedef struct yyyT2 *yyyP2; 
 
 
-struct yyyT3 { node_t* in; node_t* out; }; 
+struct yyyT3 { node_t* in; node_t* out; meth_node_t* inImplList; meth_node_t* outImplList; }; 
 typedef struct yyyT3 *yyyP3; 
 
 
@@ -41,7 +42,7 @@ struct yyyT6 { node_t* ids; };
 typedef struct yyyT6 *yyyP6; 
 
 
-struct yyyT7 { node_t* in; node_t* out; char* currentClassName; }; 
+struct yyyT7 { node_t* in; node_t* out; char* currentClassName; meth_node_t* inImplList; meth_node_t* outImplList; }; 
 typedef struct yyyT7 *yyyP7; 
 
 

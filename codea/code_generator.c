@@ -204,8 +204,12 @@ void writeReturnWithValue(char *retRegister)
     writeReturn();
 }
 
-void generateClassTable(node_t *node)
+void generateClassTable(node_t *node, meth_node_t *implmethds)
 {
+    // printf("Implemented lsit \n");
+    // printItemsImpl(implmethds);
+
+    // printf("Normal nodes\n");
     //printItems(node);
 
     //printf("\n\n");

@@ -1,4 +1,5 @@
 #include "list.h"
+#include "implemented_meth_list.h"
 
 #define TRUE_VAL -1
 #define FALSE_VAL 0
@@ -41,7 +42,7 @@ void writeLessEqualSv(char *, long, char *);
 void writeReturn();
 void writeReturnWithValue(char *);
 
-void generateClassTable(node_t *node);
+void generateClassTable(node_t *node, meth_node_t *implmethds);
 void generateClassTableForASingleClass(char *className, node_t *abstractMethds);
 
 void generateMethodeLabel(char *classname, char *meth_name);

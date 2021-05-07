@@ -13,6 +13,7 @@
 #include "tree.h"
 
 #include "code_generator.h"
+#include "implemented_meth_list.h"
 
 void yyerror(char const*);
 
@@ -42,12 +43,12 @@ extern void burm_label(NODEPTR_TYPE);
 
 @attributes { long value; } NUM
 @attributes { char *name; int lineNr; } ID
-@attributes { node_t* in; node_t* out; } Programm
-@attributes { node_t* in; node_t* out; } ProgrammStart Interface AbstraktMethodsLoop AbstraktMethod Class Stats Pars Par ParsLoop
+@attributes { node_t* in; node_t* out; meth_node_t* inImplList; meth_node_t* outImplList; } Programm ProgrammStart Class
+@attributes { node_t* in; node_t* out; } Interface AbstraktMethodsLoop AbstraktMethod Stats Pars Par ParsLoop
 @attributes { node_t* in; } Type ParamTypesLoop TypesLoop ImplementsLoop StatsMethode
 @attributes { node_t* ids; } ParamsExpr ParamsExprLoop
 
-@attributes { node_t* in; node_t* out; char* currentClassName; } MemeberLoop Member
+@attributes { node_t* in; node_t* out; char* currentClassName; meth_node_t* inImplList; meth_node_t* outImplList; } MemeberLoop Member
 
 @attributes { node_t* in; node_t* out; tree_t* tree; } Stat
 @attributes { node_t* ids; tree_t *tree; } Expr OptionaNotTerm OptionalPlusTerm OptionalMalTerm OptionalAndTerm Term 
@@ -65,7 +66,8 @@ extern void burm_label(NODEPTR_TYPE);
 Start                   :   Programm
                         @{
                             @i @Programm.in@ = newList();
-                            @gen generateClassTable(@Programm.out@);
+                            @i @Programm.inImplList@ = newImplList();
+                            @gen generateClassTable(@Programm.out@,@Programm.outImplList@);
                         @}
                         ;
 
@@ -74,10 +76,15 @@ Programm                :   ProgrammStart Programm
                             @i @ProgrammStart.in@ = @Programm.0.in@ ;
                             @i @Programm.1.in@ = @ProgrammStart.out@ ;
                             @i @Programm.0.out@ = @Programm.1.out@ ;
+
+                            @i @ProgrammStart.inImplList@ = @Programm.0.inImplList@ ;
+                            @i @Programm.1.inImplList@ = @ProgrammStart.outImplList@ ;
+                            @i @Programm.0.outImplList@ = @Programm.1.outImplList@ ;
                         @}
                         |
                         @{
                             @i @Programm.out@ = @Programm.in@ ;
+                            @i @Programm.outImplList@ = @Programm.inImplList@ ;
                         @}
                         ;
 
@@ -85,11 +92,15 @@ ProgrammStart           :   Interface ';'
                             @{
                                 @i @Interface.in@ = @ProgrammStart.in@ ;
                                 @i @ProgrammStart.out@ = @Interface.out@ ;
+                                @i @ProgrammStart.outImplList@ = @ProgrammStart.inImplList@ ;
                             @}
                         |   Class ';'
                         @{
                             @i @Class.in@ = @ProgrammStart.in@ ;
                             @i @ProgrammStart.out@ = @Class.out@ ;
+
+                            @i @Class.inImplList@ = @ProgrammStart.inImplList@ ;
+                            @i @ProgrammStart.outImplList@ = @Class.outImplList@ ;
                         @}
                         ;
 
@@ -159,6 +170,9 @@ Class                   :   CLASS ID
                             @i @ImplementsLoop.in@ = @Class.in@;
 
                             @i @MemeberLoop.currentClassName@ = @ID.name@ ;
+
+                            @i @MemeberLoop.inImplList@ = @Class.inImplList@ ;
+                            @i @Class.outImplList@ = @MemeberLoop.outImplList@ ;
                         @}
                         |   CLASS ID
                             IMPLEMENTS ':'
@@ -169,6 +183,9 @@ Class                   :   CLASS ID
                             @i @Class.out@ = addDev(@Class.in@,@ID.name@,CLASS_DING,@ID.lineNr@,"Add von Class out der Class id2");
 
                             @i @MemeberLoop.currentClassName@ = @ID.name@ ;
+
+                            @i @MemeberLoop.inImplList@ = @Class.inImplList@ ;
+                            @i @Class.outImplList@ = @MemeberLoop.outImplList@ ;
                         @}
                         |   CLASS ID
                             IMPLEMENTS ImplementsLoop ':'
@@ -176,12 +193,16 @@ Class                   :   CLASS ID
                         @{
                             @i @Class.out@ = addDev(@Class.in@,@ID.name@,CLASS_DING,@ID.lineNr@,"Add von Class out der Class id3");
                             @i @ImplementsLoop.in@ = @Class.in@;
+
+                            @i @Class.outImplList@ = @Class.outImplList@ ;
                         @}
                         |   CLASS ID
                             IMPLEMENTS ':'
                             END
                         @{
                             @i @Class.out@ = addDev(@Class.in@,@ID.name@,CLASS_DING,@ID.lineNr@,"Add von Class out der Class id4");
+
+                            @i @Class.outImplList@ = @Class.outImplList@ ;
                         @}
                         ;
 
@@ -193,6 +214,10 @@ MemeberLoop             :   MemeberLoop Member ';'
 
                             @i @MemeberLoop.1.currentClassName@ = @MemeberLoop.0.currentClassName@ ;
                             @i @Member.currentClassName@ = @MemeberLoop.0.currentClassName@ ;
+
+                            @i @MemeberLoop.1.inImplList@ = @MemeberLoop.0.inImplList@;
+                            @i @Member.inImplList@ = @MemeberLoop.1.outImplList@ ;
+                            @i @MemeberLoop.0.outImplList@ = @Member.outImplList@ ;
                         @}
                         |   Member ';'
                         @{
@@ -200,6 +225,10 @@ MemeberLoop             :   MemeberLoop Member ';'
                             @i @MemeberLoop.out@ = @Member.out@;
 
                             @i @Member.currentClassName@ = @MemeberLoop.currentClassName@ ;
+
+                            @i @Member.inImplList@ = @MemeberLoop.inImplList@;
+                            @i @MemeberLoop.outImplList@ = @Member.outImplList@ ;
+
                         @}
                         ;
 
@@ -218,12 +247,16 @@ Member                  :   VAR ID ':' Type
                         @{
                             @i @Member.out@ = addDev(@Member.in@,@ID.name@,CLASS_VAR,@ID.lineNr@,"Id von member hinzfuegen");
                             @i @Type.in@ = @Member.in@ ; 
+
+                            @i @Member.outImplList@ = @Member.inImplList@ ;
                         @}
                         |   METHOD ID '(' ')' StatsMethode END
                         @{
                             @visCheck isVisible(@Member.in@,@ID.name@, ABSTRACT_METH, @ID.lineNr@);
                             @i @StatsMethode.in@ = @Member.in@ ;
                             @i @Member.out@ = @Member.in@;
+
+                            @i @Member.outImplList@ = addImpl(@Member.inImplList@, @Member.currentClassName@, @ID.name@);
 
                             @burm @revorder(1) generateMethodeLabel(@Member.currentClassName@, @ID.name@);
                         @}
@@ -233,6 +266,8 @@ Member                  :   VAR ID ':' Type
                             @i @Pars.in@ = duplicate(@Member.in@);
                             @i @Member.out@ = duplicate(@Member.in@);
                             @i @StatsMethode.in@ = @Pars.out@ ;
+
+                            @i @Member.outImplList@ = addImpl(@Member.inImplList@, @Member.currentClassName@, @ID.name@);
 
                             @burm @revorder(1) generateMethodeLabel(@Member.currentClassName@, @ID.name@);
                         @}
