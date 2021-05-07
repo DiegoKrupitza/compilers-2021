@@ -75,6 +75,7 @@ tree_t *createParamIdentifierLeaf(char *name, int parameterIndex)
     node->kids[1] = (tree_t *)NULL;
     node->identifierName = name;
     node->parameterIndex = parameterIndex;
+    node->classVaroffset = -1;
 
     return node;
 }

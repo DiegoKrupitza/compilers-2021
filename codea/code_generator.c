@@ -9,6 +9,11 @@ char *getFirstRegister()
     return "rax";
 }
 
+char *getThisRegister()
+{
+    return "rdi";
+}
+
 char *getNextRegister(char *lastRegister)
 {
 
@@ -247,4 +252,18 @@ void generateClassTableForASingleClass(char *className, node_t *abstractMethds)
 void generateMethodeLabel(char *className, char *meth_name)
 {
     printf("%s_%s:\n", className, meth_name);
+}
+
+void writeMoveForClassVar(int classVaroffset, char *dst)
+{
+    // offset starts at 0
+    int calculatedPosition = 8 + (8 * classVaroffset);
+
+    // movq calculatedPosition(getThisRegister()), dst
+    fprintf(stdout, "\tmovq\t%d(%%%s), %%%s\n", calculatedPosition, getThisRegister(), dst);
+}
+
+void writeThisMovq(char *dst)
+{
+    fprintf(stdout, "\tmovq\t%%%s, %%%s\n", getThisRegister(), dst);
 }

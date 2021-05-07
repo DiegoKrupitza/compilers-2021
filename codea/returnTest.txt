@@ -3,7 +3,8 @@ interface a:
 end;
 
 class c implements a:
-    var d:int;
+    var adiego:int;
+    var bdiego: int;
 
     method b(e:int, f:a)
         /* return (((not (e + f)) < this) + e + 3 + 5); */
@@ -16,6 +17,9 @@ class c implements a:
         /* return (3 * 3) + 1; */
         /* return 1 and 1; */
         /* return e; */
-        return d;
+        /* return adiego; */
+        /* return bdiego; */
+        /* return this; */
+        /* return (this + 1) + this; */
     end;
 end;

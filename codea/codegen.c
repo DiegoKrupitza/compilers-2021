@@ -488,7 +488,7 @@ STATEPTR_TYPE burm_state(int op, STATEPTR_TYPE left, STATEPTR_TYPE right) {
 				{	0,
 					32767,
 					32767,
-					1,	/* expr: OP_THIS */
+					0,	/* expr: OP_THIS */
 					32767,
 				},{
 					0,
@@ -715,16 +715,16 @@ void burm_reduce(NODEPTR_TYPE bnode, int goalnt)
    if (bnode->parameterIndex != -1) writeMove(getParameterRegister(bnode->parameterIndex), bnode->regStor);   
     break;
   case 25:
-   
+   if (bnode->classVaroffset != -1) writeMoveForClassVar(bnode->classVaroffset, bnode->regStor);
     break;
   case 26:
-   
+   writeThisMovq(bnode->regStor);
     break;
   case 27:
    bnode->value = 0; /*TODO check if this is what they want */
     break;
   case 28:
-
+   /* done */
     break;
   case 29:
    bnode->value = bnode->kids[0]->value + bnode->kids[1]->value;
