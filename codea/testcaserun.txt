@@ -2,6 +2,8 @@ Teste "make clean"
 rm -f codea codegen.c *.o oxout.* lex.yy.c y.tab.* y.output parser
 Teste "make"
 ox parser.y scanner.l
+ox: parser.y: warning: line 198: implicit dependent depends on itself
+ox: parser.y: warning: line 206: implicit dependent depends on itself
 flex oxout.l
 yacc -d -v oxout.y
 gcc -c lex.yy.c  
@@ -63,6 +65,16 @@ c_f:
 	ret
 
 Übersetze und linke das Testprogramm:
+In file included from /usr/ftp/pub/ubvl/test/codea/testmain.c:10:0:
+/home/ublu21/u11808206/test/codea/crazyjack-1.call: In function ‘call’:
+/home/ublu21/u11808206/test/codea/crazyjack-1.call:3:25: warning: passing argument 1 of ‘c.f’ makes pointer from integer without a cast [-Wint-conversion]
+ RET(c.f(0) == ~0 && c.f(69)== ~69 && c.f(123) == ~123);
+                         ^~
+/home/ublu21/u11808206/test/codea/crazyjack-1.call:3:25: note: expected ‘struct objectc *’ but argument is of type ‘int’
+/home/ublu21/u11808206/test/codea/crazyjack-1.call:3:42: warning: passing argument 1 of ‘c.f’ makes pointer from integer without a cast [-Wint-conversion]
+ RET(c.f(0) == ~0 && c.f(69)== ~69 && c.f(123) == ~123);
+                                          ^~~
+/home/ublu21/u11808206/test/codea/crazyjack-1.call:3:42: note: expected ‘struct objectc *’ but argument is of type ‘int’
 
 Rufe folgendes Codefragment auf:
 struct objectc { struct vft *vftc; };
@@ -231,6 +243,10 @@ c_f:
 	ret
 
 Übersetze und linke das Testprogramm:
+testcodeaout15962.s: Assembler messages:
+testcodeaout15962.s:9: Error: operand type mismatch for `cmp'
+testcodeaout15962.s:10: Error: operand type mismatch for `cmovl'
+testcodeaout15962.s:11: Error: operand type mismatch for `cmovge'
 [Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
 ==========> Eingabe von /home/ublu21/u11808206/test/codea/kingD-4.0:
 interface i: f(int):int end;
@@ -255,6 +271,9 @@ c_f:
 	ret
 
 Übersetze und linke das Testprogramm:
+testcodeaout15962.s: Assembler messages:
+testcodeaout15962.s:10: Error: operand type mismatch for `cmovl'
+testcodeaout15962.s:11: Error: operand type mismatch for `cmovge'
 [Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
 ==========> Eingabe von /home/ublu21/u11808206/test/codea/kingD-5.0:
 interface i: 
@@ -317,12 +336,21 @@ c_f:
 	addq	$1, %rax
 	movq	%rdx, %r11
 	cmpq	%rax, %r11	# checking if rax equals r11
-	cmove	$-1, %rax
-	cmovne	$0, %rax
+	sete	%al
+	and	$1, %rax
+	imulq	$-1, %rax
 	ret
 
 Übersetze und linke das Testprogramm:
-[Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; };
+extern struct vft { long (*f)(struct objectc *, long, long); } c;
+RET(c.f(0,-1,10) == -1 && c.f(0,123,1)== 0 && c.f(0,-1,23) == -1);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
 ==========> Eingabe von /home/ublu21/u11808206/test/codea/kingD-7.0:
 interface i: 
     f(int,int):int 
@@ -528,8 +556,9 @@ Class1_lessOrEqual:
 	movq	%rsi, %r11
 	movq	%rdx, %r10
 	cmpq	%r11, %r10	# checking if r11 equals r10
-	cmove	$-1, %r11
-	cmovne	$0, %r11
+	sete	%r11b
+	and	$1, %r11
+	imulq	$-1, %r11
 	notq	%r11
 	and	%r11, %rax
 	notq	%rax
@@ -552,6 +581,31 @@ Class2_getNull:
 	ret
 
 Übersetze und linke das Testprogramm:
+In file included from /usr/ftp/pub/ubvl/test/codea/testmain.c:10:0:
+/home/ublu21/u11808206/test/codea/thenotoriousj-11.call: In function ‘call’:
+/home/ublu21/u11808206/test/codea/thenotoriousj-11.call:40:58: warning: passing argument 1 of ‘Class2.offsetThisBy64’ makes pointer from integer without a cast [-Wint-conversion]
+  Class2.offsetThisBy64(0) == 64 && Class2.offsetThisBy64(-3)==61 && Class2.offsetThisBy64(5)==69 &&
+                                                          ^
+/home/ublu21/u11808206/test/codea/thenotoriousj-11.call:40:58: note: expected ‘struct objectc *’ but argument is of type ‘int’
+/home/ublu21/u11808206/test/codea/thenotoriousj-11.call:40:91: warning: passing argument 1 of ‘Class2.offsetThisBy64’ makes pointer from integer without a cast [-Wint-conversion]
+  Class2.offsetThisBy64(0) == 64 && Class2.offsetThisBy64(-3)==61 && Class2.offsetThisBy64(5)==69 &&
+                                                                                           ^
+/home/ublu21/u11808206/test/codea/thenotoriousj-11.call:40:91: note: expected ‘struct objectc *’ but argument is of type ‘int’
+/home/ublu21/u11808206/test/codea/thenotoriousj-11.call:41:17: warning: passing argument 1 of ‘Class2.getNull’ makes pointer from integer without a cast [-Wint-conversion]
+  Class2.getNull(64) == 0 && Class2.getNull(-3)==0 && Class2.getNull(5)==0);
+                 ^~
+/home/ublu21/u11808206/test/codea/thenotoriousj-11.call:41:17: note: expected ‘struct objectc *’ but argument is of type ‘int’
+/home/ublu21/u11808206/test/codea/thenotoriousj-11.call:41:44: warning: passing argument 1 of ‘Class2.getNull’ makes pointer from integer without a cast [-Wint-conversion]
+  Class2.getNull(64) == 0 && Class2.getNull(-3)==0 && Class2.getNull(5)==0);
+                                            ^
+/home/ublu21/u11808206/test/codea/thenotoriousj-11.call:41:44: note: expected ‘struct objectc *’ but argument is of type ‘int’
+/home/ublu21/u11808206/test/codea/thenotoriousj-11.call:41:69: warning: passing argument 1 of ‘Class2.getNull’ makes pointer from integer without a cast [-Wint-conversion]
+  Class2.getNull(64) == 0 && Class2.getNull(-3)==0 && Class2.getNull(5)==0);
+                                                                     ^
+/home/ublu21/u11808206/test/codea/thenotoriousj-11.call:41:69: note: expected ‘struct objectc *’ but argument is of type ‘int’
+testcodeaout15962.s: Assembler messages:
+testcodeaout15962.s:44: Error: operand type mismatch for `cmovl'
+testcodeaout15962.s:45: Error: operand type mismatch for `cmovge'
 [Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
 ==========> Eingabe von /home/ublu21/u11808206/test/codea/thenotoriousj-12.0:
 interface Interface1:
@@ -814,6 +868,32 @@ Class2_ident:
 	ret
 
 Übersetze und linke das Testprogramm:
+In file included from /usr/ftp/pub/ubvl/test/codea/testmain.c:10:0:
+/home/ublu21/u11808206/test/codea/thenotoriousj-4.call: In function ‘call’:
+/home/ublu21/u11808206/test/codea/thenotoriousj-4.call:28:40: warning: passing argument 1 of ‘Class1.init’ makes pointer from integer without a cast [-Wint-conversion]
+ RET(Class1.init(0) == 0 && Class1.init(-3)==0 && Class1.init(5)==0 &&
+                                        ^
+/home/ublu21/u11808206/test/codea/thenotoriousj-4.call:28:40: note: expected ‘struct objectc *’ but argument is of type ‘int’
+/home/ublu21/u11808206/test/codea/thenotoriousj-4.call:28:62: warning: passing argument 1 of ‘Class1.init’ makes pointer from integer without a cast [-Wint-conversion]
+ RET(Class1.init(0) == 0 && Class1.init(-3)==0 && Class1.init(5)==0 &&
+                                                              ^
+/home/ublu21/u11808206/test/codea/thenotoriousj-4.call:28:62: note: expected ‘struct objectc *’ but argument is of type ‘int’
+/home/ublu21/u11808206/test/codea/thenotoriousj-4.call:29:38: warning: passing argument 1 of ‘Class2.init’ makes pointer from integer without a cast [-Wint-conversion]
+   Class2.init(0) == 0 && Class2.init(-3)==0 && Class2.init(5)==0 &&
+                                      ^
+/home/ublu21/u11808206/test/codea/thenotoriousj-4.call:29:38: note: expected ‘struct objectc *’ but argument is of type ‘int’
+/home/ublu21/u11808206/test/codea/thenotoriousj-4.call:29:60: warning: passing argument 1 of ‘Class2.init’ makes pointer from integer without a cast [-Wint-conversion]
+   Class2.init(0) == 0 && Class2.init(-3)==0 && Class2.init(5)==0 &&
+                                                            ^
+/home/ublu21/u11808206/test/codea/thenotoriousj-4.call:29:60: note: expected ‘struct objectc *’ but argument is of type ‘int’
+/home/ublu21/u11808206/test/codea/thenotoriousj-4.call:30:44: warning: passing argument 1 of ‘Class2.getThis’ makes pointer from integer without a cast [-Wint-conversion]
+   Class2.getThis(0) == 0 && Class2.getThis(-3)==-3 && Class2.getThis(5)==5 &&
+                                            ^
+/home/ublu21/u11808206/test/codea/thenotoriousj-4.call:30:44: note: expected ‘struct objectc *’ but argument is of type ‘int’
+/home/ublu21/u11808206/test/codea/thenotoriousj-4.call:30:70: warning: passing argument 1 of ‘Class2.getThis’ makes pointer from integer without a cast [-Wint-conversion]
+   Class2.getThis(0) == 0 && Class2.getThis(-3)==-3 && Class2.getThis(5)==5 &&
+                                                                      ^
+/home/ublu21/u11808206/test/codea/thenotoriousj-4.call:30:70: note: expected ‘struct objectc *’ but argument is of type ‘int’
 
 Rufe folgendes Codefragment auf:
 struct objectc {
@@ -874,12 +954,15 @@ interface x: end;
 class y implements x: end
 
 Ausgabe:
+Error parsing line: 1 char: 
+syntax error
 Status: korrekt
 
 ==========> Eingabe von /usr/ftp/pub/ubvl/test/codea/z0.3:
 class y implements x: end;
 
 Ausgabe:
+Identifier with name 'x' on line 1 is not visible in the current scope
 Status: korrekt
 
 ==========> Eingabe von /home/ublu21/u11808206/test/codea/thenotoriousj-1.3:
@@ -896,6 +979,7 @@ interface Interface1:
 end;
 
 Ausgabe:
+Identifier 'Interface1' on line 1 conflicts with identifier [Interface1] on line 1
 Status: korrekt
 
 ==========> Eingabe von /home/ublu21/u11808206/test/codea/thenotoriousj-10.3:
@@ -956,6 +1040,7 @@ class Class2 implements Interface1 Interface2 :
 end;
 
 Ausgabe:
+Identifier 'add3' on line 1 conflicts with identifier [add3] on line 1
 Status: korrekt
 
 ==========> Eingabe von /home/ublu21/u11808206/test/codea/thenotoriousj-2.3:
@@ -970,6 +1055,7 @@ interface Interface1:
 end;
 
 Ausgabe:
+Identifier 'Interface1' on line 1 conflicts with identifier [Interface1] on line 1
 Status: korrekt
 
 ==========> Eingabe von /home/ublu21/u11808206/test/codea/thenotoriousj-5.3:
@@ -1028,6 +1114,7 @@ class Class1 implements Interface1 Interface2 :
 end;
 
 Ausgabe:
+Identifier 'Class1' on line 1 conflicts with identifier [Class1] on line 1
 Status: korrekt
 
 ==========> Eingabe von /home/ublu21/u11808206/test/codea/thenotoriousj-6.3:
@@ -1086,6 +1173,7 @@ class Class2 implements Interface1 Interface2 :
 end;
 
 Ausgabe:
+Identifier 'in1' on line 1 conflicts with identifier [in1] on line 1
 Status: korrekt
 
 ==========> Eingabe von /home/ublu21/u11808206/test/codea/thenotoriousj-7.3:
@@ -1144,6 +1232,7 @@ class Class2 implements Interface1 Interface2 :
 end;
 
 Ausgabe:
+Identifier 'fac' on line 1 conflicts with identifier [fac] on line 1
 Status: korrekt
 
 ==========> Eingabe von /home/ublu21/u11808206/test/codea/thenotoriousj-8.3:
@@ -1203,6 +1292,7 @@ class Class2 implements Interface1 Interface2 :
 end;
 
 Ausgabe:
+Identifier 'i' on line 1 conflicts with identifier [i] on line 1
 Status: korrekt
 
 ==========> Eingabe von /home/ublu21/u11808206/test/codea/thenotoriousj-9.3:
@@ -1262,10 +1352,11 @@ class Class2 implements Interface1 Interface2 :
 end;
 
 Ausgabe:
-[Error] Status: 139. Erwartet: 3
+Identifier with name 'Interface2' on line 1 is not visible in the current scope
+Status: korrekt
 
 Statistics: 
 ===========
            29 Tests total
-           24 Tests passed
-           5 Tests failed
+           26 Tests passed
+           3 Tests failed

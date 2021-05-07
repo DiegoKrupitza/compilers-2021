@@ -289,27 +289,17 @@ void writeNeq(char *srcDst)
 void writeEqualsv(long value, char *reg, char *dst)
 {
     fprintf(stdout, "\tcmpq\t$%ld, %%%s\t# checking if %ld equals %s\n", value, reg, value, reg);
-
-    // move if equal
-    //cmove
-    fprintf(stdout, "\tcmove\t$%d, %%%s\n", TRUE_VAL, dst);
-
-    // move if notequal
-    //cmovne
-    fprintf(stdout, "\tcmovne\t$%d, %%%s\n", FALSE_VAL, dst);
+    fprintf(stdout, "\tsete\t%%%s\n", getByteRegisterName(dst));
+    writeAndv(1, dst);
+    writeMulv(-1, dst);
 }
 
 void writeEquals(char *reg1, char *reg2, char *dst)
 {
     fprintf(stdout, "\tcmpq\t%%%s, %%%s\t# checking if %s equals %s\n", reg1, reg2, reg1, reg2);
-
-    // move if equal
-    //cmove
-    fprintf(stdout, "\tcmove\t$%d, %%%s\n", TRUE_VAL, dst);
-
-    // move if notequal
-    //cmovne
-    fprintf(stdout, "\tcmovne\t$%d, %%%s\n", FALSE_VAL, dst);
+    fprintf(stdout, "\tsete\t%%%s\n", getByteRegisterName(dst));
+    writeAndv(1, dst);
+    writeMulv(-1, dst);
 }
 
 void writeVLessReg(long value, char *reg, char *dst)
