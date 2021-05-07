@@ -53,9 +53,10 @@ extern void burm_label(NODEPTR_TYPE);
 @attributes { node_t* in; node_t* out; tree_t* tree; } Stat
 @attributes { node_t* ids; tree_t *tree; } Expr OptionaNotTerm OptionalPlusTerm OptionalMalTerm OptionalAndTerm Term 
 
+@traversal @postorder visCheck
 @traversal @preorder reg
 
-@traversal @postorder visCheck
+
 @traversal @postorder gen
 
 @traversal @postorder genMeth
@@ -347,7 +348,7 @@ Stat                    :   RETURN Expr
                             @i @Stats.in@ = @Stat.in@ ;
                             @i @Stat.out@ = @Stat.in@ ;
 
-                            @i @Stat.tree@ = NULL;
+                            @i @Stat.tree@ = NULL; /*TODO change later */
                         @}
                         |   IF Expr THEN Stats ELSE Stats END
                         @{
@@ -356,7 +357,7 @@ Stat                    :   RETURN Expr
                             @i @Stats.1.in@ = @Stat.in@ ;
                             @i @Stat.out@ = @Stat.in@ ;
 
-                            @i @Stat.tree@ = NULL;
+                            @i @Stat.tree@ = NULL; /*TODO change later */
                         @}
                         |   WHILE Expr DO Stats END
                         @{
@@ -364,7 +365,7 @@ Stat                    :   RETURN Expr
                             @i @Stats.in@ = @Stat.in@ ;
                             @i @Stat.out@ = @Stat.in@ ;
 
-                            @i @Stat.tree@ = NULL;
+                            @i @Stat.tree@ = NULL; /*TODO change later */
                         @}
                         |   VAR ID ':' Type ASSIGNOP Expr
                         @{
@@ -372,7 +373,7 @@ Stat                    :   RETURN Expr
                             @i @Stat.out@ = addDev(duplicate(@Stat.in@),@ID.name@,VARIABLE,@ID.lineNr@,"Var assignment in stat");
                             @i @Type.in@ = @Stat.in@ ;
 
-                            @i @Stat.tree@ = NULL;
+                            @i @Stat.tree@ = NULL; /*TODO change later */
                         @}
                         |   ID ASSIGNOP Expr
                         @{
@@ -380,14 +381,14 @@ Stat                    :   RETURN Expr
                             @i @Expr.ids@ = @Stat.in@ ;
                             @i @Stat.out@ = @Stat.in@ ;
 
-                            @i @Stat.tree@ = NULL;
+                            @i @Stat.tree@ = NULL; /*TODO change later */
                         @}
                         |   Expr
                         @{
                             @i @Expr.ids@ = @Stat.in@ ;
                             @i @Stat.out@ = @Stat.in@ ;
 
-                            @i @Stat.tree@ = NULL;
+                            @i @Stat.tree@ = NULL; /*TODO change later */
                         @}
                         ;
 
@@ -429,7 +430,7 @@ Expr                    :   OptionaNotTerm
                         |   NEW ID
                         @{
                             @visCheck isVisible(@Expr.ids@,@ID.name@, CLASS_DING, @ID.lineNr@);
-                            @i @Expr.tree@ = NULL;
+                            @i @Expr.tree@ = NULL; /*TODO change later */
                         @}
                         ;
 
@@ -506,13 +507,13 @@ Term                    :   '(' Expr ')'
                         @{
                             @visCheck isVisible(@Term.ids@,@ID.name@, ABSTRACT_METH, @ID.lineNr@);
 
-                            @i @Term.tree@ = NULL;
+                            @i @Term.tree@ = NULL; /*TODO change later */
                         @}
                         |   Term '.' ID '(' ParamsExpr ')'
                         @{
                             @visCheck isVisible(@Term.ids@,@ID.name@, ABSTRACT_METH, @ID.lineNr@);
 
-                            @i @Term.tree@ = NULL;
+                            @i @Term.tree@ = NULL; /*TODO change later */
                         @}
                         ;
 
