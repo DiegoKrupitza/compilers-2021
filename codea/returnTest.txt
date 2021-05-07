@@ -7,9 +7,9 @@ class c implements a:
     var adiego:int;
     var bdiego: int;
 
-    method a2()
+    /*method a2()
         return 1;
-    end;
+    end;*/
 
     method b(e:int, f:a)
         /* return (((not (e + f)) < this) + e + 3 + 5); */
@@ -33,6 +33,11 @@ class c implements a:
         /* return 1 = 1; */
         /* return e = 1; */
         /* return ((1 = e) = (e = 5)); */
-        return 2;
+        /* return 1 < 3; */
+        /* return 3 < e; */
+        /* return e < 3; */        
+        /* return not (3<e); */
+        /* return e < f; */
+        return (null a) < (this + 1);
     end;
 end;

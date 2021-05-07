@@ -56,3 +56,7 @@ void writeNeq(char *srcDst);
 
 void writeEqualsv(long value, char *reg, char *dst);
 void writeEquals(char *reg1, char *reg2, char *dst);
+
+void writeVLessReg(long value, char *reg, char *dst);
+void writeRegLessV(char *reg, long value, char *dst);
+void writeRegLessReg(char *reg1, char *reg2, char *dst);

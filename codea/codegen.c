@@ -698,16 +698,16 @@ void burm_reduce(NODEPTR_TYPE bnode, int goalnt)
    bnode->value = bnode->kids[0]->value & bnode->kids[1]->value;
     break;
   case 16:
-   
+   writeRegLessReg(bnode->kids[0]->regStor, bnode->kids[1]->regStor, bnode->regStor);
     break;
   case 17:
-   
+   writeRegLessV(bnode->kids[0]->regStor, bnode->kids[1]->value, bnode->regStor);
     break;
   case 18:
- 
+   writeVLessReg(bnode->kids[0]->value, bnode->kids[1]->regStor, bnode->regStor);
     break;
   case 19:
-  
+   if(bnode->kids[0]->value < bnode->kids[1]->value) { bnode->value = TRUE_VAL; } else { bnode->value = FALSE_VAL; } 
     break;
   case 20:
    writeEquals(bnode->kids[0]->regStor,bnode->kids[1]->regStor,bnode->regStor);
