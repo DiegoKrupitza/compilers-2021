@@ -47,8 +47,8 @@ expr:   OP_PARAM_ID                     # 1 #
 expr:   OP_CLASS_VAR_ID                 # 1 #   
 
 expr:   OP_THIS                         # 1 #   
-expr:   OP_NULL                         # 1 #   
 
+const:  OP_NULL                         # 0 #   bnode->value = 0; /*TODO check if this is what they want */
 const:  OP_NUMBER                       # 0 #
 const:  OP_ADD(const, const)            # 0 #   bnode->value = bnode->kids[0]->value + bnode->kids[1]->value;
 const:  OP_MUL(const, const)            # 0 #   bnode->value = bnode->kids[0]->value * bnode->kids[1]->value;

@@ -11,7 +11,8 @@ class c implements a:
         /* return (((not (e + f)) < this) + e + 3 + 5) and (1 and 1); */
         /* return d + d + this; */
         /* return not 3; */
-        return not (1+1+1);
+        /* return not (1+1+1); */
         /* return 3+(3+3); */
+        return (3 * 3) + 1;
     end;
 end;
