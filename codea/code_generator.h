@@ -43,7 +43,7 @@ void writeReturn();
 void writeReturnWithValue(char *);
 
 void generateClassTable(node_t *node, meth_node_t *implmethds);
-void generateClassTableForASingleClass(char *className, node_t *abstractMethds);
+void generateClassTableForASingleClass(char *className, node_t *abstractMethds, meth_node_t *implmethds);
 
 void generateMethodeLabel(char *classname, char *meth_name);
 

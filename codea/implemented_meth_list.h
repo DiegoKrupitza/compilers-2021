@@ -16,4 +16,6 @@ meth_node_t *addImpl(meth_node_t *, char *className, char *methName);
 
 void printItemsImpl(meth_node_t *);
 
+int isMethImplemtedByClass(meth_node_t *list, char *className, char *methName);
+
 #endif

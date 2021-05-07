@@ -68,3 +68,20 @@ void printItemsImpl(meth_node_t *list)
         nextNode = nextNode->next;
     }
 }
+
+int isMethImplemtedByClass(meth_node_t *list, char *className, char *methName)
+{
+    meth_node_t *nextNode = list;
+
+    while (nextNode != NULL)
+    {
+        if (strcmp(nextNode->className, className) == 0 &&
+            strcmp(nextNode->methName, methName) == 0)
+        {
+            return 1;
+        }
+        nextNode = nextNode->next;
+    }
+
+    return 0;
+}

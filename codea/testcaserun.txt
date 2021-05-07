@@ -1,0 +1,1271 @@
+Teste "make clean"
+rm -f codea codegen.c *.o oxout.* lex.yy.c y.tab.* y.output parser
+Teste "make"
+ox parser.y scanner.l
+flex oxout.l
+yacc -d -v oxout.y
+gcc -c lex.yy.c  
+gcc -c y.tab.c	
+gcc -g -c -pedantic -Wall list.c
+gcc -g -c -pedantic -Wall implemented_meth_list.c
+gcc -g -c -pedantic -Wall tree.c
+gcc -g -c -pedantic -Wall code_generator.c
+bfe < codegen.bfe | iburg > codegen.c
+gcc -g -c -pedantic -Wall codegen.c
+gcc -g list.o tree.o codegen.o implemented_meth_list.o code_generator.o y.tab.o lex.yy.o -ll -o codea
+==========> Eingabe von /usr/ftp/pub/ubvl/test/codea/a0.0:
+interface i: f(int):int end;
+class c implements i:
+ method f(x:int) return x; end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_f
+
+
+c_f:
+	movq	%rsi, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; };
+extern struct vft { long (*f)(struct objectc *, long); } c;
+RET(c.f(0,6) == 6 && c.f(0,-3)==-3);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/crazyjack-1.0:
+interface i: f():int end;
+class c implements i:
+ method f() return not this; end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_f
+
+
+c_f:
+	movq	%rdi, %rax
+	notq	%rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; };
+extern struct vft { long (*f)(struct objectc *); } c;
+RET(c.f(0) == ~0 && c.f(69)== ~69 && c.f(123) == ~123);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/kingD-0.0:
+interface i: f(int):int end;
+class c implements i:
+ method f(x:int) return x + 3; end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_f
+
+
+c_f:
+	movq	%rsi, %rax
+	addq	$3, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; };
+extern struct vft { long (*f)(struct objectc *, long); } c;
+RET(c.f(0,6) == 9 && c.f(0,-3)==0);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/kingD-1.0:
+interface i: f(int):int end;
+class c implements i:
+ method f(x:int) return x - 3; end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_f
+
+
+c_f:
+	movq	%rsi, %rax
+	subq	$3, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; };
+extern struct vft { long (*f)(struct objectc *, long); } c;
+RET(c.f(0,6) == 3 && c.f(0,-3)==-6);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/kingD-10.0:
+interface i: 
+    f(int,int):int 
+end;
+class c implements i:
+    var kingD : int;
+    var giveMe : int;
+
+    method f(x:int,y:int) 
+        return (kingD * x) + giveMe + 60; 
+    end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_f
+
+
+c_f:
+	movq	8(%rdi), %rax
+	movq	%rsi, %r11
+	imulq	%r11, %rax
+	movq	16(%rdi), %r11
+	addq	$60, %r11
+	addq	%r11, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; long kingD; long giveMe; };
+extern struct vft { long (*f)(struct objectc *, long, long); } c;
+
+struct objectc *myObj = (struct objectc *)malloc(sizeof(struct objectc));
+myObj->kingD= 69;
+myObj->giveMe = 2;
+
+RET(c.f(myObj,3,10) == 269);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/kingD-2.0:
+interface i: f(int):int end;
+class c implements i:
+ method f(x:int) return x * 3; end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_f
+
+
+c_f:
+	movq	%rsi, %rax
+	imulq	$3, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; };
+extern struct vft { long (*f)(struct objectc *, long); } c;
+RET(c.f(0,2) == 6 && c.f(0,-1)==-3);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/kingD-3.0:
+interface i: f(int):int end;
+class c implements i:
+ method f(x:int) return x < 3; end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_f
+
+
+c_f:
+	movq	%rsi, %rax
+	cmpq	%rax, $3	# checking if rax less 3
+	cmovl	$-1, %rax
+	cmovge	$0, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+[Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
+==========> Eingabe von /home/ublu21/u11808206/test/codea/kingD-4.0:
+interface i: f(int):int end;
+class c implements i:
+ method f(x:int) return 3 < x; end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_f
+
+
+c_f:
+	movq	%rsi, %r11
+	cmpq	$3, %r11	# checking if 3 less r11
+	cmovl	$-1, %rax
+	cmovge	$0, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+[Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
+==========> Eingabe von /home/ublu21/u11808206/test/codea/kingD-5.0:
+interface i: 
+    f(int,int):int 
+end;
+class c implements i:
+    method f(x:int,y:int) 
+        return x + y; 
+    end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_f
+
+
+c_f:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	addq	%r11, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; };
+extern struct vft { long (*f)(struct objectc *, long, long); } c;
+RET(c.f(0,2,1) == 3 && c.f(0,-1,1)== 0 && c.f(0,100,23) == 123);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/kingD-6.0:
+interface i: 
+    f(int,int):int 
+end;
+class c implements i:
+    method f(x:int,y:int) 
+        return ((x + y) + 1) = y; 
+    end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_f
+
+
+c_f:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	addq	%r11, %rax
+	addq	$1, %rax
+	movq	%rdx, %r11
+	cmpq	%rax, %r11	# checking if rax equals r11
+	cmove	$-1, %rax
+	cmovne	$0, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+[Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
+==========> Eingabe von /home/ublu21/u11808206/test/codea/kingD-7.0:
+interface i: 
+    f(int,int):int 
+end;
+class c implements i:
+    method f(x:int,y:int) 
+        return (x * 2) + y; 
+    end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_f
+
+
+c_f:
+	movq	%rsi, %rax
+	imulq	$2, %rax
+	movq	%rdx, %r11
+	addq	%r11, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; };
+extern struct vft { long (*f)(struct objectc *, long, long); } c;
+RET(c.f(0,-1,10) == 8 && c.f(0,123,1)== 247 && c.f(0,23,-1) == 45);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/kingD-8.0:
+interface i: 
+    f(int,int):int 
+end;
+class c implements i:
+    method f(x:int,y:int) 
+        return (not x); 
+    end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_f
+
+
+c_f:
+	movq	%rsi, %rax
+	notq	%rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; };
+extern struct vft { long (*f)(struct objectc *, long, long); } c;
+RET(c.f(0,0,10) != 0);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/kingD-9.0:
+interface i: 
+    f(int,int):int 
+end;
+class c implements i:
+    var kingD : int;
+    method f(x:int,y:int) 
+        return kingD; 
+    end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_f
+
+
+c_f:
+	movq	8(%rdi), %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; long kingD; };
+extern struct vft { long (*f)(struct objectc *, long, long); } c;
+
+struct objectc *myObj = (struct objectc *)malloc(sizeof(struct objectc));
+myObj->kingD = 69;
+
+RET(c.f(myObj,0,10) == 69);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/thenotoriousj-11.0:
+interface Interface1:
+	binaryOr(int, int): int
+	squareSum(int, int) : int
+	lessOrEqual(int, int) : int
+	determinant(int, int, int, int): int
+end;
+
+interface Interface2: 
+	offsetThisBy64(): int
+	getNull(): Interface1
+end;
+
+class Class1 implements Interface1 :
+	var var1 : int;
+	var var2 : int;
+	var var3 : Interface2;
+	
+	method binaryOr(a: int, b: int)
+		return not ((not a) and (not b));
+	end;
+	
+	method squareSum(a: int, b: int)
+		return (a*a)+(b*b);
+	end;
+	
+	method lessOrEqual(a: int, b: int)
+		return not ((not (a < b)) and (not (a = b)));
+	end;
+	
+	method determinant(a11: int, a12: int, a21: int, a22: int)
+		return (a11*a22)-(a12*a21);
+	end;
+end;
+
+class Class2 implements Interface2 :
+	method offsetThisBy64()
+		return this + 64;
+	end;
+	
+	method getNull()
+		return null Interface1;
+	end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl Class1
+Class1:   
+.quad Class1_binaryOr
+.quad Class1_squareSum
+.quad Class1_lessOrEqual
+.quad Class1_determinant
+.quad 0 #offsetThisBy64
+.quad 0 #getNull
+
+
+
+.globl Class2
+Class2:   
+.quad 0 #binaryOr
+.quad 0 #squareSum
+.quad 0 #lessOrEqual
+.quad 0 #determinant
+.quad Class2_offsetThisBy64
+.quad Class2_getNull
+
+
+Class1_binaryOr:
+	movq	%rsi, %rax
+	notq	%rax
+	movq	%rdx, %r11
+	notq	%r11
+	and	%r11, %rax
+	notq	%rax
+	ret
+Class1_squareSum:
+	movq	%rsi, %rax
+	movq	%rsi, %r11
+	imulq	%r11, %rax
+	movq	%rdx, %r11
+	movq	%rdx, %r10
+	imulq	%r10, %r11
+	addq	%r11, %rax
+	ret
+Class1_lessOrEqual:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	cmpq	%rax, %r11	# checking if rax less r11
+	cmovl	$-1, %rax
+	cmovge	$0, %rax
+	notq	%rax
+	movq	%rsi, %r11
+	movq	%rdx, %r10
+	cmpq	%r11, %r10	# checking if r11 equals r10
+	cmove	$-1, %r11
+	cmovne	$0, %r11
+	notq	%r11
+	and	%r11, %rax
+	notq	%rax
+	ret
+Class1_determinant:
+	movq	%rsi, %rax
+	movq	%r8, %r11
+	imulq	%r11, %rax
+	movq	%rdx, %r11
+	movq	%rcx, %r10
+	imulq	%r10, %r11
+	subq	%r11, %rax
+	ret
+Class2_offsetThisBy64:
+	movq	%rdi, %rax
+	addq	$64, %rax
+	ret
+Class2_getNull:
+	movq	$0, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+[Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
+==========> Eingabe von /home/ublu21/u11808206/test/codea/thenotoriousj-12.0:
+interface Interface1:
+	add2(int, int) : int
+	calc1(int, int) : int
+	calc2(int, int) : int
+	calc3(int, int, int) : int
+end;
+
+class Class1 implements Interface1 :
+	method add2(in1: int, in2: int)
+		return in1+in2;
+	end;
+	method calc1(a: int, b: int)
+		return ((a * b) + (a + b)) + b + a + b + ((a * b) + (a + b));
+	end;
+	method calc2(a: int, b: int)
+		return ((a - b) * (a - b)) + b + a + b + (a - b);
+	end;
+	method calc3(a: int, b: int, c:int)
+		return a + b + c + (a + b + c);
+	end;
+end;
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl Class1
+Class1:   
+.quad Class1_add2
+.quad Class1_calc1
+.quad Class1_calc2
+.quad Class1_calc3
+
+
+Class1_add2:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	addq	%r11, %rax
+	ret
+Class1_calc1:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	imulq	%r11, %rax
+	movq	%rsi, %r11
+	movq	%rdx, %r10
+	addq	%r10, %r11
+	addq	%r11, %rax
+	movq	%rdx, %r11
+	movq	%rsi, %r10
+	movq	%rdx, %r9
+	movq	%rsi, %r8
+	movq	%rdx, %rcx
+	imulq	%rcx, %r8
+	movq	%rsi, %rcx
+	movq	%rdx, %rdx
+	addq	%rdx, %rcx
+	addq	%rcx, %r8
+	addq	%r8, %r9
+	addq	%r9, %r10
+	addq	%r10, %r11
+	addq	%r11, %rax
+	ret
+Class1_calc2:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	subq	%r11, %rax
+	movq	%rsi, %r11
+	movq	%rdx, %r10
+	subq	%r10, %r11
+	imulq	%r11, %rax
+	movq	%rdx, %r11
+	movq	%rsi, %r10
+	movq	%rdx, %r9
+	movq	%rsi, %r8
+	movq	%rdx, %rcx
+	subq	%rcx, %r8
+	addq	%r8, %r9
+	addq	%r9, %r10
+	addq	%r10, %r11
+	addq	%r11, %rax
+	ret
+Class1_calc3:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	movq	%rcx, %r10
+	movq	%rsi, %r9
+	movq	%rdx, %r8
+	movq	%rcx, %rcx
+	addq	%rcx, %r8
+	addq	%r8, %r9
+	addq	%r9, %r10
+	addq	%r10, %r11
+	addq	%r11, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { 
+	struct vft *vftc;
+};
+
+struct objectClass1 { 
+	struct vft *vftc;
+	long v1;
+	long v2;
+	struct objectc* var3;
+};
+
+struct objectClass2 { 
+	struct vft *vftc;
+};
+
+extern struct vft { 
+	long (*add2)(struct objectc *, long, long);
+	long (*calc1)(struct objectc *, long, long);
+	long (*calc2)(struct objectc *, long, long);
+	long (*calc3)(struct objectc *, long, long, long);
+} Class1;
+
+long a = 0xABCD;
+long b = 0xDEAD;
+long res2 = ((a * b) + (a + b)) + b + a + b + ((a * b) + (a + b));
+b = a;
+long res1 = ((a * b) + (a + b)) + b + a + b + ((a * b) + (a + b));
+b = 0xDEAD;
+
+RET(Class1.add2(0, 0xABCD, 0xDEAD) == (0xABCD + 0xDEAD) && Class1.add2(0, 0xABCD, 0xABCD) == 2*0xABCD && 
+	Class1.add2(0, 0, 0) == 0 && Class1.add2(0, 4, 2) == 6 &&
+	
+	Class1.calc1(0, 3, 4) == 49 && Class1.calc1(0, a, a) == res1 &&
+	Class1.calc1(0, 0, 0) == 0 && Class1.calc1(0, a, b) == res2 &&
+
+	Class1.calc2(0, 3, 4) == 11 && Class1.calc2(0, 4, 5) == 14 &&
+	Class1.calc2(0, 0, 0) == 0 && Class1.calc2(0, 2, -2) == 18 &&
+
+	Class1.calc3(0, 3, 4, 5) == 24 && Class1.calc3(0, 12, 5, 1) == 36 &&
+	Class1.calc3(0, 0, 0, 0) == 0 && Class1.calc3(0, 2, -2, 6) == 12);
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/thenotoriousj-3.0:
+interface Interface1: 
+	empty():Interface1
+	single():int
+	add2(int, int) : int
+	fact(int, int) : int
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/thenotoriousj-4.0:
+interface Interface1:
+	init():int
+	add2(int, int, int) : int
+	add3(int, int) : int
+end;
+
+interface Interface2: 
+	empty():int
+	single():int
+	getThis() : int
+	ident(int) : int
+end;
+
+class Class1 implements /* nothing */ :
+	var var1 : int;
+	var var2 : int;
+	var var3 : Interface2;
+	
+	method init()
+		return 0;
+	end;
+end;
+
+class Class2 implements Interface1 Interface2 :
+	var var1 : int;
+	var var2 : int;
+	method init()
+		return 0;
+	end;
+	method add2(in1: int, in2: int)
+		return in1+in2;
+	end;
+	method add3(in1: int, in2: int, in3: int)
+		return in1 + in2 + in3;
+	end;
+	method empty()
+		/* Stats */
+	end;
+	method getThis()
+		return this;
+	end;
+	method ident(n : int)
+		return n;
+	end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl Class1
+Class1:   
+.quad Class1_init
+.quad 0 #add2
+.quad 0 #add3
+.quad 0 #empty
+.quad 0 #single
+.quad 0 #getThis
+.quad 0 #ident
+
+
+
+.globl Class2
+Class2:   
+.quad Class2_init
+.quad Class2_add2
+.quad Class2_add3
+.quad Class2_empty
+.quad 0 #single
+.quad Class2_getThis
+.quad Class2_ident
+
+
+Class1_init:
+	movq	$0, %rax
+	ret
+Class2_init:
+	movq	$0, %rax
+	ret
+Class2_add2:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	addq	%r11, %rax
+	ret
+Class2_add3:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	movq	%rcx, %r10
+	addq	%r10, %r11
+	addq	%r11, %rax
+	ret
+Class2_empty:
+Class2_getThis:
+	movq	%rdi, %rax
+	ret
+Class2_ident:
+	movq	%rsi, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc {
+        struct vft *vftc;
+};
+
+struct objectClass1 {
+        struct vft *vftc;
+        long v1;
+        long v2;
+        struct objectc* var3;
+};
+
+struct objectClass2 {
+        struct vft *vftc;
+        long v1;
+        long v2;
+};
+
+extern struct vft {
+        long (*init)(struct objectc *);
+        long (*add2)(struct objectc *, long, long);
+        long (*add3)(struct objectc *, long, long, long);
+        long (*empty)(struct objectc *);
+        long (*single)(struct objectc *);
+        long (*getThis)(struct objectc *);
+        long (*ident)(struct objectc *, long);
+} Class1, Class2;
+
+RET(Class1.init(0) == 0 && Class1.init(-3)==0 && Class1.init(5)==0 &&
+		Class2.init(0) == 0 && Class2.init(-3)==0 && Class2.init(5)==0 &&
+		Class2.getThis(0) == 0 && Class2.getThis(-3)==-3 && Class2.getThis(5)==5 &&
+		Class2.ident(0,4) == 4 && Class2.ident(0,-1)==-1 && Class2.ident(0,5)==5 &&
+		Class2.add2(0,0,0) == 0 && Class2.add2(0,-3,3)==0 && Class2.add2(0,5,-5)==0 && Class2.add2(0,5,15)==20 &&
+		Class2.add3(0,0,0,0) == 0 && Class2.add3(0,-3,-3,6)==0 && Class2.add3(0,5,-5,1)==1 && Class2.add3(0,5,15,-10)==10);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /usr/ftp/pub/ubvl/test/codea/x0.1:
+#
+
+Ausgabe:
+ERROR on line 1 Can not lex the symbol: #
+Status: korrekt
+
+==========> Eingabe von /usr/ftp/pub/ubvl/test/codea/x1.1:
+interface x: y():int end;
+class z implements x:
+  method y() return 1 /* */  */
+
+Ausgabe:
+ERROR on line 1 Can not lex the symbol: /
+Status: korrekt
+
+==========> Eingabe von /usr/ftp/pub/ubvl/test/codea/y0.2:
+interface x: end;
+class y implements x: end
+
+Ausgabe:
+Status: korrekt
+
+==========> Eingabe von /usr/ftp/pub/ubvl/test/codea/z0.3:
+class y implements x: end;
+
+Ausgabe:
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/thenotoriousj-1.3:
+interface Interface1:
+	init():int
+	add3(int, int, int) : int
+end;
+
+interface Interface1: 
+	empty():int
+	single():int
+	add2(int, int) : int
+	fact(int, int) : int
+end;
+
+Ausgabe:
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/thenotoriousj-10.3:
+interface Interface1:
+	init():int
+	add3(int, int, int) : int
+end;
+
+class Class1 implements /* nothing */ :
+	var var1 : int;
+	var var2 : int;
+	var var3 : Interface1;
+end;
+
+interface Interface2: 
+	empty():int
+	single():int
+	add2(int, int) : int
+	add3(int, int) : int
+end;
+
+class Class2 implements Interface1 Interface2 :
+	var var1 : int;
+	var var2 : int;
+	method init()
+		var zero : int := 0H;
+		var1 := (zero);
+		var2 := zero;
+		return 0;
+	end;
+	method add2(in1: int, in2: int)
+		return in1+in2;
+	end;
+	method add3(in1: int, in2: int, in3: int)
+		return in1 + this.add2(in2, in3);
+	end;
+	method empty()
+		/* Stats */
+	end;
+	method single()
+		return this;
+	end;
+	method fact(n : int)
+		if n < 0 then
+			return 0;
+		end;
+		
+		var fac : int := 1;
+		var i : int := n;
+		
+		while (0 < i) do
+			fac := fac * i;
+		end;
+		
+		return fac;
+		
+	end;
+end;
+
+Ausgabe:
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/thenotoriousj-2.3:
+class Interface1 implements :
+end;
+
+interface Interface1: 
+	empty():int
+	single():int
+	add2(int, int) : int
+	fact(int, int) : int
+end;
+
+Ausgabe:
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/thenotoriousj-5.3:
+interface Interface1:
+	init():int
+	add3(int, int, int) : int
+end;
+
+interface Interface2: 
+	empty():int
+	single():int
+	add2(int, int) : int
+end;
+
+class Class1 implements /* nothing */ :
+	var var1 : int;
+	var var2 : int;
+end;
+
+class Class1 implements Interface1 Interface2 :
+	var var1 : int;
+	var var2 : int;
+	method init()
+		var zero : int := 0H;
+		var1 := (zero);
+		var2 := zero;
+		return 0;
+	end;
+	method add2(in1: int, in2: int)
+		return in1+in2;
+	end;
+	method add3(in1: int, in2: int)
+		return in1 + this.add2(in2, in3);
+	end;
+	method empty()
+		/* Stats */
+	end;
+	method single()
+		return this;
+	end;
+	method fact(n : int)
+		if n < 0 then
+			return 0;
+		end;
+		
+		var fac : int := 1;
+		var i : int := n;
+		
+		while (0 < i) do
+			fac := fac * i;
+		end;
+		
+		return fac;
+		
+	end;
+end;
+
+Ausgabe:
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/thenotoriousj-6.3:
+interface Interface1:
+	init():int
+	add3(int, int, int) : int
+end;
+
+interface Interface2: 
+	empty():int
+	single():int
+	add2(int, int) : int
+end;
+
+class Class1 implements /* nothing */ :
+	var var1 : int;
+	var var2 : int;
+end;
+
+class Class2 implements Interface1 Interface2 :
+	var var1 : int;
+	var var2 : int;
+	method init()
+		var zero : int := 0H;
+		var1 := (zero);
+		var2 := zero;
+		return 0;
+	end;
+	method add2(in1: int, in1: int)
+		return in1+in2;
+	end;
+	method add3(in1: int, in2: int)
+		return in1 + this.add2(in2, in3);
+	end;
+	method empty()
+		/* Stats */
+	end;
+	method single()
+		return this;
+	end;
+	method fact(n : int)
+		if n < 0 then
+			return 0;
+		end;
+		
+		var fac : int := 1;
+		var i : int := n;
+		
+		while (0 < i) do
+			fac := fac * i;
+		end;
+		
+		return fac;
+		
+	end;
+end;
+
+Ausgabe:
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/thenotoriousj-7.3:
+interface Interface1:
+	init():int
+	add3(int, int, int) : int
+end;
+
+interface Interface2: 
+	empty():int
+	single():int
+	add2(int, int) : int
+end;
+
+class Class1 implements /* nothing */ :
+	var var1 : int;
+	var var2 : int;
+end;
+
+class Class2 implements Interface1 Interface2 :
+	var fac : int;
+	var var2 : int;
+	method init()
+		var zero : int := 0H;
+		var1 := (zero);
+		var2 := zero;
+		return 0;
+	end;
+	method add2(in1: int, in2: int)
+		return in1+in2;
+	end;
+	method add3(in1: int, in2: int)
+		return in1 + this.add2(in2, in3);
+	end;
+	method empty()
+		/* Stats */
+	end;
+	method single()
+		return this;
+	end;
+	method fact(n : int)
+		if n < 0 then
+			return 0;
+		end;
+		
+		var fac : int := 1;
+		var i : int := n;
+		
+		while (0 < i) do
+			fac := fac * i;
+		end;
+		
+		return fac;
+		
+	end;
+end;
+
+Ausgabe:
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/thenotoriousj-8.3:
+interface Interface1:
+	init():int
+	add3(int, int, int) : int
+end;
+
+interface Interface2: 
+	empty():int
+	single():int
+	add2(int, int) : int
+end;
+
+class Class1 implements /* nothing */ :
+	var var1 : int;
+	var var2 : int;
+end;
+
+class Class2 implements Interface1 Interface2 :
+	var var1 : int;
+	var var2 : int;
+	method init()
+		var zero : int := 0H;
+		var1 := (zero);
+		var2 := zero;
+		return 0;
+	end;
+	method add2(in1: int, in2: int)
+		return in1+in2;
+	end;
+	method add3(in1: int, in2: int)
+		return in1 + this.add2(in2, in3);
+	end;
+	method empty()
+		/* Stats */
+	end;
+	method single()
+		return this;
+	end;
+	method fact(n : int)
+		if n < 0 then
+			return 0;
+		end;
+		
+		var fac : int := 1;
+		var i : int := n;
+		
+		while (0 < i) do
+			var i : int := 0;
+			fac := fac * i;
+		end;
+		
+		return fac;
+		
+	end;
+end;
+
+Ausgabe:
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/thenotoriousj-9.3:
+interface Interface1:
+	init():int
+	add3(int, int, int) : int
+end;
+
+class Class1 implements /* nothing */ :
+	var var1 : int;
+	var var2 : int;
+	var var3 : Interface2;
+end;
+
+interface Interface2: 
+	empty():int
+	single():int
+	add2(int, int) : int
+end;
+
+class Class2 implements Interface1 Interface2 :
+	var var1 : int;
+	var var2 : int;
+	method init()
+		var zero : int := 0H;
+		var1 := (zero);
+		var2 := zero;
+		return 0;
+	end;
+	method add2(in1: int, in2: int)
+		return in1+in2;
+	end;
+	method add3(in1: int, in2: int)
+		return in1 + this.add2(in2, in3);
+	end;
+	method empty()
+		/* Stats */
+	end;
+	method single()
+		return this;
+	end;
+	method fact(n : int)
+		if n < 0 then
+			return 0;
+		end;
+		
+		var fac : int := 1;
+		var i : int := n;
+		
+		while (0 < i) do
+			fac := fac * i;
+		end;
+		
+		return fac;
+		
+	end;
+end;
+
+Ausgabe:
+[Error] Status: 139. Erwartet: 3
+
+Statistics: 
+===========
+           29 Tests total
+           24 Tests passed
+           5 Tests failed

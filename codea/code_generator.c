@@ -230,22 +230,31 @@ void generateClassTable(node_t *node, meth_node_t *implmethds)
     node_t *nextNode = allClasses;
     while (nextNode != NULL)
     {
-        generateClassTableForASingleClass(nextNode->name, abstractMethds);
+        generateClassTableForASingleClass(nextNode->name, abstractMethds, implmethds);
 
         nextNode = nextNode->next;
     }
 }
 
-void generateClassTableForASingleClass(char *className, node_t *abstractMethds)
+void generateClassTableForASingleClass(char *className, node_t *abstractMethds, meth_node_t *implmethds)
 {
     printf("\n"); // just to have a bit more spacing
     printf(".globl %s\n", className);
-    printf("%s:   ", className);
+    printf("%s:   \n", className);
 
     node_t *nextNode = abstractMethds;
     while (nextNode != NULL)
     {
-        printf(".quad %s_%s\n", className, nextNode->name);
+        if (isMethImplemtedByClass(implmethds, className, nextNode->name) == 0)
+        {
+            // the method is not implemented in this class so we need to print a other quad
+            printf(".quad 0 #%s\n", nextNode->name);
+        }
+        else
+        {
+            // this method is implementd yeah 8D
+            printf(".quad %s_%s\n", className, nextNode->name);
+        }
 
         nextNode = nextNode->next;
     }
