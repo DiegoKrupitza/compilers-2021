@@ -10,7 +10,10 @@ all:
 	gcc -g -c -pedantic -Wall tree.c
 	gcc -g -c -pedantic -Wall code_generator.c
 
-	gcc -g list.o code_generator.o tree.o y.tab.o lex.yy.o -ly -ll -o ag
-                                                                                                                                                                                                                 
+	bfe < codegen.bfe | iburg > codegen.c
+	gcc -g -c -pedantic -Wall codegen.c
+	gcc -g list.o tree.o codegen.o code_generator.o y.tab.o lex.yy.o -ll -o codea
+	                                                                                                                                                                                             
 clean:    
-	rm -f ag *.o oxout.* lex.yy.c y.tab.* y.output parser
+	rm -f codea codegen.c *.o oxout.* lex.yy.c y.tab.* y.output parser
+	

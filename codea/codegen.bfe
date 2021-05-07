@@ -53,8 +53,8 @@ const:  OP_NUMBER                       # 0 #
 const:  OP_ADD(const, const)            # 0 #   bnode->value = bnode->kids[0]->value + bnode->kids[1]->value;
 const:  OP_MUL(const, const)            # 0 #   bnode->value = bnode->kids[0]->value * bnode->kids[1]->value;
 const:  OP_AND(const, const)            # 0 #   bnode->value = bnode->kids[0]->value & bnode->kids[1]->value;
-const:  OP_LESS_EQUAL(const, const)     # 0 #   bnode->value = bnode->kids[0]->value <= bnode->kids[1]->value ? -1 : 0;
-const:  OP_NOT_EQUAL(const, const)      # 0 #   bnode->value = bnode->kids[0]->value != bnode->kids[1]->value ? -1 : 0;
+const:  OP_LESS(const, const)           # 0 #   
+const:  OP_EQUAL(const, const)          # 0 #   
 const:  OP_NOT(const)                   # 0 #   bnode->value = ~bnode->kids[0]->value;
 const:  OP_MINUS(const)                 # 0 #   bnode->value = -bnode->kids[0]->value;
 

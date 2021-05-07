@@ -9,6 +9,7 @@ class c implements a:
         /* return (((not (e + f)) < this) + e + 3 + 5); */
         /* return 1 +2 +3 + 4; */
         /* return (((not (e + f)) < this) + e + 3 + 5) and (1 and 1); */
-        return d + d + this;
+        /* return d + d + this; */
+        return 3;
     end;
 end;

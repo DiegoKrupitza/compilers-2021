@@ -18,6 +18,9 @@ void yyerror(char const*);
 
 extern int yylex();
 
+extern void burm_reduce(NODEPTR_TYPE, int);
+extern void burm_label(NODEPTR_TYPE);
+
 %}
 
 /*%define parse.error verbose
@@ -49,10 +52,13 @@ extern int yylex();
 @attributes { node_t* in; node_t* out; tree_t* tree; } Stat
 @attributes { node_t* ids; tree_t *tree; } Expr OptionaNotTerm OptionalPlusTerm OptionalMalTerm OptionalAndTerm Term 
 
+@traversal @preorder reg
+
 @traversal @postorder visCheck
 @traversal @postorder gen
 
 @traversal @postorder genMeth
+@traversal @postorder burm
 
 %%
 
@@ -283,6 +289,8 @@ Stats                   :   Stat ';' Stats
                             @i @Stat.in@ = @Stats.0.in@ ;
                             @i @Stats.1.in@ = @Stat.out@ ;
                             @i @Stats.0.out@ = @Stats.1.out@;
+
+                            @burm if(@Stat.tree@ != NULL) { burm_label(@Stat.tree@); burm_reduce(@Stat.tree@, 1); }
                         @}
                         |
                         @{
@@ -295,8 +303,8 @@ Stat                    :   RETURN Expr
                             @i @Expr.ids@ = @Stat.in@ ;
                             @i @Stat.out@ = @Stat.in@ ;
                             @i @Stat.tree@ = createNode(OP_RETURN, @Expr.tree@, NULL);
-                            @visCheck print2D(@Stat.tree@);
-                            
+
+                            @reg @Stat.tree@->regStor = getFirstRegister(); @Expr.tree@->regStor = @Stat.tree@->regStor;
                         @}
                         |   IF Expr THEN Stats END
                         @{

@@ -41,12 +41,16 @@ struct yyyT6 { node_t* ids; };
 typedef struct yyyT6 *yyyP6; 
 
 
-struct yyyT7 { node_t* in; node_t* out; tree_t* tree; }; 
+struct yyyT7 { node_t* in; node_t* out; char* currentClassName; }; 
 typedef struct yyyT7 *yyyP7; 
 
 
-struct yyyT8 { node_t* ids; tree_t *tree; }; 
+struct yyyT8 { node_t* in; node_t* out; tree_t* tree; }; 
 typedef struct yyyT8 *yyyP8; 
+
+
+struct yyyT9 { node_t* ids; tree_t *tree; }; 
+typedef struct yyyT9 *yyyP9; 
                                                       /*custom*/  
 typedef unsigned char yyyWAT; 
 typedef unsigned char yyyRCT; 

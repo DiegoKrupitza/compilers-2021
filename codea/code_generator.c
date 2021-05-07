@@ -191,7 +191,6 @@ void writeReturn()
 
 void writeReturnWithValue(char *retRegister)
 {
-
     if (retRegister != NULL && strcmp(retRegister, "rax") != 0)
     {
         writeMove(retRegister, "rax");
