@@ -379,6 +379,7 @@ Expr                    :   OptionaNotTerm
                         |   Term '-' Term
                         @{
                             @i @Expr.tree@ = createNode(OP_MINUS, @Term.0.tree@, @Term.1.tree@); 
+                            @reg @Term.0.tree@->regStor = @Expr.tree@->regStor; @Term.1.tree@->regStor = getNextRegister(@Expr.tree@->regStor);
                         @}
                         |   Term '<' Term
                         @{
