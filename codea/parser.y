@@ -374,6 +374,7 @@ Expr                    :   OptionaNotTerm
                         |   Term OptionalAndTerm
                         @{
                             @i @Expr.tree@ = createNode(OP_AND, @Term.tree@, @OptionalAndTerm.tree@); 
+                            @reg @Term.tree@->regStor = @Expr.tree@->regStor; @OptionalAndTerm.tree@->regStor = getNextRegister(@Expr.tree@->regStor);
                         @}
                         |   Term '-' Term
                         @{
@@ -431,6 +432,7 @@ OptionalMalTerm         :   '*' Term OptionalMalTerm
 OptionalAndTerm         :   AND Term OptionalAndTerm
                         @{
                             @i @OptionalAndTerm.0.tree@ = createNode(OP_AND, @Term.tree@, @OptionalAndTerm.1.tree@); 
+                            @reg @Term.tree@->regStor = @OptionalAndTerm.0.tree@->regStor; @OptionalAndTerm.1.tree@->regStor = getNextRegister(@OptionalAndTerm.0.tree@->regStor);
                         @}
                         |   AND Term
                         @{

@@ -127,11 +127,11 @@ static short burm_decode_expr[] = {
 	21,
 	22,
 	23,
-	24,
 };
 
 static short burm_decode_const[] = {
 	0,
+	24,
 	25,
 	26,
 	27,
@@ -213,7 +213,7 @@ STATEPTR_TYPE burm_state(int op, STATEPTR_TYPE left, STATEPTR_TYPE right) {
 			c = l->cost[burm_const_NT] + r->cost[burm_const_NT] + 0;
 			if (c + 0 < p->cost[burm_const_NT]) {
 				p->cost[burm_const_NT] = c + 0;
-				p->rule.burm_const = 2;
+				p->rule.burm_const = 3;
 				burm_closure_const(p, c + 0);
 			}
 		}
@@ -245,7 +245,7 @@ STATEPTR_TYPE burm_state(int op, STATEPTR_TYPE left, STATEPTR_TYPE right) {
 			c = l->cost[burm_const_NT] + r->cost[burm_const_NT] + 0;
 			if (c + 0 < p->cost[burm_const_NT]) {
 				p->cost[burm_const_NT] = c + 0;
-				p->rule.burm_const = 3;
+				p->rule.burm_const = 4;
 				burm_closure_const(p, c + 0);
 			}
 		}
@@ -277,7 +277,7 @@ STATEPTR_TYPE burm_state(int op, STATEPTR_TYPE left, STATEPTR_TYPE right) {
 			c = l->cost[burm_const_NT] + r->cost[burm_const_NT] + 0;
 			if (c + 0 < p->cost[burm_const_NT]) {
 				p->cost[burm_const_NT] = c + 0;
-				p->rule.burm_const = 4;
+				p->rule.burm_const = 5;
 				burm_closure_const(p, c + 0);
 			}
 		}
@@ -309,7 +309,7 @@ STATEPTR_TYPE burm_state(int op, STATEPTR_TYPE left, STATEPTR_TYPE right) {
 			c = l->cost[burm_const_NT] + r->cost[burm_const_NT] + 0;
 			if (c + 0 < p->cost[burm_const_NT]) {
 				p->cost[burm_const_NT] = c + 0;
-				p->rule.burm_const = 5;
+				p->rule.burm_const = 6;
 				burm_closure_const(p, c + 0);
 			}
 		}
@@ -334,7 +334,7 @@ STATEPTR_TYPE burm_state(int op, STATEPTR_TYPE left, STATEPTR_TYPE right) {
 			c = l->cost[burm_const_NT] + r->cost[burm_const_NT] + 0;
 			if (c + 0 < p->cost[burm_const_NT]) {
 				p->cost[burm_const_NT] = c + 0;
-				p->rule.burm_const = 6;
+				p->rule.burm_const = 7;
 				burm_closure_const(p, c + 0);
 			}
 		}
@@ -366,7 +366,7 @@ STATEPTR_TYPE burm_state(int op, STATEPTR_TYPE left, STATEPTR_TYPE right) {
 			c = l->cost[burm_const_NT] + 0;
 			if (c + 0 < p->cost[burm_const_NT]) {
 				p->cost[burm_const_NT] = c + 0;
-				p->rule.burm_const = 7;
+				p->rule.burm_const = 8;
 				burm_closure_const(p, c + 0);
 			}
 		}
@@ -384,7 +384,7 @@ STATEPTR_TYPE burm_state(int op, STATEPTR_TYPE left, STATEPTR_TYPE right) {
 			c = l->cost[burm_const_NT] + 0;
 			if (c + 0 < p->cost[burm_const_NT]) {
 				p->cost[burm_const_NT] = c + 0;
-				p->rule.burm_const = 8;
+				p->rule.burm_const = 9;
 				burm_closure_const(p, c + 0);
 			}
 		}
@@ -408,7 +408,7 @@ STATEPTR_TYPE burm_state(int op, STATEPTR_TYPE left, STATEPTR_TYPE right) {
 					0,
 					0,
 					1,	/* expr: const */
-					1,	/* const: OP_NUMBER */
+					2,	/* const: OP_NUMBER */
 				}
 			};
 			return &z;
@@ -487,13 +487,13 @@ STATEPTR_TYPE burm_state(int op, STATEPTR_TYPE left, STATEPTR_TYPE right) {
 				{	0,
 					32767,
 					32767,
-					1,	/* expr: OP_NULL */
-					32767,
+					1,	/* expr: const */
+					0,	/* const: OP_NULL */
 				},{
 					0,
 					0,
-					22,	/* expr: OP_NULL */
-					0,
+					1,	/* expr: const */
+					1,	/* const: OP_NULL */
 				}
 			};
 			return &z;
@@ -569,7 +569,7 @@ NODEPTR_TYPE *burm_kids(NODEPTR_TYPE p, int eruleno, NODEPTR_TYPE kids[]) {
 		kids[1] = RIGHT_CHILD(p);
 		break;
 	case 25: /* const: OP_NUMBER */
-	case 24: /* expr: OP_NULL */
+	case 24: /* const: OP_NULL */
 	case 23: /* expr: OP_THIS */
 	case 22: /* expr: OP_CLASS_VAR_ID */
 	case 21: /* expr: OP_PARAM_ID */
@@ -692,7 +692,7 @@ void burm_reduce(NODEPTR_TYPE bnode, int goalnt)
    
     break;
   case 24:
-   
+   bnode->value = 0; /*TODO check if this is what they want */
     break;
   case 25:
 
