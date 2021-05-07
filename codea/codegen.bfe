@@ -38,7 +38,6 @@ expr:   OP_LESS(expr, const)            # 1 #
 expr:   OP_LESS(const, expr)            # 1 # 
 const:  OP_LESS(const, const)           # 0 #  
 
-
 expr:   OP_EQUAL(expr, expr)            # 1 #   
 expr:   OP_EQUAL(const, expr)           # 1 #   
 expr:   OP_EQUAL(expr, const)           # 1 #   
@@ -47,8 +46,8 @@ const:  OP_EQUAL(const, const)          # 0 #
 expr:   OP_NOT(expr)                    # 1 #   writeNot(bnode->regStor); 
 const:  OP_NOT(const)                   # 0 #   bnode->value = ~bnode->kids[0]->value;
 
-expr:   OP_MINUS(expr,const)            # 1 #   
-expr:   OP_MINUS(expr,expr)             # 1 #   
+expr:   OP_MINUS(expr,const)            # 1 #   writeSubv(bnode->kids[1]->value, bnode->kids[0]->regStor);  
+expr:   OP_MINUS(expr,expr)             # 1 #   writeSub(bnode->kids[1]->regStor, bnode->kids[0]->regStor);
 const:  OP_MINUS(const,const)           # 0 #   bnode->value = bnode->kids[0]->value - bnode->kids[1]->value;
 expr:   OP_MINUS(const,expr)            # 1 #   
 
