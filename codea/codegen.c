@@ -712,7 +712,7 @@ void burm_reduce(NODEPTR_TYPE bnode, int goalnt)
    /* TODO: in later angabe da es sich hier um normale vars handel */
     break;
   case 24:
-   
+   if (bnode->parameterIndex != -1) writeMove(getParameterRegister(bnode->parameterIndex), bnode->regStor);   
     break;
   case 25:
    

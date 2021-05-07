@@ -3,7 +3,7 @@ interface a:
 end;
 
 class c implements a:
-    var d:a;
+    var d:int;
 
     method b(e:int, f:a)
         /* return (((not (e + f)) < this) + e + 3 + 5); */
@@ -14,7 +14,8 @@ class c implements a:
         /* return not (1+1+1); */
         /* return 3+(3+3); */
         /* return (3 * 3) + 1; */
-        /*return 1 and 1; */
-        return 1-1;
+        /* return 1 and 1; */
+        /* return e; */
+        return d;
     end;
 end;
