@@ -737,7 +737,7 @@ void burm_reduce(NODEPTR_TYPE bnode, int goalnt)
    bnode->value = bnode->kids[0]->value - bnode->kids[1]->value;
     break;
   case 29:
-   
+   writeMovev(bnode->kids[0]->value,bnode->regStor); writeSub(bnode->kids[1]->regStor,bnode->regStor);
     break;
   case 30:
    /* TODO: in later angabe da es sich hier um normale vars handel */

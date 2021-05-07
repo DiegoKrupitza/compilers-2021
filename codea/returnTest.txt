@@ -19,8 +19,13 @@ class c implements a:
         /* return e; */
         /* return adiego; */
         /* return bdiego; */
-        /* return this; */
+        /* return (this + this) +1; */
         /* return (this + 1) + this; */
-        return (e - 1) - e;
+        /* return (e - 1) - e; */
+        /* return (bdiego + 1) + e; */
+        /* return e - 1; */
+        return 1- e;
+
+
     end;
 end;

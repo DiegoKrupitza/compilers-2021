@@ -48,3 +48,5 @@ void writeMoveForClassVar(int classVaroffset, char *dst);
 char *getThisRegister();
 
 void writeThisMovq(char *dst);
+
+void writeNeq(char *srcDst);

@@ -267,3 +267,7 @@ void writeThisMovq(char *dst)
 {
     fprintf(stdout, "\tmovq\t%%%s, %%%s\n", getThisRegister(), dst);
 }
+
+void writeNeq(char *srcDst) {
+    fprintf(stdout, "\tnegq\t%%%s\n", srcDst);
+}
