@@ -2099,6 +2099,66 @@ RET(c.f(0,2) == -1 && c.g(0,4) == -1  && c.h(0,3,2) == -1  && c.j(0,2,3) == -1  
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
+==========> Eingabe von /home/ublu21/u11808206/test/codea/kingD-16.0:
+interface TestcaseInt2:
+    i(int, int, int): int
+end;
+
+class TestClass2 implements TestcaseInt2:
+    var objVar1: int;
+    var objVar2: int;
+
+
+    method i(x: int, y: int, z: int)
+        return 0DEADH * 0BEEFH * objVar1;
+    end;
+
+end;
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl TestClass2
+TestClass2:   
+.quad TestClass2_i
+
+
+TestClass2_i:
+	movq	8(%rdi), %r10
+	imulq	$48879, %r10
+	movq	%r10, %r11
+	imulq	$57005, %r11
+	movq	%r11, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { 
+    struct vft *vftc; 
+    long objVar1;
+    long objVar2;
+};
+
+extern struct ct { 
+    long (*i)(struct objectc*, long, long, long);
+    
+} TestClass2;
+
+struct objectc *TestObj = (struct objectc *)malloc(sizeof(struct objectc));
+TestObj->objVar1= 2147483647;
+TestObj->objVar2 = -2147483648;
+
+#define I2(o,x,y,z) (TestObj->objVar1 * 0xDEAD * 0xBEEF)
+
+
+RET(
+
+    TestClass2.i(TestObj, 0, 0, 0) == I2(0, 0, 0, 0)
+);
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
 ==========> Eingabe von /home/ublu21/u11808206/test/codea/kingD-2.0:
 interface i: f(int):int end;
 class c implements i:
@@ -2711,6 +2771,160 @@ RET(Class1.add2(0, 0xABCD, 0xDEAD) == (0xABCD + 0xDEAD) && Class1.add2(0, 0xABCD
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
+==========> Eingabe von /home/ublu21/u11808206/test/codea/thenotoriousj-13.0:
+interface Interface1:
+	add1(int) : int
+	add2(int) : int
+	add3(int) : int
+	add4(int) : int
+	mul(int) : int
+	equal(int) : int
+	sub1(int) : int
+	sub2(int) : int
+	less1(int) : int
+	less2(int) : int
+	constant() : int
+end;
+
+class Class1 implements Interface1 :
+	method add1(in1: int)
+		return (2147483648-1)+in1;
+	end;
+	method add2(in1: int)
+		return 2147483648+in1;
+	end;
+	method add3(in1: int)
+		return (0-2147483648)+in1;
+	end;
+	method add4(in1: int)
+		return ((0-2147483648)-1)+in1;
+	end;
+	method mul(a: int)
+		return a*0DEADH * 0BEEFH;
+	end;
+	
+	method equal(a: int)
+		return a = (0DEADH * 0BEEFH);
+	end;
+	
+	method sub1(in1: int)
+		return in1 - (0DEADH * 0BEEFH);
+	end;
+	method sub2(in1: int)
+		return (0DEADH * 0BEEFH) - in1;
+	end;
+	
+	method less1(in1: int)
+		return in1 < (0DEADH * 0BEEFH);
+	end;
+	method less2(in1: int)
+		return (0DEADH * 0BEEFH) < in1;
+	end;
+	
+	method constant()
+		return 0DEADH * 0BEEFH;
+	end;
+end;
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl Class1
+Class1:   
+.quad Class1_add1
+.quad Class1_add2
+.quad Class1_add3
+.quad Class1_add4
+.quad Class1_mul
+.quad Class1_equal
+.quad Class1_sub1
+.quad Class1_sub2
+.quad Class1_less1
+.quad Class1_less2
+.quad Class1_constant
+
+
+Class1_add1:
+	movq	$1, %r11
+	movq	$2147483648, %rax
+	subq	%r11, %rax
+	movq	%rsi, %r11
+	addq	%r11, %rax
+	ret
+Class1_add2:
+	movq	%rsi, %r11
+	addq	$2147483648, %r11
+	movq	%r11, %rax
+	ret
+Class1_add3:
+	movq	$2147483648, %r11
+	movq	$0, %rax
+	subq	%r11, %rax
+	movq	%rsi, %r11
+	addq	%r11, %rax
+	ret
+Class1_add4:
+	movq	$2147483648, %r11
+	movq	$0, %rax
+	subq	%r11, %rax
+	subq	$1, %rax
+	movq	%rsi, %r11
+	addq	%r11, %rax
+	ret
+Class1_mul:
+	movq	%rsi, %rax
+	movq	$57005, %r11
+	imulq	$48879, %r11
+	imulq	%r11, %rax
+	ret
+Class1_equal:
+	movq	%rsi, %rax
+	movq	$57005, %r11
+	imulq	$48879, %r11
+	cmpq	%rax, %r11	# checking if rax equals r11
+	sete	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	ret
+Class1_sub1:
+	movq	%rsi, %rax
+	movq	$57005, %r11
+	imulq	$48879, %r11
+	subq	%r11, %rax
+	ret
+Class1_sub2:
+	movq	$57005, %rax
+	imulq	$48879, %rax
+	movq	%rsi, %r11
+	subq	%r11, %rax
+	ret
+Class1_less1:
+	movq	%rsi, %rax
+	movq	$57005, %r11
+	imulq	$48879, %r11
+	cmpq	%rax, %r11	# checking if rax less r11
+	setg	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	ret
+Class1_less2:
+	movq	$57005, %rax
+	imulq	$48879, %rax
+	movq	%rsi, %r11
+	cmpq	%rax, %r11	# checking if rax less r11
+	setg	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	ret
+Class1_constant:
+	movq	$57005, %rax
+	imulq	$48879, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+testcodeaout29530.s: Assembler messages:
+testcodeaout29530.s:26: Error: operand type mismatch for `add'
+[Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
 ==========> Eingabe von /home/ublu21/u11808206/test/codea/thenotoriousj-3.0:
 interface Interface1: 
 	empty():Interface1
@@ -3687,7 +3901,7 @@ Ausgabe:
 Identifier 'test' on line 1 conflicts with identifier [test] on line 1
 Status: korrekt
 
-==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_Dappzydee.1.3:
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_Dappzydee_1.3:
 interface myInterface:
     testMethod(): int
 end;
@@ -3700,10 +3914,9 @@ end;
 
 Ausgabe:
 Identifier with name 'testMethod' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
-/usr/ftp/pub/ubvl/test/codea/test: line 125: test: 1.3: integer expression expected
-[Error] Status: 3. Erwartet: 1.3
+Status: korrekt
 
-==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_Dappzydee.2.3:
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_Dappzydee_2.3:
 interface myInterface:
     testMethod(): int
 end;
@@ -3717,10 +3930,22 @@ end;
 
 Ausgabe:
 Identifier with name 'testMethod' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
-/usr/ftp/pub/ubvl/test/codea/test: line 125: test: 2.3: integer expression expected
-[Error] Status: 3. Erwartet: 2.3
+Status: korrekt
 
-==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_crazyjack.1.3:
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_crazyjack6.3:
+interface i:
+    a():int
+end;
+class x implements:
+    method a()
+        a23; /* FAIL */
+    end;
+end;
+Ausgabe:
+Identifier with name 'a23' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_crazyjack_1.3:
 interface a1:
 end;
 interface a2:
@@ -3762,10 +3987,9 @@ class hello2 implements a2 a1:
 end;
 Ausgabe:
 Identifier with name 'INVALID' on line 1 is not visible in the current scope
-/usr/ftp/pub/ubvl/test/codea/test: line 125: test: 1.3: integer expression expected
-[Error] Status: 3. Erwartet: 1.3
+Status: korrekt
 
-==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_crazyjack.10.3:
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_crazyjack_10.3:
 interface i:
     a():int
 end;
@@ -3777,10 +4001,9 @@ class b implements:
 end;
 Ausgabe:
 Identifier with name 'x' on line 1 is not visible in the current scope
-/usr/ftp/pub/ubvl/test/codea/test: line 125: test: 10.3: integer expression expected
-[Error] Status: 3. Erwartet: 10.3
+Status: korrekt
 
-==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_crazyjack.11.3:
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_crazyjack_11.3:
 interface i:
     a():int
 end;
@@ -3797,10 +4020,9 @@ class x implements:
 end;
 Ausgabe:
 Identifier with name 'x' on line 1 is not visible in the current scope
-/usr/ftp/pub/ubvl/test/codea/test: line 125: test: 11.3: integer expression expected
-[Error] Status: 3. Erwartet: 11.3
+Status: korrekt
 
-==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_crazyjack.3.3:
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_crazyjack_3.3:
 interface a:
     b(int, int):int
 end;
@@ -3811,10 +4033,9 @@ class hello implements a:
 end;
 Ausgabe:
 Identifier with name 'a' on line 1 is not visible in the current scope
-/usr/ftp/pub/ubvl/test/codea/test: line 125: test: 3.3: integer expression expected
-[Error] Status: 3. Erwartet: 3.3
+Status: korrekt
 
-==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_crazyjack.5.3:
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_crazyjack_5.3:
 interface a1:
     b(int, int):int
 end;
@@ -3828,24 +4049,9 @@ interface a2:
 end;
 Ausgabe:
 Identifier with name 'b2' on line 1 is not visible in the current scope
-/usr/ftp/pub/ubvl/test/codea/test: line 125: test: 5.3: integer expression expected
-[Error] Status: 3. Erwartet: 5.3
+Status: korrekt
 
-==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_crazyjack.6.3:
-interface i:
-    a():int
-end;
-class x implements:
-    method a()
-        a23; /* FAIL */
-    end;
-end;
-Ausgabe:
-Identifier with name 'a23' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
-/usr/ftp/pub/ubvl/test/codea/test: line 125: test: 6.3: integer expression expected
-[Error] Status: 3. Erwartet: 6.3
-
-==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_crazyjack.8.3:
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_crazyjack_8.3:
 interface i:
     a():int
 end;
@@ -3856,8 +4062,7 @@ class x implements:
 end;
 Ausgabe:
 Identifier with name 'hallo' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
-/usr/ftp/pub/ubvl/test/codea/test: line 125: test: 8.3: integer expression expected
-[Error] Status: 3. Erwartet: 8.3
+Status: korrekt
 
 ==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_gutti-6.3:
 class Foo implements Bar: /*Bar ist noch nicht sichtbar*/
@@ -4743,6 +4948,6 @@ Status: korrekt
 
 Statistics: 
 ===========
-           106 Tests total
-           97 Tests passed
-           9 Tests failed
+           108 Tests total
+           107 Tests passed
+           1 Tests failed

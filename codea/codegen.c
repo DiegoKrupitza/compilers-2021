@@ -28,7 +28,7 @@ struct burm_state {
 		unsigned burm_stat:1;
 		unsigned burm_ret:1;
 		unsigned burm_expr:5;
-		unsigned burm_const:2;
+		unsigned burm_const:3;
 	} rule;
 };
 
@@ -38,7 +38,8 @@ static short burm_nts_2[] = { burm_const_NT, 0 };
 static short burm_nts_3[] = { burm_expr_NT, burm_expr_NT, 0 };
 static short burm_nts_4[] = { burm_const_NT, burm_expr_NT, 0 };
 static short burm_nts_5[] = { burm_expr_NT, burm_const_NT, 0 };
-static short burm_nts_6[] = { 0 };
+static short burm_nts_6[] = { burm_const_NT, burm_const_NT, 0 };
+static short burm_nts_7[] = { 0 };
 
 short *burm_nts[] = {
 	0,	/* 0 */
@@ -57,20 +58,22 @@ short *burm_nts[] = {
 	burm_nts_3,	/* 13 */
 	burm_nts_5,	/* 14 */
 	burm_nts_4,	/* 15 */
-	burm_nts_3,	/* 16 */
-	burm_nts_4,	/* 17 */
-	burm_nts_5,	/* 18 */
-	burm_nts_1,	/* 19 */
-	burm_nts_2,	/* 20 */
-	burm_nts_5,	/* 21 */
-	burm_nts_3,	/* 22 */
-	burm_nts_4,	/* 23 */
-	burm_nts_6,	/* 24 */
-	burm_nts_6,	/* 25 */
-	burm_nts_6,	/* 26 */
-	burm_nts_6,	/* 27 */
-	burm_nts_6,	/* 28 */
-	burm_nts_6,	/* 29 */
+	burm_nts_6,	/* 16 */
+	burm_nts_3,	/* 17 */
+	burm_nts_4,	/* 18 */
+	burm_nts_5,	/* 19 */
+	burm_nts_6,	/* 20 */
+	burm_nts_1,	/* 21 */
+	burm_nts_2,	/* 22 */
+	burm_nts_5,	/* 23 */
+	burm_nts_3,	/* 24 */
+	burm_nts_4,	/* 25 */
+	burm_nts_7,	/* 26 */
+	burm_nts_7,	/* 27 */
+	burm_nts_7,	/* 28 */
+	burm_nts_7,	/* 29 */
+	burm_nts_7,	/* 30 */
+	burm_nts_7,	/* 31 */
 };
 
 char burm_arity[] = {
@@ -115,24 +118,26 @@ static short burm_decode_expr[] = {
 	13,
 	14,
 	15,
-	16,
 	17,
 	18,
 	19,
 	21,
-	22,
 	23,
 	24,
 	25,
 	26,
 	27,
+	28,
+	29,
 };
 
 static short burm_decode_const[] = {
 	0,
+	16,
 	20,
-	28,
-	29,
+	22,
+	30,
+	31,
 };
 
 int burm_rule(STATEPTR_TYPE state, int goalnt) {
@@ -274,6 +279,14 @@ STATEPTR_TYPE burm_state(int op, STATEPTR_TYPE left, STATEPTR_TYPE right) {
 		break;
 	case 4: /* OP_LESS */
 		assert(l && r);
+		{	/* const: OP_LESS(const,const) */
+			c = l->cost[burm_const_NT] + r->cost[burm_const_NT] + 0;
+			if (c + 0 < p->cost[burm_const_NT]) {
+				p->cost[burm_const_NT] = c + 0;
+				p->rule.burm_const = 1;
+				burm_closure_const(p, c + 0);
+			}
+		}
 		{	/* expr: OP_LESS(const,expr) */
 			c = l->cost[burm_const_NT] + r->cost[burm_expr_NT] + 1;
 			if (c + 0 < p->cost[burm_expr_NT]) {
@@ -298,6 +311,14 @@ STATEPTR_TYPE burm_state(int op, STATEPTR_TYPE left, STATEPTR_TYPE right) {
 		break;
 	case 5: /* OP_EQUAL */
 		assert(l && r);
+		{	/* const: OP_EQUAL(const,const) */
+			c = l->cost[burm_const_NT] + r->cost[burm_const_NT] + 0;
+			if (c + 0 < p->cost[burm_const_NT]) {
+				p->cost[burm_const_NT] = c + 0;
+				p->rule.burm_const = 2;
+				burm_closure_const(p, c + 0);
+			}
+		}
 		{	/* expr: OP_EQUAL(expr,const) */
 			c = l->cost[burm_expr_NT] + r->cost[burm_const_NT] + 1;
 			if (c + 0 < p->cost[burm_expr_NT]) {
@@ -326,7 +347,7 @@ STATEPTR_TYPE burm_state(int op, STATEPTR_TYPE left, STATEPTR_TYPE right) {
 			c = l->cost[burm_const_NT] + 0;
 			if (c + 0 < p->cost[burm_const_NT]) {
 				p->cost[burm_const_NT] = c + 0;
-				p->rule.burm_const = 1;
+				p->rule.burm_const = 3;
 				burm_closure_const(p, c + 0);
 			}
 		}
@@ -374,7 +395,7 @@ STATEPTR_TYPE burm_state(int op, STATEPTR_TYPE left, STATEPTR_TYPE right) {
 					0,
 					0,
 					1,	/* expr: const */
-					3,	/* const: OP_NUMBER */
+					5,	/* const: OP_NUMBER */
 				}
 			};
 			return &z;
@@ -459,7 +480,7 @@ STATEPTR_TYPE burm_state(int op, STATEPTR_TYPE left, STATEPTR_TYPE right) {
 					0,
 					0,
 					1,	/* expr: const */
-					2,	/* const: OP_NULL */
+					4,	/* const: OP_NULL */
 				}
 			};
 			return &z;
@@ -505,17 +526,19 @@ NODEPTR_TYPE *burm_kids(NODEPTR_TYPE p, int eruleno, NODEPTR_TYPE kids[]) {
 	case 1: /* stat: ret */
 		kids[0] = p;
 		break;
-	case 20: /* const: OP_NOT(const) */
-	case 19: /* expr: OP_NOT(expr) */
+	case 22: /* const: OP_NOT(const) */
+	case 21: /* expr: OP_NOT(expr) */
 	case 2: /* ret: OP_RETURN(expr) */
 		kids[0] = LEFT_CHILD(p);
 		break;
-	case 23: /* expr: OP_MINUS(const,expr) */
-	case 22: /* expr: OP_MINUS(expr,expr) */
-	case 21: /* expr: OP_MINUS(expr,const) */
-	case 18: /* expr: OP_EQUAL(expr,const) */
-	case 17: /* expr: OP_EQUAL(const,expr) */
-	case 16: /* expr: OP_EQUAL(expr,expr) */
+	case 25: /* expr: OP_MINUS(const,expr) */
+	case 24: /* expr: OP_MINUS(expr,expr) */
+	case 23: /* expr: OP_MINUS(expr,const) */
+	case 20: /* const: OP_EQUAL(const,const) */
+	case 19: /* expr: OP_EQUAL(expr,const) */
+	case 18: /* expr: OP_EQUAL(const,expr) */
+	case 17: /* expr: OP_EQUAL(expr,expr) */
+	case 16: /* const: OP_LESS(const,const) */
 	case 15: /* expr: OP_LESS(const,expr) */
 	case 14: /* expr: OP_LESS(expr,const) */
 	case 13: /* expr: OP_LESS(expr,expr) */
@@ -531,12 +554,12 @@ NODEPTR_TYPE *burm_kids(NODEPTR_TYPE p, int eruleno, NODEPTR_TYPE kids[]) {
 		kids[0] = LEFT_CHILD(p);
 		kids[1] = RIGHT_CHILD(p);
 		break;
-	case 29: /* const: OP_NUMBER */
-	case 28: /* const: OP_NULL */
-	case 27: /* expr: OP_THIS */
-	case 26: /* expr: OP_CLASS_VAR_ID */
-	case 25: /* expr: OP_PARAM_ID */
-	case 24: /* expr: OP_ID */
+	case 31: /* const: OP_NUMBER */
+	case 30: /* const: OP_NULL */
+	case 29: /* expr: OP_THIS */
+	case 28: /* expr: OP_CLASS_VAR_ID */
+	case 27: /* expr: OP_PARAM_ID */
+	case 26: /* expr: OP_ID */
 		break;
 	default:
 		burm_assert(0, PANIC("Bad external rule number %d in burm_kids\n", eruleno));
@@ -631,45 +654,51 @@ void burm_reduce(NODEPTR_TYPE bnode, int goalnt)
    writeVLessReg(bnode->kids[0]->value, bnode->kids[1]->regStor, bnode->regStor);
     break;
   case 16:
-   writeEquals(bnode->kids[0]->regStor,bnode->kids[1]->regStor,bnode->regStor);
+   if(bnode->kids[0]->value < bnode->kids[1]->value) { bnode->value = TRUE_VAL; } else { bnode->value = FALSE_VAL; } 
     break;
   case 17:
-   writeEqualsv(bnode->kids[0]->value,bnode->kids[1]->regStor,bnode->regStor);
+   writeEquals(bnode->kids[0]->regStor,bnode->kids[1]->regStor,bnode->regStor);
     break;
   case 18:
-   writeEqualsv(bnode->kids[1]->value,bnode->kids[0]->regStor,bnode->regStor);
+   writeEqualsv(bnode->kids[0]->value,bnode->kids[1]->regStor,bnode->regStor);
     break;
   case 19:
-   writeNot(bnode->regStor); 
+   writeEqualsv(bnode->kids[1]->value,bnode->kids[0]->regStor,bnode->regStor);
     break;
   case 20:
-   bnode->value = ~bnode->kids[0]->value;
+   if(bnode->kids[0]->value == bnode->kids[1]->value) { bnode->value = TRUE_VAL; } else { bnode->value = FALSE_VAL; }
     break;
   case 21:
-   writeSubv(bnode->kids[1]->value, bnode->kids[0]->regStor);  
+   writeNot(bnode->regStor); 
     break;
   case 22:
-   writeSub(bnode->kids[1]->regStor, bnode->kids[0]->regStor);
+   bnode->value = ~bnode->kids[0]->value;
     break;
   case 23:
-   writeMovev(bnode->kids[0]->value,bnode->regStor); writeSub(bnode->kids[1]->regStor,bnode->regStor);
+   writeSubv(bnode->kids[1]->value, bnode->kids[0]->regStor);  
     break;
   case 24:
-   /* TODO: in later angabe da es sich hier um normale vars handel */
+   writeSub(bnode->kids[1]->regStor, bnode->kids[0]->regStor);
     break;
   case 25:
-   if (bnode->parameterIndex != -1) writeMove(getParameterRegister(bnode->parameterIndex), bnode->regStor);   
+   writeMovev(bnode->kids[0]->value,bnode->regStor); writeSub(bnode->kids[1]->regStor,bnode->regStor);
     break;
   case 26:
-   if (bnode->classVaroffset != -1) writeMoveForClassVar(bnode->classVaroffset, bnode->regStor);
+   /* TODO: in later angabe da es sich hier um normale vars handel */
     break;
   case 27:
-   writeThisMovq(bnode->regStor);
+   if (bnode->parameterIndex != -1) writeMove(getParameterRegister(bnode->parameterIndex), bnode->regStor);   
     break;
   case 28:
-   bnode->value = 0; /*TODO check if this is what they want */
+   if (bnode->classVaroffset != -1) writeMoveForClassVar(bnode->classVaroffset, bnode->regStor);
     break;
   case 29:
+   writeThisMovq(bnode->regStor);
+    break;
+  case 30:
+   bnode->value = 0; /*TODO check if this is what they want */
+    break;
+  case 31:
    /* done */
     break;
   default:    assert (0);

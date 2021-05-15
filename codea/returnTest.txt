@@ -41,7 +41,8 @@ class c implements a:
         /* return (null a) < (this + 1); */
         /* return adiego * 0DEADH * 0BEEFH; */
 
-        return 5 + (2147483645 + 6);
+        /* return 5 + (2147483645 + 6); */
+        return (0DEADH * 0BEEFH) < 5;
 
     end;
 end;
