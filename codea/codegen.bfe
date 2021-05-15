@@ -36,12 +36,12 @@ expr:   OP_AND(expr, const)             # 1 #   writeAndv(bnode->kids[1]->value,
 expr:   OP_LESS(expr, expr)             # 1 #   writeRegLessReg(bnode->kids[0]->regStor, bnode->kids[1]->regStor, bnode->regStor);
 expr:   OP_LESS(expr, const)            # 1 #   writeRegLessV(bnode->kids[0]->regStor, bnode->kids[1]->value, bnode->regStor);
 expr:   OP_LESS(const, expr)            # 1 #   writeVLessReg(bnode->kids[0]->value, bnode->kids[1]->regStor, bnode->regStor);
-
+const:  OP_LESS(const, const)           # 0 #   if(bnode->kids[0]->value < bnode->kids[1]->value) { bnode->value = TRUE_VAL; } else { bnode->value = FALSE_VAL; } 
 
 expr:   OP_EQUAL(expr, expr)            # 1 #   writeEquals(bnode->kids[0]->regStor,bnode->kids[1]->regStor,bnode->regStor);
 expr:   OP_EQUAL(const, expr)           # 1 #   writeEqualsv(bnode->kids[0]->value,bnode->kids[1]->regStor,bnode->regStor);
 expr:   OP_EQUAL(expr, const)           # 1 #   writeEqualsv(bnode->kids[1]->value,bnode->kids[0]->regStor,bnode->regStor);
-
+const:  OP_EQUAL(const, const)          # 0 #   if(bnode->kids[0]->value == bnode->kids[1]->value) { bnode->value = TRUE_VAL; } else { bnode->value = FALSE_VAL; }
 
 expr:   OP_NOT(expr)                    # 1 #   writeNot(bnode->regStor); 
 const:  OP_NOT(const)                   # 0 #   bnode->value = ~bnode->kids[0]->value;
