@@ -21,34 +21,34 @@ expr:   const                           # 1 #   writeMovev(bnode->value, bnode->
 expr:   OP_ADD(expr, expr)              # 1 #   writeAdd(bnode->kids[1]->regStor, bnode->kids[0]->regStor);
 expr:   OP_ADD(const, expr)             # 1 #   writeAddv(bnode->kids[0]->value, bnode->kids[1]->regStor); writeMove(bnode->kids[1]->regStor, bnode->regStor); 
 expr:   OP_ADD(expr, const)             # 1 #   writeAddv(bnode->kids[1]->value, bnode->kids[0]->regStor);
-const:  OP_ADD(const, const)            # 0 #   bnode->value = bnode->kids[0]->value + bnode->kids[1]->value;
+
 
 expr:   OP_MUL(expr, expr)              # 1 #   writeMul(bnode->kids[1]->regStor, bnode->kids[0]->regStor);
 expr:   OP_MUL(const, expr)             # 1 #   writeMulv(bnode->kids[0]->value, bnode->kids[1]->regStor); writeMove(bnode->kids[1]->regStor, bnode->regStor);
 expr:   OP_MUL(expr, const)             # 1 #   writeMulv(bnode->kids[1]->value, bnode->kids[0]->regStor);
-const:  OP_MUL(const, const)            # 0 #   bnode->value = bnode->kids[0]->value * bnode->kids[1]->value;
+
 
 expr:   OP_AND(expr, expr)              # 1 #   writeAnd(bnode->kids[1]->regStor, bnode->kids[0]->regStor);
 expr:   OP_AND(const, expr)             # 1 #   writeAndv(bnode->kids[0]->value, bnode->kids[1]->regStor); writeMove(bnode->kids[1]->regStor, bnode->regStor); 
 expr:   OP_AND(expr, const)             # 1 #   writeAndv(bnode->kids[1]->value, bnode->kids[0]->regStor);
-const:  OP_AND(const, const)            # 0 #   bnode->value = bnode->kids[0]->value & bnode->kids[1]->value;
+
 
 expr:   OP_LESS(expr, expr)             # 1 #   writeRegLessReg(bnode->kids[0]->regStor, bnode->kids[1]->regStor, bnode->regStor);
 expr:   OP_LESS(expr, const)            # 1 #   writeRegLessV(bnode->kids[0]->regStor, bnode->kids[1]->value, bnode->regStor);
 expr:   OP_LESS(const, expr)            # 1 #   writeVLessReg(bnode->kids[0]->value, bnode->kids[1]->regStor, bnode->regStor);
-const:  OP_LESS(const, const)           # 0 #   if(bnode->kids[0]->value < bnode->kids[1]->value) { bnode->value = TRUE_VAL; } else { bnode->value = FALSE_VAL; } 
+
 
 expr:   OP_EQUAL(expr, expr)            # 1 #   writeEquals(bnode->kids[0]->regStor,bnode->kids[1]->regStor,bnode->regStor);
 expr:   OP_EQUAL(const, expr)           # 1 #   writeEqualsv(bnode->kids[0]->value,bnode->kids[1]->regStor,bnode->regStor);
 expr:   OP_EQUAL(expr, const)           # 1 #   writeEqualsv(bnode->kids[1]->value,bnode->kids[0]->regStor,bnode->regStor);
-const:  OP_EQUAL(const, const)          # 0 #   if(bnode->kids[0]->value == bnode->kids[1]->value) { bnode->value = TRUE_VAL; } else { bnode->value = FALSE_VAL; } 
+
 
 expr:   OP_NOT(expr)                    # 1 #   writeNot(bnode->regStor); 
 const:  OP_NOT(const)                   # 0 #   bnode->value = ~bnode->kids[0]->value;
 
 expr:   OP_MINUS(expr,const)            # 1 #   writeSubv(bnode->kids[1]->value, bnode->kids[0]->regStor);  
 expr:   OP_MINUS(expr,expr)             # 1 #   writeSub(bnode->kids[1]->regStor, bnode->kids[0]->regStor);
-const:  OP_MINUS(const,const)           # 0 #   bnode->value = bnode->kids[0]->value - bnode->kids[1]->value;
+
 expr:   OP_MINUS(const,expr)            # 1 #   writeMovev(bnode->kids[0]->value,bnode->regStor); writeSub(bnode->kids[1]->regStor,bnode->regStor);
 
 expr:   OP_ID                           # 1 #   /* TODO: in later angabe da es sich hier um normale vars handel */

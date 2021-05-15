@@ -44,6 +44,1596 @@ RET(c.f(0,6) == 6 && c.f(0,-3)==-3);
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
+==========> Eingabe von /home/ublu21/u11808206/test/codea/Andy0n_000.0:
+interface myInt1:
+    myMeth1(int, int):int
+    myMeth2(int, int):int
+    myMeth3(int, int):int
+end;
+
+interface myInt2:
+    myMeth4(int, int):int
+    myMeth5(int, int):int
+    myMeth6(int, int):int
+end;
+
+class myClass1 implements myInt1:
+    method myMeth1(a: int, b: int)
+        return a < 5;
+    end;
+
+    method myMeth2(a: int, b: int)
+        return 5 < a;
+    end;
+
+    method myMeth3(a: int, b: int)
+        return 5 = a;
+    end;
+end;
+
+class myClass2 implements myInt2:
+    var x:int;
+    var y:int;
+    var z:int;
+
+    method myMeth4(e:int, f:int)
+        return 5 * (e + f);
+    end;
+
+    method myMeth5(e:int, f:int)
+        return (e + f) * 5;
+    end;
+
+    method myMeth6(e:int, f:int)
+        return (x + y) * z;
+    end;
+end;
+
+class myClass3 implements myInt1 myInt2:
+    method myMeth2(x: int, y: int)
+        return y + (((x and y) - x) * y);
+    end;
+
+    method myMeth5(x: int, y: int)
+        return (((15+5)*3)-8)<100;
+    end;
+
+    method myMeth6(x: int, y: int)
+        return not not y;
+    end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl myClass1
+myClass1:   
+.quad myClass1_myMeth1
+.quad myClass1_myMeth2
+.quad myClass1_myMeth3
+.quad 0 #myMeth4
+.quad 0 #myMeth5
+.quad 0 #myMeth6
+
+
+
+.globl myClass2
+myClass2:   
+.quad 0 #myMeth1
+.quad 0 #myMeth2
+.quad 0 #myMeth3
+.quad myClass2_myMeth4
+.quad myClass2_myMeth5
+.quad myClass2_myMeth6
+
+
+
+.globl myClass3
+myClass3:   
+.quad 0 #myMeth1
+.quad myClass3_myMeth2
+.quad 0 #myMeth3
+.quad 0 #myMeth4
+.quad myClass3_myMeth5
+.quad myClass3_myMeth6
+
+
+myClass1_myMeth1:
+	movq	%rsi, %rax
+	cmpq	$5, %rax	# checking if 5 less rax (inverted because right const not allwoed) 
+	setl	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	ret
+myClass1_myMeth2:
+	movq	%rsi, %r11
+	cmpq	$5, %r11	# checking if 5 less r11
+	setg	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	ret
+myClass1_myMeth3:
+	movq	%rsi, %r11
+	cmpq	$5, %r11	# checking if 5 equals r11
+	sete	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	ret
+myClass2_myMeth4:
+	movq	%rsi, %r11
+	movq	%rdx, %r10
+	addq	%r10, %r11
+	imulq	$5, %r11
+	movq	%r11, %rax
+	ret
+myClass2_myMeth5:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	addq	%r11, %rax
+	imulq	$5, %rax
+	ret
+myClass2_myMeth6:
+	movq	8(%rdi), %rax
+	movq	16(%rdi), %r11
+	addq	%r11, %rax
+	movq	24(%rdi), %r11
+	imulq	%r11, %rax
+	ret
+myClass3_myMeth2:
+	movq	%rdx, %rax
+	movq	%rsi, %r11
+	movq	%rdx, %r10
+	and	%r10, %r11
+	movq	%rsi, %r10
+	subq	%r10, %r11
+	movq	%rdx, %r10
+	imulq	%r10, %r11
+	addq	%r11, %rax
+	ret
+myClass3_myMeth5:
+	movq	$15, %rax
+	addq	$5, %rax
+	imulq	$3, %rax
+	subq	$8, %rax
+	cmpq	$100, %rax	# checking if 100 less rax (inverted because right const not allwoed) 
+	setl	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	ret
+myClass3_myMeth6:
+	movq	%rdx, %rax
+	notq	%rax
+	notq	%rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; };
+
+struct ct { 
+    int (*myMeth1)(struct objectc*, long, long);
+    int (*myMeth2)(struct objectc*, long, long);
+    int (*myMeth3)(struct objectc*, long, long);
+    int (*myMeth4)(struct objectc*, long, long);
+    int (*myMeth5)(struct objectc*, long, long);
+    int (*myMeth6)(struct objectc*, long, long);
+};
+
+extern struct ct myClass1;
+extern struct ct myClass2;
+extern struct ct myClass3;
+
+RET(
+    myClass1.myMeth1(0,6,0) == 0 && 
+    myClass1.myMeth1(0,-3,0)==-1 &&
+    myClass1.myMeth1(0,4,5)==-1 &&
+
+    myClass2.myMeth5(0, 5, 7)==60 &&
+
+    myClass3.myMeth5(0,0,0)==-1 &&
+    myClass3.myMeth6(0,0,5)==5
+);
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/Andy0n_001.0:
+interface myInt:
+    f(int, int): int
+end;
+
+class myClass1 implements myInt:
+    method f(a: int, b: int)
+        return a + b + a + b + ((a * b) + a + b);
+    end;
+end;
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl myClass1
+myClass1:   
+.quad myClass1_f
+
+
+myClass1_f:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	movq	%rsi, %r10
+	movq	%rdx, %r9
+	movq	%rsi, %r8
+	movq	%rdx, %rcx
+	imulq	%rcx, %r8
+	movq	%rsi, %rcx
+	movq	%rdx, %rdx
+	addq	%rdx, %rcx
+	addq	%rcx, %r8
+	addq	%r8, %r9
+	addq	%r9, %r10
+	addq	%r10, %r11
+	addq	%r11, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+In file included from /usr/ftp/pub/ubvl/test/codea/testmain.c:13:0:
+/home/ublu21/u11808206/test/codea/Andy0n_001.call: In function ‘call’:
+/home/ublu21/u11808206/test/codea/Andy0n_001.call:13:57: warning: integer overflow in expression [-Woverflow]
+     myClass1.f(0,-1,2147483647) == -1 + 2147483647 + -1 + 2147483647 + ((-1 * 2147483647) + -1 + 2147483647)
+                                                         ^
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; };
+
+struct ct { 
+    int (*f)(struct objectc*, long, long);
+};
+
+extern struct ct myClass1;
+// a + b + a + b + ((a * b) + a + b)
+RET(
+    myClass1.f(0,10,2) == 10 + 2 + 10 + 2 + ((10 * 2) + 10 + 2) &&
+    myClass1.f(0,0,2) == 0 + 2 + 0 + 2 + ((0 * 2) + 0 + 2) &&
+    myClass1.f(0,7,-7) == 7 + (-7) + 7 + (-7) + ((7 * (-7)) + 7 + (-7)) &&
+    myClass1.f(0,-1,2147483647) == -1 + 2147483647 + -1 + 2147483647 + ((-1 * 2147483647) + -1 + 2147483647)
+);
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/Andy0n_002.0:
+interface myInt:
+    f(int, int): int
+end;
+
+class myClass1 implements myInt:
+    method f(a: int, b: int)
+        return a+a+a+a+a;
+    end;
+end;
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl myClass1
+myClass1:   
+.quad myClass1_f
+
+
+myClass1_f:
+	movq	%rsi, %rax
+	movq	%rsi, %r11
+	movq	%rsi, %r10
+	movq	%rsi, %r9
+	movq	%rsi, %r8
+	addq	%r8, %r9
+	addq	%r9, %r10
+	addq	%r10, %r11
+	addq	%r11, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+In file included from /usr/ftp/pub/ubvl/test/codea/testmain.c:13:0:
+/home/ublu21/u11808206/test/codea/Andy0n_002.call: In function ‘call’:
+/home/ublu21/u11808206/test/codea/Andy0n_002.call:13:37: warning: integer overflow in expression [-Woverflow]
+     myClass1.f(0,2147483647,0) == 5 * 2147483647
+                                     ^
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; };
+
+struct ct { 
+    int (*f)(struct objectc*, long, long);
+};
+
+extern struct ct myClass1;
+// a + b + a + b + ((a * b) + a + b)
+RET(
+    myClass1.f(0,10,0) == 5 * 10  &&
+    myClass1.f(0,0,0) == 5 * 0  &&
+    myClass1.f(0,7,0) == 5 * 7  &&
+    myClass1.f(0,2147483647,0) == 5 * 2147483647
+);
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/Andy0n_003.0:
+interface myInt:
+    f(int, int): int
+end;
+
+class myClass1 implements myInt:
+    method f(a: int, b: int)
+        return not not not not not not a;
+    end;
+end;
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl myClass1
+myClass1:   
+.quad myClass1_f
+
+
+myClass1_f:
+	movq	%rsi, %rax
+	notq	%rax
+	notq	%rax
+	notq	%rax
+	notq	%rax
+	notq	%rax
+	notq	%rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; };
+
+struct ct { 
+    int (*f)(struct objectc*, long, long);
+};
+
+extern struct ct myClass1;
+
+RET(
+    myClass1.f(0,10,0) == 10  &&
+    myClass1.f(0,0,0) == 0  &&
+    myClass1.f(0,7,0) == 7  &&
+    myClass1.f(0,2147483647,0) == 2147483647
+);
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/Andy0n_004.0:
+interface myInt1:
+    f(int, int, int): int
+    g(int, int, int): int
+end;
+
+class myClass1 implements myInt1:
+    method f(x: int, y: int, z: int)
+        return (x*x) + (y*y) + (z*z);
+    end;
+
+    method g(x: int, y: int, z: int)
+        return (x+y+z) * (x-y) * (y-z) * (z-x);
+    end;
+end;
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl myClass1
+myClass1:   
+.quad myClass1_f
+.quad myClass1_g
+
+
+myClass1_f:
+	movq	%rsi, %rax
+	movq	%rsi, %r11
+	imulq	%r11, %rax
+	movq	%rdx, %r11
+	movq	%rdx, %r10
+	imulq	%r10, %r11
+	movq	%rcx, %r10
+	movq	%rcx, %r9
+	imulq	%r9, %r10
+	addq	%r10, %r11
+	addq	%r11, %rax
+	ret
+myClass1_g:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	movq	%rcx, %r10
+	addq	%r10, %r11
+	addq	%r11, %rax
+	movq	%rsi, %r11
+	movq	%rdx, %r10
+	subq	%r10, %r11
+	movq	%rdx, %r10
+	movq	%rcx, %r9
+	subq	%r9, %r10
+	movq	%rcx, %r9
+	movq	%rsi, %r8
+	subq	%r8, %r9
+	imulq	%r9, %r10
+	imulq	%r10, %r11
+	imulq	%r11, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+In file included from /usr/ftp/pub/ubvl/test/codea/testmain.c:13:0:
+/home/ublu21/u11808206/test/codea/Andy0n_004.call: In function ‘call’:
+/home/ublu21/u11808206/test/codea/Andy0n_004.call:8:28: warning: integer overflow in expression [-Woverflow]
+ #define F(o, x,y,z) ((x*x) + (y*y) + (z*z))
+                            ^
+/home/ublu21/u11808206/test/codea/Andy0n_004.call:14:62: note: in expansion of macro ‘F’
+     myClass1.f(0, -2147483648l,-2147483648l,-2147483648l) == F(0, -2147483648l,-2147483648l,-2147483648l)  &&
+                                                              ^
+/home/ublu21/u11808206/test/codea/Andy0n_004.call:8:36: warning: integer overflow in expression [-Woverflow]
+ #define F(o, x,y,z) ((x*x) + (y*y) + (z*z))
+                                    ^
+/home/ublu21/u11808206/test/codea/Andy0n_004.call:15:61: note: in expansion of macro ‘F’
+     myClass1.f(0, 2147483647l, 2147483647l, 2147483647l) == F(0, 2147483647l, 2147483647l, 2147483647l) &&
+                                                             ^
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; };
+
+extern struct ct { 
+    long (*f)(struct objectc*, long, long, long);
+    long (*g)(struct objectc*, long, long, long);
+} myClass1;
+
+#define F(o, x,y,z) ((x*x) + (y*y) + (z*z))
+#define G(o, x,y,z) ((x+y+z) * (x-y) * (y-z) * (z-x))
+
+RET(
+    myClass1.f(0, 0, 0, 0) == F(0, 0, 0, 0)  &&
+    myClass1.f(0, 1, 2,3 ) == F(0, 1, 2, 3)  &&
+    myClass1.f(0, -2147483648l,-2147483648l,-2147483648l) == F(0, -2147483648l,-2147483648l,-2147483648l)  &&
+    myClass1.f(0, 2147483647l, 2147483647l, 2147483647l) == F(0, 2147483647l, 2147483647l, 2147483647l) &&
+
+    myClass1.g(0, 0, 0, 0) == G(0, 0, 0, 0) &&
+    myClass1.g(0, 1, 2, 3) == G(0, 1, 2, 3) &&
+    myClass1.g(0,-2147483648l,-2147483648l,-2147483648l) == G(0,-2147483648l,-2147483648l,-2147483648l) &&
+    myClass1.g(0, 2147483647l, 2147483647l, 2147483647l) == G(0, 2147483647l, 2147483647l, 2147483647l)
+);
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/Andy0n_005.0:
+interface TestcaseInt1:
+    f(): int
+    g(int, int, int): int
+end;
+
+interface TestcaseInt2:
+    h(int, int, int): int
+    i(int, int, int): int
+    j(int, int, int): int
+end;
+
+class TestClass1 implements TestcaseInt1:
+    method f()
+        return 5+5+(10*3*(7-29)*112);
+    end;
+
+    method g(x: int, y: int, z: int)
+        return 3 and 1 and ((x-y) < (y-z));
+    end;
+end;
+
+class TestClass2 implements TestcaseInt1 TestcaseInt2:
+    var objVar1: int;
+    var objVar2: int;
+
+    method f()
+        return (7*12*13) < (100-57);
+    end;
+
+    method g(x: int, y: int, z: int)
+        return (x < y) + z;
+    end;
+
+    method h(x: int, y: int, z: int)
+        return (objVar1 + objVar2) < z;
+    end;
+
+    method i(x: int, y: int, z: int)
+        return objVar1 * 0DEADH * 0BEEFH;
+    end;
+
+    method j(x: int, y: int, z: int)
+        return z + ((objVar1 + x) and (objVar2 + y)) + 5;
+    end;
+end;
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl TestClass1
+TestClass1:   
+.quad TestClass1_f
+.quad TestClass1_g
+.quad 0 #h
+.quad 0 #i
+.quad 0 #j
+
+
+
+.globl TestClass2
+TestClass2:   
+.quad TestClass2_f
+.quad TestClass2_g
+.quad TestClass2_h
+.quad TestClass2_i
+.quad TestClass2_j
+
+
+TestClass1_f:
+	movq	$29, %rcx
+	movq	$7, %r8
+	subq	%rcx, %r8
+	imulq	$112, %r8
+	imulq	$3, %r8
+	movq	%r8, %r9
+	imulq	$10, %r9
+	movq	%r9, %r10
+	addq	$5, %r10
+	movq	%r10, %r11
+	addq	$5, %r11
+	movq	%r11, %rax
+	ret
+TestClass1_g:
+	movq	%rsi, %r10
+	movq	%rdx, %r9
+	subq	%r9, %r10
+	movq	%rdx, %r9
+	movq	%rcx, %r8
+	subq	%r8, %r9
+	cmpq	%r10, %r9	# checking if r10 less r9
+	setg	%r10b
+	and	$1, %r10
+	imulq	$-1, %r10
+	and	$1, %r10
+	movq	%r10, %r11
+	and	$3, %r11
+	movq	%r11, %rax
+	ret
+TestClass2_f:
+	movq	$12, %r11
+	imulq	$13, %r11
+	imulq	$7, %r11
+	movq	%r11, %rax
+	movq	$57, %r10
+	movq	$100, %r11
+	subq	%r10, %r11
+	cmpq	%rax, %r11	# checking if rax less r11
+	setg	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	ret
+TestClass2_g:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	cmpq	%rax, %r11	# checking if rax less r11
+	setg	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	movq	%rcx, %r11
+	addq	%r11, %rax
+	ret
+TestClass2_h:
+	movq	8(%rdi), %rax
+	movq	16(%rdi), %r11
+	addq	%r11, %rax
+	movq	%rcx, %r11
+	cmpq	%rax, %r11	# checking if rax less r11
+	setg	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	ret
+TestClass2_i:
+	movq	8(%rdi), %rax
+	movq	$57005, %r11
+	imulq	$48879, %r11
+	imulq	%r11, %rax
+	ret
+TestClass2_j:
+	movq	%rcx, %rax
+	movq	8(%rdi), %r11
+	movq	%rsi, %r10
+	addq	%r10, %r11
+	movq	16(%rdi), %r10
+	movq	%rdx, %r9
+	addq	%r9, %r10
+	and	%r10, %r11
+	addq	$5, %r11
+	addq	%r11, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { 
+    struct vft *vftc; 
+    long objVar1;
+    long objVar2;
+};
+
+extern struct ct { 
+    long (*f)(struct objectc*);
+    long (*g)(struct objectc*, long, long, long);
+    long (*h)(struct objectc*, long, long, long);
+    long (*i)(struct objectc*, long, long, long);
+    long (*j)(struct objectc*, long, long, long);
+} TestClass1, TestClass2;
+
+struct objectc *TestObj = (struct objectc *)malloc(sizeof(struct objectc));
+TestObj->objVar1= 2147483647;
+TestObj->objVar2 = -2147483648;
+
+#define F1(o) (5+5+(10*3*(7-29)*112))
+#define G1(o,x,y,z) (3&1&((x-y)<(y-z)))
+
+#define F2(o) (-1*((7*12*13)<(100-57)))
+#define G2(o,x,y,z) (-1*(x<y)+z)
+#define H2(o,x,y,z) (-1*((TestObj->objVar1 + TestObj->objVar2) < z))
+#define I2(o,x,y,z) (TestObj->objVar1 * 0xDEAD * 0xBEEF)
+#define J2(o,x,y,z) (z + ((TestObj->objVar1 + x) & (TestObj->objVar2 + y)) + 5)
+
+
+RET(
+    TestClass1.f(0) == F1(0)  &&
+    TestClass2.f(0) == F2(0)  &&
+
+    TestClass1.g(0, 1, 10, 1) == G1(0, 1, 10, 1) &&
+    TestClass1.g(0, 0, 0, 0) == G1(0, 0, 0, 0) &&
+    TestClass1.g(0, 1, 1, 10) == G1(0, 1, 1, 10) &&
+
+    TestClass2.g(0, 1, 5, 10) == G2(0, 1, 5, 10) &&
+    TestClass2.g(0, 5, 1, 10) == G2(0, 5, 1, 10) &&
+    
+    TestClass2.h(TestObj, 0, 0, 27) == H2(0, 0, 0, 27) &&
+    TestClass2.h(TestObj, 0, 0, 0) == H2(0, 0, 0, 0) &&
+    TestClass2.h(TestObj, 0, 0, -27) == H2(0, 0, 0, -27) &&
+
+    TestClass2.i(TestObj, 0, 0, 0) == I2(0, 0, 0, 0) &&
+
+    TestClass2.j(TestObj, 0, 0, 0) == J2(0, 0, 0, 0) &&
+    TestClass2.j(TestObj, 10, 10, 10) == J2(0, 10, 10, 10) &&
+    TestClass2.j(TestObj, -10, -10, -10) == J2(0, -10, -10, -10) &&
+    TestClass2.j(TestObj, 27, -69, 420) == J2(0, 27, -69, 420)
+
+);
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/Andy0n_006.0:
+interface PlusInt:
+    f(int, int): int
+    g(int, int): int
+    h(int, int): int
+    i(int, int): int
+end;
+
+class PlusClass implements PlusInt:
+    method f(a: int, b: int)
+        return (a*b)+(a*b);
+    end;
+
+    method g(a: int, b: int)
+        return (a*b)+a;
+    end;
+
+    method h(a: int, b: int)
+        return (a*b)+27;
+    end;
+
+    method i(a: int, b: int)
+        return 27+(a*b);
+    end;
+end;
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl PlusClass
+PlusClass:   
+.quad PlusClass_f
+.quad PlusClass_g
+.quad PlusClass_h
+.quad PlusClass_i
+
+
+PlusClass_f:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	imulq	%r11, %rax
+	movq	%rsi, %r11
+	movq	%rdx, %r10
+	imulq	%r10, %r11
+	addq	%r11, %rax
+	ret
+PlusClass_g:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	imulq	%r11, %rax
+	movq	%rsi, %r11
+	addq	%r11, %rax
+	ret
+PlusClass_h:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	imulq	%r11, %rax
+	addq	$27, %rax
+	ret
+PlusClass_i:
+	movq	%rsi, %r11
+	movq	%rdx, %r10
+	imulq	%r10, %r11
+	addq	$27, %r11
+	movq	%r11, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+In file included from /usr/ftp/pub/ubvl/test/codea/testmain.c:13:0:
+/home/ublu21/u11808206/test/codea/Andy0n_006.call: In function ‘call’:
+/home/ublu21/u11808206/test/codea/Andy0n_006.call:12:24: warning: integer overflow in expression [-Woverflow]
+ #define F(o,a,b) ((a*b)+(a*b))
+                        ^
+/home/ublu21/u11808206/test/codea/Andy0n_006.call:22:51: note: in expansion of macro ‘F’
+     PlusClass.f(0, -2147483648l, -2147483648l) == F(0, -2147483648l, -2147483648l) &&
+                                                   ^
+
+Rufe folgendes Codefragment auf:
+struct objectc { 
+    struct vft *vftc;
+};
+
+extern struct ct { 
+    long (*f)(struct objectc*, long, long);
+    long (*g)(struct objectc*, long, long);
+    long (*h)(struct objectc*, long, long);
+    long (*i)(struct objectc*, long, long);
+} PlusClass;
+
+#define F(o,a,b) ((a*b)+(a*b))
+#define G(o,a,b) ((a*b)+a)
+#define H(o,a,b) ((a*b)+27)
+#define I(o,a,b) (27+(a*b))
+
+RET(
+    PlusClass.f(0, 0l, 0l) == F(0, 0l, 0l) &&
+    PlusClass.f(0, 2147483647l, 2147483647l) == F(0, 2147483647l, 2147483647l) &&
+    PlusClass.f(0, 2147483647l, -2147483648l) == F(0, 2147483647l, -2147483648l) &&
+    PlusClass.f(0, -2147483648l, 2147483647l) == F(0, -2147483648l, 2147483647l) &&
+    PlusClass.f(0, -2147483648l, -2147483648l) == F(0, -2147483648l, -2147483648l) &&
+
+    PlusClass.g(0, 0l, 0l) == G(0, 0l, 0l) &&
+    PlusClass.g(0, 2147483647l, 2147483647l) == G(0, 2147483647l, 2147483647l) &&
+    PlusClass.g(0, 2147483647l, -2147483648l) == G(0, 2147483647l, -2147483648l) &&
+    PlusClass.g(0, -2147483648l, 2147483647l) == G(0, -2147483648l, 2147483647l) &&
+    PlusClass.g(0, -2147483648l, -2147483648l) == G(0, -2147483648l, -2147483648l) &&
+
+    PlusClass.h(0, 0l, 0l) == H(0, 0l, 0l) &&
+    PlusClass.h(0, 2147483647l, 2147483647l) == H(0, 2147483647l, 2147483647l) &&
+    PlusClass.h(0, 2147483647l, -2147483648l) == H(0, 2147483647l, -2147483648l) &&
+    PlusClass.h(0, -2147483648l, 2147483647l) == H(0, -2147483648l, 2147483647l) &&
+    PlusClass.h(0, -2147483648l, -2147483648l) == H(0, -2147483648l, -2147483648l) &&
+
+    PlusClass.i(0, 0l, 0l) == I(0, 0l, 0l) &&
+    PlusClass.i(0, 2147483647l, 2147483647l) == I(0, 2147483647l, 2147483647l) &&
+    PlusClass.i(0, 2147483647l, -2147483648l) == I(0, 2147483647l, -2147483648l) &&
+    PlusClass.i(0, -2147483648l, 2147483647l) == I(0, -2147483648l, 2147483647l) &&
+    PlusClass.i(0, -2147483648l, -2147483648l) == I(0, -2147483648l, -2147483648l)
+);
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/Andy0n_007.0:
+interface MultInt:
+    f(int, int): int
+    g(int, int): int
+    h(int, int): int
+    i(int, int): int
+end;
+
+class MultClass implements MultInt:
+    method f(a: int, b: int)
+        return (a+b)*(a+b);
+    end;
+
+    method g(a: int, b: int)
+        return (a+b)*a;
+    end;
+
+    method h(a: int, b: int)
+        return (a+b)*27;
+    end;
+
+    method i(a: int, b: int)
+        return 27*(a+b);
+    end;
+end;
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl MultClass
+MultClass:   
+.quad MultClass_f
+.quad MultClass_g
+.quad MultClass_h
+.quad MultClass_i
+
+
+MultClass_f:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	addq	%r11, %rax
+	movq	%rsi, %r11
+	movq	%rdx, %r10
+	addq	%r10, %r11
+	imulq	%r11, %rax
+	ret
+MultClass_g:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	addq	%r11, %rax
+	movq	%rsi, %r11
+	imulq	%r11, %rax
+	ret
+MultClass_h:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	addq	%r11, %rax
+	imulq	$27, %rax
+	ret
+MultClass_i:
+	movq	%rsi, %r11
+	movq	%rdx, %r10
+	addq	%r10, %r11
+	imulq	$27, %r11
+	movq	%r11, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+In file included from /usr/ftp/pub/ubvl/test/codea/testmain.c:13:0:
+/home/ublu21/u11808206/test/codea/Andy0n_007.call: In function ‘call’:
+/home/ublu21/u11808206/test/codea/Andy0n_007.call:12:24: warning: integer overflow in expression [-Woverflow]
+ #define F(o,a,b) ((a+b)*(a+b))
+                        ^
+/home/ublu21/u11808206/test/codea/Andy0n_007.call:19:49: note: in expansion of macro ‘F’
+     MultClass.f(0, 2147483647l, 2147483647l) == F(0, 2147483647l, 2147483647l) &&
+                                                 ^
+/home/ublu21/u11808206/test/codea/Andy0n_007.call:12:24: warning: integer overflow in expression [-Woverflow]
+ #define F(o,a,b) ((a+b)*(a+b))
+                        ^
+/home/ublu21/u11808206/test/codea/Andy0n_007.call:22:51: note: in expansion of macro ‘F’
+     MultClass.f(0, -2147483648l, -2147483648l) == F(0, -2147483648l, -2147483648l) &&
+                                                   ^
+/home/ublu21/u11808206/test/codea/Andy0n_007.call:13:24: warning: integer overflow in expression [-Woverflow]
+ #define G(o,a,b) ((a+b)*a)
+                        ^
+/home/ublu21/u11808206/test/codea/Andy0n_007.call:28:51: note: in expansion of macro ‘G’
+     MultClass.g(0, -2147483648l, -2147483648l) == G(0, -2147483648l, -2147483648l) &&
+                                                   ^
+
+Rufe folgendes Codefragment auf:
+struct objectc { 
+    struct vft *vftc;
+};
+
+extern struct ct { 
+    long (*f)(struct objectc*, long, long);
+    long (*g)(struct objectc*, long, long);
+    long (*h)(struct objectc*, long, long);
+    long (*i)(struct objectc*, long, long);
+} MultClass;
+
+#define F(o,a,b) ((a+b)*(a+b))
+#define G(o,a,b) ((a+b)*a)
+#define H(o,a,b) ((a+b)*27)
+#define I(o,a,b) (27*(a+b))
+
+RET(
+    MultClass.f(0, 0l, 0l) == F(0, 0l, 0l) &&
+    MultClass.f(0, 2147483647l, 2147483647l) == F(0, 2147483647l, 2147483647l) &&
+    MultClass.f(0, 2147483647l, -2147483648l) == F(0, 2147483647l, -2147483648l) &&
+    MultClass.f(0, -2147483648l, 2147483647l) == F(0, -2147483648l, 2147483647l) &&
+    MultClass.f(0, -2147483648l, -2147483648l) == F(0, -2147483648l, -2147483648l) &&
+
+    MultClass.g(0, 0l, 0l) == G(0, 0l, 0l) &&
+    MultClass.g(0, 2147483647l, 2147483647l) == G(0, 2147483647l, 2147483647l) &&
+    MultClass.g(0, 2147483647l, -2147483648l) == G(0, 2147483647l, -2147483648l) &&
+    MultClass.g(0, -2147483648l, 2147483647l) == G(0, -2147483648l, 2147483647l) &&
+    MultClass.g(0, -2147483648l, -2147483648l) == G(0, -2147483648l, -2147483648l) &&
+
+    MultClass.h(0, 0l, 0l) == H(0, 0l, 0l) &&
+    MultClass.h(0, 2147483647l, 2147483647l) == H(0, 2147483647l, 2147483647l) &&
+    MultClass.h(0, 2147483647l, -2147483648l) == H(0, 2147483647l, -2147483648l) &&
+    MultClass.h(0, -2147483648l, 2147483647l) == H(0, -2147483648l, 2147483647l) &&
+    MultClass.h(0, -2147483648l, -2147483648l) == H(0, -2147483648l, -2147483648l) &&
+
+    MultClass.i(0, 0l, 0l) == I(0, 0l, 0l) &&
+    MultClass.i(0, 2147483647l, 2147483647l) == I(0, 2147483647l, 2147483647l) &&
+    MultClass.i(0, 2147483647l, -2147483648l) == I(0, 2147483647l, -2147483648l) &&
+    MultClass.i(0, -2147483648l, 2147483647l) == I(0, -2147483648l, 2147483647l) &&
+    MultClass.i(0, -2147483648l, -2147483648l) == I(0, -2147483648l, -2147483648l)
+);
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/Andy0n_008.0:
+interface AndInt:
+    f(int, int): int
+    g(int, int): int
+    h(int, int): int
+    i(int, int): int
+end;
+
+class AndClass implements AndInt:
+    method f(a: int, b: int)
+        return (a+b) and (a+b);
+    end;
+
+    method g(a: int, b: int)
+        return (a+b) and a;
+    end;
+
+    method h(a: int, b: int)
+        return (a+b) and 27;
+    end;
+
+    method i(a: int, b: int)
+        return 27 and (a+b);
+    end;
+end;
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl AndClass
+AndClass:   
+.quad AndClass_f
+.quad AndClass_g
+.quad AndClass_h
+.quad AndClass_i
+
+
+AndClass_f:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	addq	%r11, %rax
+	movq	%rsi, %r11
+	movq	%rdx, %r10
+	addq	%r10, %r11
+	and	%r11, %rax
+	ret
+AndClass_g:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	addq	%r11, %rax
+	movq	%rsi, %r11
+	and	%r11, %rax
+	ret
+AndClass_h:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	addq	%r11, %rax
+	and	$27, %rax
+	ret
+AndClass_i:
+	movq	%rsi, %r11
+	movq	%rdx, %r10
+	addq	%r10, %r11
+	and	$27, %r11
+	movq	%r11, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { 
+    struct vft *vftc;
+};
+
+extern struct ct { 
+    long (*f)(struct objectc*, long, long);
+    long (*g)(struct objectc*, long, long);
+    long (*h)(struct objectc*, long, long);
+    long (*i)(struct objectc*, long, long);
+} AndClass;
+
+#define F(o,a,b) ((a+b)&(a+b))
+#define G(o,a,b) ((a+b)&a)
+#define H(o,a,b) ((a+b)&27)
+#define I(o,a,b) (27&(a+b))
+
+RET(
+    AndClass.f(0, 0l, 0l) == F(0, 0l, 0l) &&
+    AndClass.f(0, 2147483647l, 2147483647l) == F(0, 2147483647l, 2147483647l) &&
+    AndClass.f(0, 2147483647l, -2147483648l) == F(0, 2147483647l, -2147483648l) &&
+    AndClass.f(0, -2147483648l, 2147483647l) == F(0, -2147483648l, 2147483647l) &&
+    AndClass.f(0, -2147483648l, -2147483648l) == F(0, -2147483648l, -2147483648l) &&
+
+    AndClass.g(0, 0l, 0l) == G(0, 0l, 0l) &&
+    AndClass.g(0, 2147483647l, 2147483647l) == G(0, 2147483647l, 2147483647l) &&
+    AndClass.g(0, 2147483647l, -2147483648l) == G(0, 2147483647l, -2147483648l) &&
+    AndClass.g(0, -2147483648l, 2147483647l) == G(0, -2147483648l, 2147483647l) &&
+    AndClass.g(0, -2147483648l, -2147483648l) == G(0, -2147483648l, -2147483648l) &&
+
+    AndClass.h(0, 0l, 0l) == H(0, 0l, 0l) &&
+    AndClass.h(0, 2147483647l, 2147483647l) == H(0, 2147483647l, 2147483647l) &&
+    AndClass.h(0, 2147483647l, -2147483648l) == H(0, 2147483647l, -2147483648l) &&
+    AndClass.h(0, -2147483648l, 2147483647l) == H(0, -2147483648l, 2147483647l) &&
+    AndClass.h(0, -2147483648l, -2147483648l) == H(0, -2147483648l, -2147483648l) &&
+
+    AndClass.i(0, 0l, 0l) == I(0, 0l, 0l) &&
+    AndClass.i(0, 2147483647l, 2147483647l) == I(0, 2147483647l, 2147483647l) &&
+    AndClass.i(0, 2147483647l, -2147483648l) == I(0, 2147483647l, -2147483648l) &&
+    AndClass.i(0, -2147483648l, 2147483647l) == I(0, -2147483648l, 2147483647l) &&
+    AndClass.i(0, -2147483648l, -2147483648l) == I(0, -2147483648l, -2147483648l)
+);
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/Andy0n_009.0:
+interface MinusInt:
+    f(int, int): int
+    g(int, int): int
+    h(int, int): int
+    i(int, int): int
+end;
+
+class MinusClass implements MinusInt:
+    method f(a: int, b: int)
+        return (a+b) - (a+b);
+    end;
+
+    method g(a: int, b: int)
+        return (a+b) - a;
+    end;
+
+    method h(a: int, b: int)
+        return (a+b) - 27;
+    end;
+
+    method i(a: int, b: int)
+        return 27 - (a+b);
+    end;
+end;
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl MinusClass
+MinusClass:   
+.quad MinusClass_f
+.quad MinusClass_g
+.quad MinusClass_h
+.quad MinusClass_i
+
+
+MinusClass_f:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	addq	%r11, %rax
+	movq	%rsi, %r11
+	movq	%rdx, %r10
+	addq	%r10, %r11
+	subq	%r11, %rax
+	ret
+MinusClass_g:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	addq	%r11, %rax
+	movq	%rsi, %r11
+	subq	%r11, %rax
+	ret
+MinusClass_h:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	addq	%r11, %rax
+	subq	$27, %rax
+	ret
+MinusClass_i:
+	movq	%rsi, %r11
+	movq	%rdx, %r10
+	addq	%r10, %r11
+	movq	$27, %rax
+	subq	%r11, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { 
+    struct vft *vftc;
+};
+
+extern struct ct { 
+    long (*f)(struct objectc*, long, long);
+    long (*g)(struct objectc*, long, long);
+    long (*h)(struct objectc*, long, long);
+    long (*i)(struct objectc*, long, long);
+} MinusClass;
+
+#define F(o,a,b) ((a+b)-(a+b))
+#define G(o,a,b) ((a+b)-a)
+#define H(o,a,b) ((a+b)-27)
+#define I(o,a,b) (27-(a+b))
+
+RET(
+    MinusClass.f(0, 0l, 0l) == F(0, 0l, 0l) &&
+    MinusClass.f(0, 2147483647l, 2147483647l) == F(0, 2147483647l, 2147483647l) &&
+    MinusClass.f(0, 2147483647l, -2147483648l) == F(0, 2147483647l, -2147483648l) &&
+    MinusClass.f(0, -2147483648l, 2147483647l) == F(0, -2147483648l, 2147483647l) &&
+    MinusClass.f(0, -2147483648l, -2147483648l) == F(0, -2147483648l, -2147483648l) &&
+
+    MinusClass.g(0, 0l, 0l) == G(0, 0l, 0l) &&
+    MinusClass.g(0, 2147483647l, 2147483647l) == G(0, 2147483647l, 2147483647l) &&
+    MinusClass.g(0, 2147483647l, -2147483648l) == G(0, 2147483647l, -2147483648l) &&
+    MinusClass.g(0, -2147483648l, 2147483647l) == G(0, -2147483648l, 2147483647l) &&
+    MinusClass.g(0, -2147483648l, -2147483648l) == G(0, -2147483648l, -2147483648l) &&
+
+    MinusClass.h(0, 0l, 0l) == H(0, 0l, 0l) &&
+    MinusClass.h(0, 2147483647l, 2147483647l) == H(0, 2147483647l, 2147483647l) &&
+    MinusClass.h(0, 2147483647l, -2147483648l) == H(0, 2147483647l, -2147483648l) &&
+    MinusClass.h(0, -2147483648l, 2147483647l) == H(0, -2147483648l, 2147483647l) &&
+    MinusClass.h(0, -2147483648l, -2147483648l) == H(0, -2147483648l, -2147483648l) &&
+
+    MinusClass.i(0, 0l, 0l) == I(0, 0l, 0l) &&
+    MinusClass.i(0, 2147483647l, 2147483647l) == I(0, 2147483647l, 2147483647l) &&
+    MinusClass.i(0, 2147483647l, -2147483648l) == I(0, 2147483647l, -2147483648l) &&
+    MinusClass.i(0, -2147483648l, 2147483647l) == I(0, -2147483648l, 2147483647l) &&
+    MinusClass.i(0, -2147483648l, -2147483648l) == I(0, -2147483648l, -2147483648l)
+);
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/Andy0n_010.0:
+interface LessthenInt:
+    f(int, int): int
+    g(int, int): int
+    h(int, int): int
+    i(int, int): int
+    j(int, int): int
+    k(int, int): int
+    l(int, int): int
+    m(int, int): int
+end;
+
+class LessthenClass implements LessthenInt:
+    method f(a: int, b: int)
+        return (a+b) < (a+b);
+    end;
+
+    method g(a: int, b: int)
+        return (a+b) < a;
+    end;
+
+    method h(a: int, b: int)
+        return (a+b) < 27;
+    end;
+
+    method i(a: int, b: int)
+        return 27 < (a+b);
+    end;
+
+
+    method j(a: int, b: int)
+        return a < b;
+    end;
+
+    method k(a: int, b: int)
+        return a < (a+b);
+    end;
+
+    method l(a: int, b: int)
+        return 27 < a;
+    end;
+
+    method m(a: int, b: int)
+        return a < 27;
+    end;
+end;
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl LessthenClass
+LessthenClass:   
+.quad LessthenClass_f
+.quad LessthenClass_g
+.quad LessthenClass_h
+.quad LessthenClass_i
+.quad LessthenClass_j
+.quad LessthenClass_k
+.quad LessthenClass_l
+.quad LessthenClass_m
+
+
+LessthenClass_f:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	addq	%r11, %rax
+	movq	%rsi, %r11
+	movq	%rdx, %r10
+	addq	%r10, %r11
+	cmpq	%rax, %r11	# checking if rax less r11
+	setg	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	ret
+LessthenClass_g:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	addq	%r11, %rax
+	movq	%rsi, %r11
+	cmpq	%rax, %r11	# checking if rax less r11
+	setg	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	ret
+LessthenClass_h:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	addq	%r11, %rax
+	cmpq	$27, %rax	# checking if 27 less rax (inverted because right const not allwoed) 
+	setl	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	ret
+LessthenClass_i:
+	movq	%rsi, %r11
+	movq	%rdx, %r10
+	addq	%r10, %r11
+	cmpq	$27, %r11	# checking if 27 less r11
+	setg	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	ret
+LessthenClass_j:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	cmpq	%rax, %r11	# checking if rax less r11
+	setg	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	ret
+LessthenClass_k:
+	movq	%rsi, %rax
+	movq	%rsi, %r11
+	movq	%rdx, %r10
+	addq	%r10, %r11
+	cmpq	%rax, %r11	# checking if rax less r11
+	setg	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	ret
+LessthenClass_l:
+	movq	%rsi, %r11
+	cmpq	$27, %r11	# checking if 27 less r11
+	setg	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	ret
+LessthenClass_m:
+	movq	%rsi, %rax
+	cmpq	$27, %rax	# checking if 27 less rax (inverted because right const not allwoed) 
+	setl	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { 
+    struct vft *vftc;
+};
+
+extern struct ct { 
+    long (*f)(struct objectc*, long, long);
+    long (*g)(struct objectc*, long, long);
+    long (*h)(struct objectc*, long, long);
+    long (*i)(struct objectc*, long, long);
+    long (*j)(struct objectc*, long, long);
+    long (*k)(struct objectc*, long, long);
+    long (*l)(struct objectc*, long, long);
+    long (*m)(struct objectc*, long, long);
+} LessthenClass;
+
+#define F(o,a,b) (-1*((a+b)<(a+b)))
+#define G(o,a,b) (-1*((a+b)<a))
+#define H(o,a,b) (-1*((a+b)<27))
+#define I(o,a,b) (-1*(27<(a+b)))
+#define J(o,a,b) (-1*(a<b))
+#define K(o,a,b) (-1*(a<(a+b)))
+#define L(o,a,b) (-1*(27<a))
+#define M(o,a,b) (-1*(a<27))
+
+RET(
+    LessthenClass.f(0, 0l, 0l)                      == F(0, 0l, 0l) &&
+    LessthenClass.f(0, 2147483647l, 2147483647l)    == F(0, 2147483647l, 2147483647l) &&
+    LessthenClass.f(0, 2147483647l, -2147483648l)   == F(0, 2147483647l, -2147483648l) &&
+    LessthenClass.f(0, -2147483648l, 2147483647l)   == F(0, -2147483648l, 2147483647l) &&
+    LessthenClass.f(0, -2147483648l, -2147483648l)  == F(0, -2147483648l, -2147483648l) &&
+
+    LessthenClass.g(0, 0l, 0l)                      == G(0, 0l, 0l) &&
+    LessthenClass.g(0, 2147483647l, 2147483647l)    == G(0, 2147483647l, 2147483647l) &&
+    LessthenClass.g(0, 2147483647l, -2147483648l)   == G(0, 2147483647l, -2147483648l) &&
+    LessthenClass.g(0, -2147483648l, 2147483647l)   == G(0, -2147483648l, 2147483647l) &&
+    LessthenClass.g(0, -2147483648l, -2147483648l)  == G(0, -2147483648l, -2147483648l) &&
+
+    LessthenClass.h(0, 0l, 0l)                      == H(0, 0l, 0l) &&
+    LessthenClass.h(0, 2147483647l, 2147483647l)    == H(0, 2147483647l, 2147483647l) &&
+    LessthenClass.h(0, 2147483647l, -2147483648l)   == H(0, 2147483647l, -2147483648l) &&
+    LessthenClass.h(0, -2147483648l, 2147483647l)   == H(0, -2147483648l, 2147483647l) &&
+    LessthenClass.h(0, -2147483648l, -2147483648l)  == H(0, -2147483648l, -2147483648l) &&
+
+    LessthenClass.i(0, 0l, 0l)                      == I(0, 0l, 0l) &&
+    LessthenClass.i(0, 2147483647l, 2147483647l)    == I(0, 2147483647l, 2147483647l) &&
+    LessthenClass.i(0, 2147483647l, -2147483648l)   == I(0, 2147483647l, -2147483648l) &&
+    LessthenClass.i(0, -2147483648l, 2147483647l)   == I(0, -2147483648l, 2147483647l) &&
+    LessthenClass.i(0, -2147483648l, -2147483648l)  == I(0, -2147483648l, -2147483648l) &&
+
+
+    LessthenClass.j(0, 0l, 0l)                      == J(0, 0l, 0l) &&
+    LessthenClass.j(0, 2147483647l, 2147483647l)    == J(0, 2147483647l, 2147483647l) &&
+    LessthenClass.j(0, 2147483647l, -2147483648l)   == J(0, 2147483647l, -2147483648l) &&
+    LessthenClass.j(0, -2147483648l, 2147483647l)   == J(0, -2147483648l, 2147483647l) &&
+    LessthenClass.j(0, -2147483648l, -2147483648l)  == J(0, -2147483648l, -2147483648l) &&
+
+    LessthenClass.k(0, 0l, 0l)                      == K(0, 0l, 0l) &&
+    LessthenClass.k(0, 2147483647l, 2147483647l)    == K(0, 2147483647l, 2147483647l) &&
+    LessthenClass.k(0, 2147483647l, -2147483648l)   == K(0, 2147483647l, -2147483648l) &&
+    LessthenClass.k(0, -2147483648l, 2147483647l)   == K(0, -2147483648l, 2147483647l) &&
+    LessthenClass.k(0, -2147483648l, -2147483648l)  == K(0, -2147483648l, -2147483648l) &&
+
+    LessthenClass.l(0, 0l, 0l)                      == L(0, 0l, 0l) &&
+    LessthenClass.l(0, 2147483647l, 2147483647l)    == L(0, 2147483647l, 2147483647l) &&
+    LessthenClass.l(0, 2147483647l, -2147483648l)   == L(0, 2147483647l, -2147483648l) &&
+    LessthenClass.l(0, -2147483648l, 2147483647l)   == L(0, -2147483648l, 2147483647l) &&
+    LessthenClass.l(0, -2147483648l, -2147483648l)  == L(0, -2147483648l, -2147483648l) &&
+    LessthenClass.l(0, 27l, -2147483648l)           == L(0, 27l, -2147483648l) &&
+    LessthenClass.l(0, 0, 27l)                      == L(0, 0, 27l) &&
+
+    LessthenClass.m(0, 0l, 0l)                      == M(0, 0l, 0l) &&
+    LessthenClass.m(0, 2147483647l, 2147483647l)    == M(0, 2147483647l, 2147483647l) &&
+    LessthenClass.m(0, 2147483647l, -2147483648l)   == M(0, 2147483647l, -2147483648l) &&
+    LessthenClass.m(0, -2147483648l, 2147483647l)   == M(0, -2147483648l, 2147483647l) &&
+    LessthenClass.m(0, -2147483648l, -2147483648l)  == M(0, -2147483648l, -2147483648l) &&
+    LessthenClass.m(0, 27l, -2147483648l)           == M(0, 27l, -2147483648l) &&
+    LessthenClass.m(0, 0, 27l)                      == M(0, 0, 27l)
+);
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/Andy0n_011.0:
+interface EqualsInt:
+    f(int, int): int
+    g(int, int): int
+    h(int, int): int
+    i(int, int): int
+    j(int, int): int
+    k(int, int): int
+    l(int, int): int
+    m(int, int): int
+end;
+
+class EqualsClass implements EqualsInt:
+    method f(a: int, b: int)
+        return (a+b) = (a+b);
+    end;
+
+    method g(a: int, b: int)
+        return (a+b) = a;
+    end;
+
+    method h(a: int, b: int)
+        return (a+b) = 27;
+    end;
+
+    method i(a: int, b: int)
+        return 27 = (a+b);
+    end;
+
+
+    method j(a: int, b: int)
+        return a = b;
+    end;
+
+    method k(a: int, b: int)
+        return a = (a+b);
+    end;
+
+    method l(a: int, b: int)
+        return 27 = a;
+    end;
+
+    method m(a: int, b: int)
+        return a = 27;
+    end;
+end;
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl EqualsClass
+EqualsClass:   
+.quad EqualsClass_f
+.quad EqualsClass_g
+.quad EqualsClass_h
+.quad EqualsClass_i
+.quad EqualsClass_j
+.quad EqualsClass_k
+.quad EqualsClass_l
+.quad EqualsClass_m
+
+
+EqualsClass_f:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	addq	%r11, %rax
+	movq	%rsi, %r11
+	movq	%rdx, %r10
+	addq	%r10, %r11
+	cmpq	%rax, %r11	# checking if rax equals r11
+	sete	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	ret
+EqualsClass_g:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	addq	%r11, %rax
+	movq	%rsi, %r11
+	cmpq	%rax, %r11	# checking if rax equals r11
+	sete	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	ret
+EqualsClass_h:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	addq	%r11, %rax
+	cmpq	$27, %rax	# checking if 27 equals rax
+	sete	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	ret
+EqualsClass_i:
+	movq	%rsi, %r11
+	movq	%rdx, %r10
+	addq	%r10, %r11
+	cmpq	$27, %r11	# checking if 27 equals r11
+	sete	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	ret
+EqualsClass_j:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	cmpq	%rax, %r11	# checking if rax equals r11
+	sete	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	ret
+EqualsClass_k:
+	movq	%rsi, %rax
+	movq	%rsi, %r11
+	movq	%rdx, %r10
+	addq	%r10, %r11
+	cmpq	%rax, %r11	# checking if rax equals r11
+	sete	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	ret
+EqualsClass_l:
+	movq	%rsi, %r11
+	cmpq	$27, %r11	# checking if 27 equals r11
+	sete	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	ret
+EqualsClass_m:
+	movq	%rsi, %rax
+	cmpq	$27, %rax	# checking if 27 equals rax
+	sete	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { 
+    struct vft *vftc;
+};
+
+extern struct ct { 
+    long (*f)(struct objectc*, long, long);
+    long (*g)(struct objectc*, long, long);
+    long (*h)(struct objectc*, long, long);
+    long (*i)(struct objectc*, long, long);
+    long (*j)(struct objectc*, long, long);
+    long (*k)(struct objectc*, long, long);
+    long (*l)(struct objectc*, long, long);
+    long (*m)(struct objectc*, long, long);
+} EqualsClass;
+
+#define F(o,a,b) (-1*((a+b)==(a+b)))
+#define G(o,a,b) (-1*((a+b)==a))
+#define H(o,a,b) (-1*((a+b)==27))
+#define I(o,a,b) (-1*(27==(a+b)))
+#define J(o,a,b) (-1*(a==b))
+#define K(o,a,b) (-1*(a==(a+b)))
+#define L(o,a,b) (-1*(27==a))
+#define M(o,a,b) (-1*(a==27))
+
+RET(
+    EqualsClass.f(0, 0l, 0l)                      == F(0, 0l, 0l) &&
+    EqualsClass.f(0, 2147483647l, 2147483647l)    == F(0, 2147483647l, 2147483647l) &&
+    EqualsClass.f(0, 2147483647l, -2147483648l)   == F(0, 2147483647l, -2147483648l) &&
+    EqualsClass.f(0, -2147483648l, 2147483647l)   == F(0, -2147483648l, 2147483647l) &&
+    EqualsClass.f(0, -2147483648l, -2147483648l)  == F(0, -2147483648l, -2147483648l) &&
+
+    EqualsClass.g(0, 0l, 0l)                      == G(0, 0l, 0l) &&
+    EqualsClass.g(0, 2147483647l, 2147483647l)    == G(0, 2147483647l, 2147483647l) &&
+    EqualsClass.g(0, 2147483647l, -2147483648l)   == G(0, 2147483647l, -2147483648l) &&
+    EqualsClass.g(0, -2147483648l, 2147483647l)   == G(0, -2147483648l, 2147483647l) &&
+    EqualsClass.g(0, -2147483648l, -2147483648l)  == G(0, -2147483648l, -2147483648l) &&
+
+    EqualsClass.h(0, 0l, 0l)                      == H(0, 0l, 0l) &&
+    EqualsClass.h(0, 2147483647l, 2147483647l)    == H(0, 2147483647l, 2147483647l) &&
+    EqualsClass.h(0, 2147483647l, -2147483648l)   == H(0, 2147483647l, -2147483648l) &&
+    EqualsClass.h(0, -2147483648l, 2147483647l)   == H(0, -2147483648l, 2147483647l) &&
+    EqualsClass.h(0, -2147483648l, -2147483648l)  == H(0, -2147483648l, -2147483648l) &&
+
+    EqualsClass.i(0, 0l, 0l)                      == I(0, 0l, 0l) &&
+    EqualsClass.i(0, 2147483647l, 2147483647l)    == I(0, 2147483647l, 2147483647l) &&
+    EqualsClass.i(0, 2147483647l, -2147483648l)   == I(0, 2147483647l, -2147483648l) &&
+    EqualsClass.i(0, -2147483648l, 2147483647l)   == I(0, -2147483648l, 2147483647l) &&
+    EqualsClass.i(0, -2147483648l, -2147483648l)  == I(0, -2147483648l, -2147483648l) &&
+
+
+    EqualsClass.j(0, 0l, 0l)                      == J(0, 0l, 0l) &&
+    EqualsClass.j(0, 2147483647l, 2147483647l)    == J(0, 2147483647l, 2147483647l) &&
+    EqualsClass.j(0, 2147483647l, -2147483648l)   == J(0, 2147483647l, -2147483648l) &&
+    EqualsClass.j(0, -2147483648l, 2147483647l)   == J(0, -2147483648l, 2147483647l) &&
+    EqualsClass.j(0, -2147483648l, -2147483648l)  == J(0, -2147483648l, -2147483648l) &&
+
+    EqualsClass.k(0, 0l, 0l)                      == K(0, 0l, 0l) &&
+    EqualsClass.k(0, 2147483647l, 2147483647l)    == K(0, 2147483647l, 2147483647l) &&
+    EqualsClass.k(0, 2147483647l, -2147483648l)   == K(0, 2147483647l, -2147483648l) &&
+    EqualsClass.k(0, -2147483648l, 2147483647l)   == K(0, -2147483648l, 2147483647l) &&
+    EqualsClass.k(0, -2147483648l, -2147483648l)  == K(0, -2147483648l, -2147483648l) &&
+
+    EqualsClass.l(0, 0l, 0l)                      == L(0, 0l, 0l) &&
+    EqualsClass.l(0, 2147483647l, 2147483647l)    == L(0, 2147483647l, 2147483647l) &&
+    EqualsClass.l(0, 2147483647l, -2147483648l)   == L(0, 2147483647l, -2147483648l) &&
+    EqualsClass.l(0, -2147483648l, 2147483647l)   == L(0, -2147483648l, 2147483647l) &&
+    EqualsClass.l(0, -2147483648l, -2147483648l)  == L(0, -2147483648l, -2147483648l) &&
+    EqualsClass.l(0, 27l, -2147483648l)           == L(0, 27l, -2147483648l) &&
+    EqualsClass.l(0, 0, 27l)                      == L(0, 0, 27l) &&
+
+    EqualsClass.m(0, 0l, 0l)                      == M(0, 0l, 0l) &&
+    EqualsClass.m(0, 2147483647l, 2147483647l)    == M(0, 2147483647l, 2147483647l) &&
+    EqualsClass.m(0, 2147483647l, -2147483648l)   == M(0, 2147483647l, -2147483648l) &&
+    EqualsClass.m(0, -2147483648l, 2147483647l)   == M(0, -2147483648l, 2147483647l) &&
+    EqualsClass.m(0, -2147483648l, -2147483648l)  == M(0, -2147483648l, -2147483648l) &&
+    EqualsClass.m(0, 27l, -2147483648l)           == M(0, 27l, -2147483648l) &&
+    EqualsClass.m(0, 0, 27l)                      == M(0, 0, 27l)
+);
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
 ==========> Eingabe von /home/ublu21/u11808206/test/codea/crazyjack-1.0:
 interface i: f():int end;
 class c implements i:
@@ -65,7 +1655,7 @@ c_f:
 	ret
 
 Übersetze und linke das Testprogramm:
-In file included from /usr/ftp/pub/ubvl/test/codea/testmain.c:10:0:
+In file included from /usr/ftp/pub/ubvl/test/codea/testmain.c:13:0:
 /home/ublu21/u11808206/test/codea/crazyjack-1.call: In function ‘call’:
 /home/ublu21/u11808206/test/codea/crazyjack-1.call:3:25: warning: passing argument 1 of ‘c.f’ makes pointer from integer without a cast [-Wint-conversion]
  RET(c.f(0) == ~0 && c.f(69)== ~69 && c.f(123) == ~123);
@@ -234,7 +1824,7 @@ c_f:
 c_g:
 	movq	%rsi, %r11
 	cmpq	$3, %r11	# checking if 3 less r11
-	setge	%al
+	setg	%al
 	and	$1, %rax
 	imulq	$-1, %rax
 	ret
@@ -292,7 +1882,7 @@ c:
 c_g:
 	movq	%rsi, %r11
 	cmpq	$3, %r11	# checking if 3 less r11
-	setge	%al
+	setg	%al
 	and	$1, %rax
 	imulq	$-1, %rax
 	ret
@@ -307,7 +1897,7 @@ extern struct vft {
 RET(c.g(0,3) == 0);
 
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
-[Error] aber das Ergebnis des Aufrufs ist falsch.
+und das Ergebnis des Ausdrucks ist korrekt.
 
 ==========> Eingabe von /home/ublu21/u11808206/test/codea/kingD-13.0:
 interface i: 
@@ -353,7 +1943,7 @@ c_f:
 c_g:
 	movq	%rsi, %r11
 	cmpq	$3, %r11	# checking if 3 less r11
-	setge	%al
+	setg	%al
 	and	$1, %rax
 	imulq	$-1, %rax
 	ret
@@ -473,7 +2063,7 @@ c_f:
 c_g:
 	movq	%rsi, %r11
 	cmpq	$3, %r11	# checking if 3 less r11
-	setge	%al
+	setg	%al
 	and	$1, %rax
 	imulq	$-1, %rax
 	ret
@@ -590,7 +2180,7 @@ c:
 c_f:
 	movq	%rsi, %r11
 	cmpq	$3, %r11	# checking if 3 less r11
-	setge	%al
+	setg	%al
 	and	$1, %rax
 	imulq	$-1, %rax
 	ret
@@ -912,7 +2502,7 @@ Class2_getNull:
 	ret
 
 Übersetze und linke das Testprogramm:
-In file included from /usr/ftp/pub/ubvl/test/codea/testmain.c:10:0:
+In file included from /usr/ftp/pub/ubvl/test/codea/testmain.c:13:0:
 /home/ublu21/u11808206/test/codea/thenotoriousj-11.call: In function ‘call’:
 /home/ublu21/u11808206/test/codea/thenotoriousj-11.call:40:58: warning: passing argument 1 of ‘Class2.offsetThisBy64’ makes pointer from integer without a cast [-Wint-conversion]
   Class2.offsetThisBy64(0) == 64 && Class2.offsetThisBy64(-3)==61 && Class2.offsetThisBy64(5)==69 &&
@@ -1241,7 +2831,7 @@ Class2_ident:
 	ret
 
 Übersetze und linke das Testprogramm:
-In file included from /usr/ftp/pub/ubvl/test/codea/testmain.c:10:0:
+In file included from /usr/ftp/pub/ubvl/test/codea/testmain.c:13:0:
 /home/ublu21/u11808206/test/codea/thenotoriousj-4.call: In function ‘call’:
 /home/ublu21/u11808206/test/codea/thenotoriousj-4.call:28:40: warning: passing argument 1 of ‘Class1.init’ makes pointer from integer without a cast [-Wint-conversion]
  RET(Class1.init(0) == 0 && Class1.init(-3)==0 && Class1.init(5)==0 &&
@@ -1336,6 +2926,1429 @@ class y implements x: end;
 
 Ausgabe:
 Identifier with name 'x' on line 1 is not visible in the current scope
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/Andy0n_100.1:
+interface myInterface:
+    testMethod(): int
+end;
+
+class ObjectvariableClass implements myInterface:
+    method testMethod()
+        var x:int := 1/5; /* FAIL */
+        return 5; 
+    end;
+end;
+Ausgabe:
+ERROR on line 1 Can not lex the symbol: /
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/Andy0n_101.1:
+/* FAIL
+Ausgabe:
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/Andy0n_200.2:
+interface class:end;
+Ausgabe:
+Error parsing line: 1 char: class
+syntax error
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/Andy0n_300.3:
+interface myInterface:
+    testMethod(): int
+end;
+
+class ObjectvariableClass implements myInterface:
+    method testMethod()
+        return global; /* FAIL */
+    end;
+end;
+Ausgabe:
+Identifier with name 'global' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/Andy0n_301.3:
+interface myInterface:
+    testMethod(): int
+end;
+
+class ObjectvariableClass implements myInterface:
+    var global:int;
+
+    method testMethod()
+        var global:int := 5; /* FAIL */
+        return global;
+    end;
+end;
+Ausgabe:
+Identifier 'global' on line 1 conflicts with identifier [global] on line 1
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/Andy0n_302.3:
+interface myInterface:
+    testMethod(): int
+end;
+
+class ObjectvariableClass implements myInterface:
+    method failMethod()
+        return 5; /* FAIL */
+    end;
+end;
+Ausgabe:
+Identifier with name 'failMethod' on line 1 is not visible in the current scope
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/Andy0n_303.3:
+interface myInterface:
+    testMethod(): int
+end;
+
+class ObjectvariableClass implements myInterface fail: /* FAIL */
+    method testMethod()
+        return 5; 
+    end;
+end;
+Ausgabe:
+Identifier with name 'fail' on line 1 is not visible in the current scope
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/Andy0n_304.3:
+interface myInterface:
+    testMethod(): int
+end;
+
+class ObjectvariableClass implements myInterface:
+    method testMethod()
+        null ObjectvariableClass; /* FAIL */
+        return 5; 
+    end;
+end;
+Ausgabe:
+Identifier with name 'ObjectvariableClass' on line 1 is not visible in the current scope
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/Andy0n_305.3:
+interface myInterface:
+    testMethod(): int
+end;
+
+class ObjectvariableClass implements myInterface:
+    method testMethod()
+        myInterface := 5; /* FAIL */
+        return 5; 
+    end;
+end;
+Ausgabe:
+Identifier with name 'myInterface' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/Andy0n_306.3:
+interface myInterface:
+    testMethod(): int
+end;
+
+class MyClass implements myInterface:
+    var global:int;
+
+    method testMethod()
+        global := new global;
+        return global;
+    end;
+end;
+Ausgabe:
+Identifier with name 'global' on line 1 is not visible in the current scope
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/Andy0n_307.3:
+interface x: 
+s():int 
+z(int):int 
+end; 
+interface u: 
+end;
+
+interface d: 
+y():int 
+end;
+
+class b implements:
+
+end;
+
+class c implements d:
+    var a:int;
+    method y()
+        var a : d := 5; /* FAIL */
+    end;
+end;
+Ausgabe:
+Identifier 'a' on line 1 conflicts with identifier [a] on line 1
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/Andy0n_308.3:
+interface LinkedList:
+    add(Object): int
+    get(int): Object
+    size(): int
+end;
+
+class MyLinkedList implements LinkedList:
+    var next:LinkedList;
+    var head:Object;    /* FAIL */
+
+    method add(o:Object)
+        if head = null LinkedList then /* Absolut keine Ahnung ob das mit null so funken wird, aber ist momentan korrekt */
+            head := o;
+            return 0;
+        else 
+            if head.getId() = o.getId() then
+                return 1;
+            else
+                if next = null LinkedList then
+                    next := new MyLinkedList;
+                end;
+            end;
+        end;
+
+        return next.add(o);
+    end;
+
+    method get(i:int)
+        if i = 0 then
+            return head;
+        else
+            if next = null LinkedList then
+                return null Object;
+            end;
+        end;
+
+        return next.get(i-1);
+    end;
+
+    method size()
+        if head = null Object then
+            return 0;
+        end;
+        
+        if next = null Object then
+            return 1;
+        end;
+
+        return 1 + next.size();
+    end;
+end;
+Ausgabe:
+Identifier with name 'Object' on line 1 is not visible in the current scope
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/Andy0n_309.3:
+interface Object:
+    getId(): int 
+end;
+
+interface LinkedList:
+    add(Object): int
+    get(int): Object
+    size(): int
+end;
+
+class MyLinkedList implements LinkedList:
+    var next:LinkedList;
+    var head:Object;
+
+    method add(o:Object)
+        if head = null LinkedList then /* Absolut keine Ahnung ob das mit null so funken wird, aber ist momentan korrekt */
+            head := o;
+            return 0;
+        else 
+            if head.getId() = o.getId() then
+                return 1;
+            else
+                if next = null LinkedList then
+                    next := new MyLinkedList;
+                end;
+            end;
+        end;
+
+        return next.add(p); /* FAIL */
+    end;
+
+    method get(i:int)
+        if i = 0 then
+            return head;
+        else
+            if next = null LinkedList then
+                return null Object;
+            end;
+        end;
+
+        return next.get(i-1);
+    end;
+
+    method size()
+        if head = null Object then
+            return 0;
+        end;
+        
+        if next = null Object then
+            return 1;
+        end;
+
+        return 1 + next.size();
+    end;
+end;
+Ausgabe:
+Identifier with name 'p' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/Andy0n_310.3:
+interface a:
+    b(int,a):a
+end;
+
+class c implements a:
+    method b(e:int, f:a)
+        return d; /* FAIL */
+    end;
+
+    var d:a;
+end;
+Ausgabe:
+Identifier with name 'd' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/Andy0n_311.3:
+interface a:end;
+interface a:end; /* FAIL */
+Ausgabe:
+Identifier 'a' on line 1 conflicts with identifier [a] on line 1
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/Andy0n_312.3:
+class a implements:end;
+class a implements:end; /* FAIL */
+Ausgabe:
+Identifier 'a' on line 1 conflicts with identifier [a] on line 1
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/Andy0n_314.3:
+interface myInterface:
+    myMethod(int,myInterface):myInterface
+end;
+
+class myClass implements myInterface:
+    method myMethod(par1:int, par2:myInterface)
+        if 0 = 1 then
+            var fail : int := 0;
+        else
+            return this.myMethod(fail, par2); /* FAIL */
+        end;
+    end;
+end;
+Ausgabe:
+Identifier with name 'fail' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/Andy0n_315.3:
+interface a:
+    b():int
+end;
+
+class one implements a:
+    var v1:int;
+    method b()
+        v1 := 27;
+    end;
+end;
+
+class two implements a:
+    method b()
+        var x:a := new one;
+        return x.v1();
+    end;
+end;
+Ausgabe:
+Identifier with name 'v1' on line 1 is not visible in the current scope
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/Andy0n_316.3:
+interface a:
+    b(int, int):a
+    d(int, int):a
+end;
+
+class c implements a:
+    var d:a;
+
+    method b(e:int, f:int)
+        return 5 * (e + f);
+    end;
+end;
+Ausgabe:
+Identifier 'd' on line 1 conflicts with identifier [d] on line 1
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/Andy0n_317.3:
+interface a:
+    b():int
+end;
+
+class one implements a:
+    var v1:int;
+    method b()
+        v1 := 27;
+    end;
+end;
+
+class two implements a:
+    method b()
+        var x:a := new one;
+        return v1;
+    end;
+end;
+Ausgabe:
+Identifier with name 'v1' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/Andy0n_318.3:
+interface a:
+    test():a
+    test():a
+end;
+Ausgabe:
+Identifier 'test' on line 1 conflicts with identifier [test] on line 1
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_Andy0n_300.3:
+interface myInterface:
+    testMethod(): int
+end;
+
+class ObjectvariableClass implements myInterface:
+    method testMethod()
+        return global; /* FAIL */
+    end;
+end;
+Ausgabe:
+Identifier with name 'global' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_Andy0n_301.3:
+interface myInterface:
+    testMethod(): int
+end;
+
+class ObjectvariableClass implements myInterface:
+    var global:int;
+
+    method testMethod()
+        var global:int := 5; /* FAIL */
+        return global;
+    end;
+end;
+Ausgabe:
+Identifier 'global' on line 1 conflicts with identifier [global] on line 1
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_Andy0n_302.3:
+interface myInterface:
+    testMethod(): int
+end;
+
+class ObjectvariableClass implements myInterface:
+    method failMethod()
+        return 5; /* FAIL */
+    end;
+end;
+Ausgabe:
+Identifier with name 'failMethod' on line 1 is not visible in the current scope
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_Andy0n_303.3:
+interface myInterface:
+    testMethod(): int
+end;
+
+class ObjectvariableClass implements myInterface fail: /* FAIL */
+    method testMethod()
+        return 5; 
+    end;
+end;
+Ausgabe:
+Identifier with name 'fail' on line 1 is not visible in the current scope
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_Andy0n_304.3:
+interface myInterface:
+    testMethod(): int
+end;
+
+class ObjectvariableClass implements myInterface:
+    method testMethod()
+        null ObjectvariableClass; /* FAIL */
+        return 5; 
+    end;
+end;
+Ausgabe:
+Identifier with name 'ObjectvariableClass' on line 1 is not visible in the current scope
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_Andy0n_305.3:
+interface myInterface:
+    testMethod(): int
+end;
+
+class ObjectvariableClass implements myInterface:
+    method testMethod()
+        myInterface := 5; /* FAIL */
+        return 5; 
+    end;
+end;
+Ausgabe:
+Identifier with name 'myInterface' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_Andy0n_306.3:
+interface myInterface:
+    testMethod(): int
+end;
+
+class MyClass implements myInterface:
+    var global:int;
+
+    method testMethod()
+        global := new global;
+        return global;
+    end;
+end;
+Ausgabe:
+Identifier with name 'global' on line 1 is not visible in the current scope
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_Andy0n_307.3:
+interface x: 
+s():int 
+z(int):int 
+end; 
+interface u: 
+end;
+
+interface d: 
+y():int 
+end;
+
+class b implements:
+
+end;
+
+class c implements d:
+    var a:int;
+    method y()
+        var a : d := 5; /* FAIL */
+    end;
+end;
+Ausgabe:
+Identifier 'a' on line 1 conflicts with identifier [a] on line 1
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_Andy0n_308.3:
+interface LinkedList:
+    add(Object): int
+    get(int): Object
+    size(): int
+end;
+
+class MyLinkedList implements LinkedList:
+    var next:LinkedList;
+    var head:Object;    /* FAIL */
+
+    method add(o:Object)
+        if head = null LinkedList then /* Absolut keine Ahnung ob das mit null so funken wird, aber ist momentan korrekt */
+            head := o;
+            return 0;
+        else 
+            if head.getId() = o.getId() then
+                return 1;
+            else
+                if next = null LinkedList then
+                    next := new MyLinkedList;
+                end;
+            end;
+        end;
+
+        return next.add(o);
+    end;
+
+    method get(i:int)
+        if i = 0 then
+            return head;
+        else
+            if next = null LinkedList then
+                return null Object;
+            end;
+        end;
+
+        return next.get(i-1);
+    end;
+
+    method size()
+        if head = null Object then
+            return 0;
+        end;
+        
+        if next = null Object then
+            return 1;
+        end;
+
+        return 1 + next.size();
+    end;
+end;
+Ausgabe:
+Identifier with name 'Object' on line 1 is not visible in the current scope
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_Andy0n_309.3:
+interface Object:
+    getId(): int 
+end;
+
+interface LinkedList:
+    add(Object): int
+    get(int): Object
+    size(): int
+end;
+
+class MyLinkedList implements LinkedList:
+    var next:LinkedList;
+    var head:Object;
+
+    method add(o:Object)
+        if head = null LinkedList then /* Absolut keine Ahnung ob das mit null so funken wird, aber ist momentan korrekt */
+            head := o;
+            return 0;
+        else 
+            if head.getId() = o.getId() then
+                return 1;
+            else
+                if next = null LinkedList then
+                    next := new MyLinkedList;
+                end;
+            end;
+        end;
+
+        return next.add(p); /* FAIL */
+    end;
+
+    method get(i:int)
+        if i = 0 then
+            return head;
+        else
+            if next = null LinkedList then
+                return null Object;
+            end;
+        end;
+
+        return next.get(i-1);
+    end;
+
+    method size()
+        if head = null Object then
+            return 0;
+        end;
+        
+        if next = null Object then
+            return 1;
+        end;
+
+        return 1 + next.size();
+    end;
+end;
+Ausgabe:
+Identifier with name 'p' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_Andy0n_310.3:
+interface a:
+    b(int,a):a
+end;
+
+class c implements a:
+    method b(e:int, f:a)
+        return d; /* FAIL */
+    end;
+
+    var d:a;
+end;
+Ausgabe:
+Identifier with name 'd' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_Andy0n_311.3:
+interface a:end;
+interface a:end; /* FAIL */
+Ausgabe:
+Identifier 'a' on line 1 conflicts with identifier [a] on line 1
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_Andy0n_312.3:
+class a implements:end;
+class a implements:end; /* FAIL */
+Ausgabe:
+Identifier 'a' on line 1 conflicts with identifier [a] on line 1
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_Andy0n_314.3:
+interface myInterface:
+    myMethod(int,myInterface):myInterface
+end;
+
+class myClass implements myInterface:
+    method myMethod(par1:int, par2:myInterface)
+        if 0 = 1 then
+            var fail : int := 0;
+        else
+            return this.myMethod(fail, par2); /* FAIL */
+        end;
+    end;
+end;
+Ausgabe:
+Identifier with name 'fail' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_Andy0n_315.3:
+interface a:
+    b():int
+end;
+
+class one implements a:
+    var v1:int;
+    method b()
+        v1 := 27;
+    end;
+end;
+
+class two implements a:
+    method b()
+        var x:a := new one;
+        return x.v1();
+    end;
+end;
+Ausgabe:
+Identifier with name 'v1' on line 1 is not visible in the current scope
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_Andy0n_316.3:
+interface a:
+    b(int, int):a
+    d(int, int):a
+end;
+
+class c implements a:
+    var d:a;
+
+    method b(e:int, f:int)
+        return 5 * (e + f);
+    end;
+end;
+Ausgabe:
+Identifier 'd' on line 1 conflicts with identifier [d] on line 1
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_Andy0n_317.3:
+interface a:
+    b():int
+end;
+
+class one implements a:
+    var v1:int;
+    method b()
+        v1 := 27;
+    end;
+end;
+
+class two implements a:
+    method b()
+        var x:a := new one;
+        return v1;
+    end;
+end;
+Ausgabe:
+Identifier with name 'v1' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_Andy0n_318.3:
+interface a:
+    test():a
+    test():a
+end;
+Ausgabe:
+Identifier 'test' on line 1 conflicts with identifier [test] on line 1
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_Dappzydee.1.3:
+interface myInterface:
+    testMethod(): int
+end;
+
+class ObjectvariableClass implements myInterface:
+    method testMethod()
+         return testMethod; /* FAIL */
+    end;
+end;
+
+Ausgabe:
+Identifier with name 'testMethod' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
+/usr/ftp/pub/ubvl/test/codea/test: line 125: test: 1.3: integer expression expected
+[Error] Status: 3. Erwartet: 1.3
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_Dappzydee.2.3:
+interface myInterface:
+    testMethod(): int
+end;
+
+class ObjectvariableClass implements myInterface:
+    method testMethod()
+        var tmp : int := 0;
+        tmp = testMethod; /* FAIL */
+    end;
+end;
+
+Ausgabe:
+Identifier with name 'testMethod' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
+/usr/ftp/pub/ubvl/test/codea/test: line 125: test: 2.3: integer expression expected
+[Error] Status: 3. Erwartet: 2.3
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_crazyjack.1.3:
+interface a1:
+end;
+interface a2:
+    a3(int, int):int
+    a6(a2, a2):int
+    a5(a1, a2):int
+end;
+interface a32:
+    a27(a1, a2):int
+end;
+class hello implements a32 a2:
+    var bobbi: a1;
+    var number1: int;
+    var bobbi2: int;
+    method a27()
+        if bobbi < bobbi2
+        then
+            bobbi := 123;
+        end;
+    end;
+    var katzi: int;
+end;
+interface b2:
+    a55(a2, a2):int
+end;
+class hello2 implements a2 a1:
+    var bobbi: a1;
+    var bobbi2: int;
+    method a27(number33: int)
+        if bobbi < bobbi2
+        then
+            bobbi := 123;
+        end;
+        var number1: int := 23;
+        not null INVALID;
+    end;
+    var katzi: int;
+    var number1: int;
+end;
+Ausgabe:
+Identifier with name 'INVALID' on line 1 is not visible in the current scope
+/usr/ftp/pub/ubvl/test/codea/test: line 125: test: 1.3: integer expression expected
+[Error] Status: 3. Erwartet: 1.3
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_crazyjack.10.3:
+interface i:
+    a():int
+end;
+class b implements:
+    var hallo: int;
+    method a()
+        new x; /* FAIL */
+    end;
+end;
+Ausgabe:
+Identifier with name 'x' on line 1 is not visible in the current scope
+/usr/ftp/pub/ubvl/test/codea/test: line 125: test: 10.3: integer expression expected
+[Error] Status: 3. Erwartet: 10.3
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_crazyjack.11.3:
+interface i:
+    a():int
+end;
+class b implements:
+    var hallo: int;
+    method a()
+        new x; /* FAIL */
+    end;
+end;
+class x implements:
+    var hallo: int;
+    method a()
+    end;
+end;
+Ausgabe:
+Identifier with name 'x' on line 1 is not visible in the current scope
+/usr/ftp/pub/ubvl/test/codea/test: line 125: test: 11.3: integer expression expected
+[Error] Status: 3. Erwartet: 11.3
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_crazyjack.3.3:
+interface a:
+    b(int, int):int
+end;
+class hello implements a:
+    method b()
+        this.a(); /* FAIL */
+    end;
+end;
+Ausgabe:
+Identifier with name 'a' on line 1 is not visible in the current scope
+/usr/ftp/pub/ubvl/test/codea/test: line 125: test: 3.3: integer expression expected
+[Error] Status: 3. Erwartet: 3.3
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_crazyjack.5.3:
+interface a1:
+    b(int, int):int
+end;
+class hello implements:
+    method b()
+        this.b2(); /* fail */
+    end;
+end;
+interface a2:
+    b2(int, int):int
+end;
+Ausgabe:
+Identifier with name 'b2' on line 1 is not visible in the current scope
+/usr/ftp/pub/ubvl/test/codea/test: line 125: test: 5.3: integer expression expected
+[Error] Status: 3. Erwartet: 5.3
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_crazyjack.6.3:
+interface i:
+    a():int
+end;
+class x implements:
+    method a()
+        a23; /* FAIL */
+    end;
+end;
+Ausgabe:
+Identifier with name 'a23' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
+/usr/ftp/pub/ubvl/test/codea/test: line 125: test: 6.3: integer expression expected
+[Error] Status: 3. Erwartet: 6.3
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_crazyjack.8.3:
+interface i:
+    a():int
+end;
+class x implements:
+    method a()
+        hallo := 3; /* FAIL */
+    end;
+end;
+Ausgabe:
+Identifier with name 'hallo' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
+/usr/ftp/pub/ubvl/test/codea/test: line 125: test: 8.3: integer expression expected
+[Error] Status: 3. Erwartet: 8.3
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_gutti-6.3:
+class Foo implements Bar: /*Bar ist noch nicht sichtbar*/
+    var x: Bar;
+    method nochNichtSichtbar(x:int,bar:Bar)
+        not 42;
+    end;
+end;
+
+interface Bar:
+    nochNichtSichtbar(int,Bar):Bar
+end;
+
+
+Ausgabe:
+Identifier 'x' on line 1 conflicts with identifier [x] on line 1
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_gutti-7.3:
+interface Fail:
+    methode(int,Fail): int
+    funktion(Fail,Fail,Fail): int
+end;
+
+class Failed implements Fail:
+    method methode(x: int, y: Fail) 
+        x+y;
+        while this do
+            x := null Fail;
+        end;
+    end;
+
+    method hilfsFail()
+    end;
+
+    method funktion(x: Fail, y: Fail, z: Fail)
+        x*y*z;
+        return y*x*z;
+    end;
+
+end;
+Ausgabe:
+Identifier with name 'hilfsFail' on line 1 is not visible in the current scope
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_gutti-8.3:
+interface Test:
+    function(int,int,Test):Test
+end;
+
+class Failing implements Test:
+    method function(x:int, y:int, z:Test)
+        if x = y then
+            z.function(x,y,z);
+            return new Failing;
+        else
+            return failVariable;
+        end;
+    end;
+
+    var failVariable: Test;
+end;
+
+
+Ausgabe:
+Identifier with name 'failVariable' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_stimitom1.3:
+interface Interf0 :
+end;
+
+interface Interf1:
+    initialize(): int
+    testNonsensicalStuff(int): Interf0
+end;
+
+class Somename implements Interf0 :
+end;
+
+class OtherName implements Interf1 :
+    var count : int;
+    method initialize()
+        count := 15;
+    end;
+    method testNonsensicalStuff(par : int)   
+        if not this then
+            while (par < 25) do
+                count := count * 5;
+                if null Interf0 then
+                    count := count * 5;
+                else 
+                    return new Interf1;
+                    /* should throw an error here */
+                end;
+            end;
+        end;
+    end;
+end;
+Ausgabe:
+Identifier with name 'Interf1' on line 1 is not visible in the current scope
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_thenotoriousj-1.3:
+interface Interface1:
+	init():int
+	add3(int, int, int) : int
+end;
+
+interface Interface1: 
+	empty():int
+	single():int
+	add2(int, int) : int
+	fact(int, int) : int
+end;
+
+Ausgabe:
+Identifier 'Interface1' on line 1 conflicts with identifier [Interface1] on line 1
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_thenotoriousj-10.3:
+interface Interface1:
+	init():int
+	add3(int, int, int) : int
+end;
+
+class Class1 implements /* nothing */ :
+	var var1 : int;
+	var var2 : int;
+	var var3 : Interface1;
+end;
+
+interface Interface2: 
+	empty():int
+	single():int
+	add2(int, int) : int
+	add3(int, int) : int
+end;
+
+class Class2 implements Interface1 Interface2 :
+	var var1 : int;
+	var var2 : int;
+	method init()
+		var zero : int := 0H;
+		var1 := (zero);
+		var2 := zero;
+		return 0;
+	end;
+	method add2(in1: int, in2: int)
+		return in1+in2;
+	end;
+	method add3(in1: int, in2: int, in3: int)
+		return in1 + this.add2(in2, in3);
+	end;
+	method empty()
+		/* Stats */
+	end;
+	method single()
+		return this;
+	end;
+	method fact(n : int)
+		if n < 0 then
+			return 0;
+		end;
+		
+		var fac : int := 1;
+		var i : int := n;
+		
+		while (0 < i) do
+			fac := fac * i;
+		end;
+		
+		return fac;
+		
+	end;
+end;
+
+Ausgabe:
+Identifier 'add3' on line 1 conflicts with identifier [add3] on line 1
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_thenotoriousj-2.3:
+class Interface1 implements :
+end;
+
+interface Interface1: 
+	empty():int
+	single():int
+	add2(int, int) : int
+	fact(int, int) : int
+end;
+
+Ausgabe:
+Identifier 'Interface1' on line 1 conflicts with identifier [Interface1] on line 1
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_thenotoriousj-5.3:
+interface Interface1:
+	init():int
+	add3(int, int, int) : int
+end;
+
+interface Interface2: 
+	empty():int
+	single():int
+	add2(int, int) : int
+end;
+
+class Class1 implements /* nothing */ :
+	var var1 : int;
+	var var2 : int;
+end;
+
+class Class1 implements Interface1 Interface2 :
+	var var1 : int;
+	var var2 : int;
+	method init()
+		var zero : int := 0H;
+		var1 := (zero);
+		var2 := zero;
+		return 0;
+	end;
+	method add2(in1: int, in2: int)
+		return in1+in2;
+	end;
+	method add3(in1: int, in2: int)
+		return in1 + this.add2(in2, in3);
+	end;
+	method empty()
+		/* Stats */
+	end;
+	method single()
+		return this;
+	end;
+	method fact(n : int)
+		if n < 0 then
+			return 0;
+		end;
+		
+		var fac : int := 1;
+		var i : int := n;
+		
+		while (0 < i) do
+			fac := fac * i;
+		end;
+		
+		return fac;
+		
+	end;
+end;
+
+Ausgabe:
+Identifier 'Class1' on line 1 conflicts with identifier [Class1] on line 1
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_thenotoriousj-6.3:
+interface Interface1:
+	init():int
+	add3(int, int, int) : int
+end;
+
+interface Interface2: 
+	empty():int
+	single():int
+	add2(int, int) : int
+end;
+
+class Class1 implements /* nothing */ :
+	var var1 : int;
+	var var2 : int;
+end;
+
+class Class2 implements Interface1 Interface2 :
+	var var1 : int;
+	var var2 : int;
+	method init()
+		var zero : int := 0H;
+		var1 := (zero);
+		var2 := zero;
+		return 0;
+	end;
+	method add2(in1: int, in1: int)
+		return in1+in2;
+	end;
+	method add3(in1: int, in2: int)
+		return in1 + this.add2(in2, in3);
+	end;
+	method empty()
+		/* Stats */
+	end;
+	method single()
+		return this;
+	end;
+	method fact(n : int)
+		if n < 0 then
+			return 0;
+		end;
+		
+		var fac : int := 1;
+		var i : int := n;
+		
+		while (0 < i) do
+			fac := fac * i;
+		end;
+		
+		return fac;
+		
+	end;
+end;
+
+Ausgabe:
+Identifier 'in1' on line 1 conflicts with identifier [in1] on line 1
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_thenotoriousj-7.3:
+interface Interface1:
+	init():int
+	add3(int, int, int) : int
+end;
+
+interface Interface2: 
+	empty():int
+	single():int
+	add2(int, int) : int
+end;
+
+class Class1 implements /* nothing */ :
+	var var1 : int;
+	var var2 : int;
+end;
+
+class Class2 implements Interface1 Interface2 :
+	var fac : int;
+	var var2 : int;
+	method init()
+		var zero : int := 0H;
+		var1 := (zero);
+		var2 := zero;
+		return 0;
+	end;
+	method add2(in1: int, in2: int)
+		return in1+in2;
+	end;
+	method add3(in1: int, in2: int)
+		return in1 + this.add2(in2, in3);
+	end;
+	method empty()
+		/* Stats */
+	end;
+	method single()
+		return this;
+	end;
+	method fact(n : int)
+		if n < 0 then
+			return 0;
+		end;
+		
+		var fac : int := 1;
+		var i : int := n;
+		
+		while (0 < i) do
+			fac := fac * i;
+		end;
+		
+		return fac;
+		
+	end;
+end;
+
+Ausgabe:
+Identifier 'fac' on line 1 conflicts with identifier [fac] on line 1
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_thenotoriousj-8.3:
+interface Interface1:
+	init():int
+	add3(int, int, int) : int
+end;
+
+interface Interface2: 
+	empty():int
+	single():int
+	add2(int, int) : int
+end;
+
+class Class1 implements /* nothing */ :
+	var var1 : int;
+	var var2 : int;
+end;
+
+class Class2 implements Interface1 Interface2 :
+	var var1 : int;
+	var var2 : int;
+	method init()
+		var zero : int := 0H;
+		var1 := (zero);
+		var2 := zero;
+		return 0;
+	end;
+	method add2(in1: int, in2: int)
+		return in1+in2;
+	end;
+	method add3(in1: int, in2: int)
+		return in1 + this.add2(in2, in3);
+	end;
+	method empty()
+		/* Stats */
+	end;
+	method single()
+		return this;
+	end;
+	method fact(n : int)
+		if n < 0 then
+			return 0;
+		end;
+		
+		var fac : int := 1;
+		var i : int := n;
+		
+		while (0 < i) do
+			var i : int := 0;
+			fac := fac * i;
+		end;
+		
+		return fac;
+		
+	end;
+end;
+
+Ausgabe:
+Identifier 'i' on line 1 conflicts with identifier [i] on line 1
+Status: korrekt
+
+==========> Eingabe von /home/ublu21/u11808206/test/codea/ag_test_case_thenotoriousj-9.3:
+interface Interface1:
+	init():int
+	add3(int, int, int) : int
+end;
+
+class Class1 implements /* nothing */ :
+	var var1 : int;
+	var var2 : int;
+	var var3 : Interface2;
+end;
+
+interface Interface2: 
+	empty():int
+	single():int
+	add2(int, int) : int
+end;
+
+class Class2 implements Interface1 Interface2 :
+	var var1 : int;
+	var var2 : int;
+	method init()
+		var zero : int := 0H;
+		var1 := (zero);
+		var2 := zero;
+		return 0;
+	end;
+	method add2(in1: int, in2: int)
+		return in1+in2;
+	end;
+	method add3(in1: int, in2: int)
+		return in1 + this.add2(in2, in3);
+	end;
+	method empty()
+		/* Stats */
+	end;
+	method single()
+		return this;
+	end;
+	method fact(n : int)
+		if n < 0 then
+			return 0;
+		end;
+		
+		var fac : int := 1;
+		var i : int := n;
+		
+		while (0 < i) do
+			fac := fac * i;
+		end;
+		
+		return fac;
+		
+	end;
+end;
+
+Ausgabe:
+Identifier with name 'Interface2' on line 1 is not visible in the current scope
 Status: korrekt
 
 ==========> Eingabe von /home/ublu21/u11808206/test/codea/thenotoriousj-1.3:
@@ -1730,6 +4743,6 @@ Status: korrekt
 
 Statistics: 
 ===========
-           34 Tests total
-           33 Tests passed
-           1 Tests failed
+           106 Tests total
+           97 Tests passed
+           9 Tests failed
