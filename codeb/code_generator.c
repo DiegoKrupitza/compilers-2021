@@ -418,8 +418,8 @@ void writeJumpToIfEnd(char *name)
 
 void writeJumpEvenIf(char *src, char *jumpName)
 {
-    fprintf(stdout, "\tcmpq\t$-1, %%%s\n", src);
-    fprintf(stdout, "\tjnz\t%s_end\n", jumpName);
+    fprintf(stdout, "\tcmpq\t$0, %%%s\n", src);
+    fprintf(stdout, "\tjns\t%s_end\n", jumpName);
 }
 
 void writeJumpEvenIfElse(char *src, char *jumpName)
