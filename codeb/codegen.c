@@ -28,7 +28,7 @@ struct burm_state {
 	struct {
 		unsigned burm_stat:2;
 		unsigned burm_ret:1;
-		unsigned burm_assign:3;
+		unsigned burm_assign:4;
 		unsigned burm_expr:5;
 		unsigned burm_const:3;
 	} rule;
@@ -83,6 +83,11 @@ short *burm_nts[] = {
 	burm_nts_8,	/* 35 */
 	burm_nts_8,	/* 36 */
 	burm_nts_8,	/* 37 */
+	burm_nts_3,	/* 38 */
+	burm_nts_2,	/* 39 */
+	burm_nts_8,	/* 40 */
+	burm_nts_8,	/* 41 */
+	burm_nts_8,	/* 42 */
 };
 
 char burm_arity[] = {
@@ -121,6 +126,11 @@ static short burm_decode_assign[] = {
 	35,
 	36,
 	37,
+	38,
+	39,
+	40,
+	41,
+	42,
 };
 
 static short burm_decode_expr[] = {
@@ -530,6 +540,59 @@ STATEPTR_TYPE burm_state(int op, STATEPTR_TYPE left, STATEPTR_TYPE right) {
 		}
 	case 14: /* OP_ASSIGN */
 		assert(l && r);
+		if (	/* assign: OP_ASSIGN(OP_PARAM_ID,OP_CLASS_VAR_ID) */
+			l->op == 10 && /* OP_PARAM_ID */
+			r->op == 11 /* OP_CLASS_VAR_ID */
+		) {
+			c = 1;
+			if (c + 0 < p->cost[burm_assign_NT]) {
+				p->cost[burm_assign_NT] = c + 0;
+				p->rule.burm_assign = 10;
+				burm_closure_assign(p, c + 0);
+			}
+		}
+		if (	/* assign: OP_ASSIGN(OP_PARAM_ID,OP_PARAM_ID) */
+			l->op == 10 && /* OP_PARAM_ID */
+			r->op == 10 /* OP_PARAM_ID */
+		) {
+			c = 1;
+			if (c + 0 < p->cost[burm_assign_NT]) {
+				p->cost[burm_assign_NT] = c + 0;
+				p->rule.burm_assign = 9;
+				burm_closure_assign(p, c + 0);
+			}
+		}
+		if (	/* assign: OP_ASSIGN(OP_PARAM_ID,OP_ID) */
+			l->op == 10 && /* OP_PARAM_ID */
+			r->op == 9 /* OP_ID */
+		) {
+			c = 1;
+			if (c + 0 < p->cost[burm_assign_NT]) {
+				p->cost[burm_assign_NT] = c + 0;
+				p->rule.burm_assign = 8;
+				burm_closure_assign(p, c + 0);
+			}
+		}
+		if (	/* assign: OP_ASSIGN(OP_PARAM_ID,expr) */
+			l->op == 10 /* OP_PARAM_ID */
+		) {
+			c = r->cost[burm_expr_NT] + 1;
+			if (c + 0 < p->cost[burm_assign_NT]) {
+				p->cost[burm_assign_NT] = c + 0;
+				p->rule.burm_assign = 7;
+				burm_closure_assign(p, c + 0);
+			}
+		}
+		if (	/* assign: OP_ASSIGN(OP_PARAM_ID,const) */
+			l->op == 10 /* OP_PARAM_ID */
+		) {
+			c = r->cost[burm_const_NT] + 1;
+			if (c + 0 < p->cost[burm_assign_NT]) {
+				p->cost[burm_assign_NT] = c + 0;
+				p->rule.burm_assign = 6;
+				burm_closure_assign(p, c + 0);
+			}
+		}
 		if (	/* assign: OP_ASSIGN(OP_ID,OP_CLASS_VAR_ID) */
 			l->op == 9 && /* OP_ID */
 			r->op == 11 /* OP_CLASS_VAR_ID */
@@ -654,6 +717,9 @@ NODEPTR_TYPE *burm_kids(NODEPTR_TYPE p, int eruleno, NODEPTR_TYPE kids[]) {
 		kids[0] = LEFT_CHILD(p);
 		kids[1] = RIGHT_CHILD(p);
 		break;
+	case 42: /* assign: OP_ASSIGN(OP_PARAM_ID,OP_CLASS_VAR_ID) */
+	case 41: /* assign: OP_ASSIGN(OP_PARAM_ID,OP_PARAM_ID) */
+	case 40: /* assign: OP_ASSIGN(OP_PARAM_ID,OP_ID) */
 	case 37: /* assign: OP_ASSIGN(OP_ID,OP_CLASS_VAR_ID) */
 	case 36: /* assign: OP_ASSIGN(OP_ID,OP_PARAM_ID) */
 	case 35: /* assign: OP_ASSIGN(OP_ID,OP_ID) */
@@ -664,6 +730,8 @@ NODEPTR_TYPE *burm_kids(NODEPTR_TYPE p, int eruleno, NODEPTR_TYPE kids[]) {
 	case 28: /* expr: OP_PARAM_ID */
 	case 27: /* expr: OP_ID */
 		break;
+	case 39: /* assign: OP_ASSIGN(OP_PARAM_ID,expr) */
+	case 38: /* assign: OP_ASSIGN(OP_PARAM_ID,const) */
 	case 34: /* assign: OP_ASSIGN(OP_ID,expr) */
 	case 33: /* assign: OP_ASSIGN(OP_ID,const) */
 		kids[0] = RIGHT_CHILD(p);
@@ -825,6 +893,21 @@ void burm_reduce(NODEPTR_TYPE bnode, int goalnt)
     break;
   case 37:
    writeMoveClassVarInStack(bnode->kids[1]->classVaroffset, bnode->kids[0]->localVarOffset);
+    break;
+  case 38:
+   writeMovev(bnode->kids[1]->value, getParameterRegister(bnode->kids[0]->parameterIndex));
+    break;
+  case 39:
+   writeMove(bnode->kids[1]->regStor, getParameterRegister(bnode->kids[0]->parameterIndex));
+    break;
+  case 40:
+   writeMoveStack(bnode->kids[1]->localVarOffset, getParameterRegister(bnode->kids[0]->parameterIndex));
+    break;
+  case 41:
+   writeMove(getParameterRegister(bnode->kids[1]->parameterIndex), getParameterRegister(bnode->kids[0]->parameterIndex));
+    break;
+  case 42:
+   writeMoveForClassVar(bnode->kids[1]->classVaroffset, getParameterRegister(bnode->kids[0]->parameterIndex));
     break;
   default:    assert (0);
   }

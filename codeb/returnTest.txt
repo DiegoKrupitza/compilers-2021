@@ -14,8 +14,11 @@ class c implements a:
         /* var z : int := 10;  */
         /* return y; */
         /* var y : int := e; */
-        var y: int := adiego;
-        return y;
-
+        /* var y: int := adiego; */
+        /* return y; */
+        /* e := 5 + 5;*/
+        /* var x : int := 5; */
+        e := bdiego;
+        return e;
     end;
 end;

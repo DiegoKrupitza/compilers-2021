@@ -66,5 +66,10 @@ assign: OP_ASSIGN(OP_ID, OP_ID)                     # 1 #   writeMoveStackInStac
 assign: OP_ASSIGN(OP_ID, OP_PARAM_ID)               # 1 #   writeMoveRegInStack(getParameterRegister(bnode->kids[1]->parameterIndex), bnode->kids[0]->localVarOffset);
 assign: OP_ASSIGN(OP_ID, OP_CLASS_VAR_ID)           # 1 #   writeMoveClassVarInStack(bnode->kids[1]->classVaroffset, bnode->kids[0]->localVarOffset);
 
+assign: OP_ASSIGN(OP_PARAM_ID, const)               # 1 #   writeMovev(bnode->kids[1]->value, getParameterRegister(bnode->kids[0]->parameterIndex));
+assign: OP_ASSIGN(OP_PARAM_ID, expr)                # 1 #   writeMove(bnode->kids[1]->regStor, getParameterRegister(bnode->kids[0]->parameterIndex));
+assign: OP_ASSIGN(OP_PARAM_ID, OP_ID)               # 1 #   writeMoveStack(bnode->kids[1]->localVarOffset, getParameterRegister(bnode->kids[0]->parameterIndex));
+assign: OP_ASSIGN(OP_PARAM_ID, OP_PARAM_ID)         # 1 #   writeMove(getParameterRegister(bnode->kids[1]->parameterIndex), getParameterRegister(bnode->kids[0]->parameterIndex));
+assign: OP_ASSIGN(OP_PARAM_ID, OP_CLASS_VAR_ID)     # 1 #   writeMoveForClassVar(bnode->kids[1]->classVaroffset, getParameterRegister(bnode->kids[0]->parameterIndex));
 
 %%

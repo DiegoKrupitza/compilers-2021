@@ -5,3 +5,12 @@ Possible testcases:
 * var x = classVar; ret x;
 * var x = classVar + 1; ret x;
 * var x = param; ret x + 1;
+* write expresion into param
+* write a constant into param
+* write param into param
+* write classVar into param
+* write constant into classVar
+* write expression into classVar
+* write param into classVar
+* write localvar into classVar
+* write classVar into classVar
