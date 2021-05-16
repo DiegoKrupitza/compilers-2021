@@ -317,3 +317,19 @@ node_t *getAllOfType(node_t *returnList, node_t *list, int type)
     }
     return returnList;
 }
+
+int calcCurrentLocalVarOffset(node_t *list)
+{
+    node_t *nextNode = list;
+
+    int index = 1;
+    while (nextNode != NULL)
+    {
+        if (nextNode->type == VARIABLE)
+        {
+            index++;
+        }
+        nextNode = nextNode->next;
+    }
+    return index;
+}

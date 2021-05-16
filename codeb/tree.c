@@ -36,8 +36,8 @@ tree_t *createComplexIdentifierLeaf(char *name, int type, int parameterIndex, in
 {
     if (type == VARIABLE)
     {
-        //TODO: later when its wanted
-        return NULL;
+        // we have a simple variable this mean we have only the offset
+        return createLocalVarIdentifierLeaf(name, offset);
     }
     else if (type == PARAMETER)
     {
@@ -51,6 +51,19 @@ tree_t *createComplexIdentifierLeaf(char *name, int type, int parameterIndex, in
     }
 
     return NULL;
+}
+
+tree_t *createLocalVarIdentifierLeaf(char *name, int offset)
+{
+    tree_t *node = (tree_t *)malloc(sizeof(tree_t));
+
+    node->op = OP_ID;
+    node->kids[0] = (tree_t *)NULL;
+    node->kids[1] = (tree_t *)NULL;
+    node->identifierName = name;
+    node->localVarOffset = offset;
+
+    return node;
 }
 
 tree_t *createClassVarIdentifierLead(char *name, int offset)
@@ -181,7 +194,7 @@ void printElem(tree_t *root)
     }
     else if (root->op == OP_ID)
     {
-        printf("ID: %s\n", root->identifierName);
+        printf("ID: %s (Offset: %d) \n", root->identifierName, root->localVarOffset);
     }
     else if (root->op == OP_PARAM_ID)
     {
@@ -199,6 +212,10 @@ void printElem(tree_t *root)
     {
         printf("NULLOP\n");
     }
+    else if (root->op == OP_ASSIGN)
+    {
+        printf(":=\n");
+    }
     else
     {
         printf("?\n");
@@ -208,8 +225,10 @@ void printElem(tree_t *root)
 // Wrapper over print2DUtil()
 void print2D(struct tree_t *root)
 {
+    printf("=======================================\n");
     // Pass initial space count as 0
     print2DUtil(root, 0);
+    printf("=======================================\n");
 }
 
 #define DEBUGPRINT 0

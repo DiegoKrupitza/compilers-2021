@@ -8,11 +8,12 @@
 %}
 
 %start stat
-%term OP_RETURN=0 OP_ADD=1 OP_MUL=2 OP_AND=3 OP_LESS=4 OP_EQUAL=5 OP_NOT=6 OP_MINUS=7 OP_NUMBER=8 OP_ID=9 OP_PARAM_ID=10 OP_CLASS_VAR_ID=11 OP_THIS=12 OP_NULL=13
+%term OP_RETURN=0 OP_ADD=1 OP_MUL=2 OP_AND=3 OP_LESS=4 OP_EQUAL=5 OP_NOT=6 OP_MINUS=7 OP_NUMBER=8 OP_ID=9 OP_PARAM_ID=10 OP_CLASS_VAR_ID=11 OP_THIS=12 OP_NULL=13 OP_ASSIGN=14
 
 %%
 
 stat:   ret                             # 0 #
+stat:   assign                          # 0 #
 
 ret:    OP_RETURN(expr)                 # 1 #   writeReturnWithValue(bnode->regStor);
 
@@ -59,4 +60,6 @@ expr:   OP_THIS                         # 0 #   writeThisMovq(bnode->regStor);
 const:  OP_NULL                         # 0 #   bnode->value = 0; /*TODO check if this is what they want */
 const:  OP_NUMBER                       # 0 #   /* done */
 
+assign: OP_ASSIGN(OP_ID, const)         # 1 #   writeMoveVInStack(bnode->kids[1]->value, bnode->kids[0]->localVarOffset);
+assign: OP_ASSIGN(OP_ID, expr)          # 1 #   writeMoveRegInStack(bnode->kids[1]->regStor, bnode->kids[0]->localVarOffset);
 %%

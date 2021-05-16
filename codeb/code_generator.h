@@ -61,3 +61,7 @@ void writeEquals(char *reg1, char *reg2, char *dst);
 void writeVLessReg(long value, char *reg, char *dst);
 void writeRegLessV(char *reg, long value, char *dst);
 void writeRegLessReg(char *reg1, char *reg2, char *dst);
+
+void writeMoveStack(long offset, char *dst);
+void writeMoveVInStack(long value, long offset);
+void writeMoveRegInStack(char *src, long offset);

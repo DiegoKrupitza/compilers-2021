@@ -325,8 +325,8 @@ Stats                   :   Stat ';' Stats
                             @i @Stat.in@ = @Stats.0.in@ ;
                             @i @Stats.1.in@ = @Stat.out@ ;
                             @i @Stats.0.out@ = @Stats.1.out@;
-                            @visCheck /* print2D(@Stat.tree@); */
-                            @burm if(@Stat.tree@ != NULL) { burm_label(@Stat.tree@); burm_reduce(@Stat.tree@, 1); }
+                            @visCheck @revorder(1) print2D(@Stat.tree@);
+                            @burm @revorder(1) if(@Stat.tree@ != NULL) { burm_label(@Stat.tree@); burm_reduce(@Stat.tree@, 1); } 
                         @}
                         |
                         @{
@@ -373,7 +373,10 @@ Stat                    :   RETURN Expr
                             @i @Stat.out@ = addDev(duplicate(@Stat.in@),@ID.name@,VARIABLE,@ID.lineNr@,"Var assignment in stat");
                             @i @Type.in@ = @Stat.in@ ;
 
-                            @i @Stat.tree@ = NULL; /*TODO change later */
+                            @i @Stat.tree@ = createNode(OP_ASSIGN, createComplexIdentifierLeaf(@ID.name@, VARIABLE, -1, calcCurrentLocalVarOffset(@Stat.in@)), @Expr.tree@);
+
+                            @reg @Stat.tree@->regStor = getFirstRegister(); @Expr.tree@->regStor = @Stat.tree@->regStor;
+                            
                         @}
                         |   ID ASSIGNOP Expr
                         @{

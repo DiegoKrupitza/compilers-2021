@@ -45,4 +45,6 @@ int getTypeOfName(node_t *list, char *name);
 
 node_t *getAllOfType(node_t *returnList, node_t *list, int type);
 
+int calcCurrentLocalVarOffset(node_t *list);
+
 #endif

@@ -17,7 +17,8 @@ typedef enum
     OP_PARAM_ID,
     OP_CLASS_VAR_ID,
     OP_THIS,
-    OP_NULL
+    OP_NULL,
+    OP_ASSIGN
 } operators_t;
 
 typedef struct tree_t
@@ -30,6 +31,8 @@ typedef struct tree_t
     long value;
 
     int classVaroffset;
+
+    int localVarOffset;
 
     int parameterIndex;
     char *regStor;
@@ -53,6 +56,7 @@ typedef tree_t *NODEPTR_TYPE;
 tree_t *createNode(operators_t op, tree_t *left, tree_t *right);
 tree_t *createNumericalLeaf(long value);
 
+tree_t *createLocalVarIdentifierLeaf(char *name, int offset);
 tree_t *createClassVarIdentifierLead(char *name, int offset);
 tree_t *createParamIdentifierLeaf(char *name, int parameterIndex);
 tree_t *createComplexIdentifierLeaf(char *name, int type, int parameterIndex, int offset);

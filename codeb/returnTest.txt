@@ -7,6 +7,11 @@ class c implements a:
     var bdiego: int;
 
     method b(e:int, f:int)
-        return (0DEADH * 0BEEFH) < 5;
+        /* var x : int := 5; */
+        /* var x : int := ((not(5 + 5)) < 1) + e; */
+        var x : int := 5;
+        var y : int := 6;
+        var z : int := 10;
+        return 10;
     end;
 end;

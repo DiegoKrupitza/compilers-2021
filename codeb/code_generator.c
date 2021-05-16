@@ -326,3 +326,20 @@ void writeRegLessReg(char *reg1, char *reg2, char *dst)
     writeAndv(1, dst);
     writeMulv(-1, dst);
 }
+
+void writeMoveStack(long offset, char *dst)
+{
+    fprintf(stdout, "\tmovq\t%ld(%%rsp), %%%s\n", offset, dst);
+}
+
+void writeMoveRegInStack(char *src, long offset)
+{
+    //NOTE: the offset you provide will be mulitplied by 8 so take care of that!!!
+    printf("\tmovq\t%%%s, %ld(%%rsp)\n", src, offset * 8);
+}
+
+void writeMoveVInStack(long value, long offset)
+{
+    //NOTE: the offset you provide will be mulitplied by 8 so take care of that!!!
+    printf("\tmovq\t$%ld, %ld(%%rsp)\n", value, offset * 8);
+}
