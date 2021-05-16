@@ -276,6 +276,47 @@ void writeMoveForClassVar(int classVaroffset, char *dst)
     fprintf(stdout, "\tmovq\t%d(%%%s), %%%s\n", calculatedPosition, getThisRegister(), dst);
 }
 
+void writeMoveVIntoClassVar(long value, int classVaroffset)
+{
+    // offset starts at 0
+    int calculatedPosition = 8 + (8 * classVaroffset);
+
+    // movq calculatedPosition(getThisRegister()), dst
+    fprintf(stdout, "\tmovq\t$%ld, %d(%%%s)\n", value, calculatedPosition, getThisRegister());
+}
+
+void writeMoveRegIntoClassVar(char *src, int classVaroffset)
+{
+    // offset starts at 0
+    int calculatedPosition = 8 + (8 * classVaroffset);
+
+    // movq calculatedPosition(getThisRegister()), dst
+    fprintf(stdout, "\tmovq\t%%%s, %d(%%%s)\n", src, calculatedPosition, getThisRegister());
+}
+
+void writeMoveStackIntoClassVar(long srcOffset, int classVaroffset)
+{
+    //NOTE: the stack offset you provide will be mulitplied by 8 so take care of that!!!
+
+    // offset starts at 0
+    int calculatedPosition = 8 + (8 * classVaroffset);
+
+    // movq calculatedPosition(getThisRegister()), dst
+    fprintf(stdout, "\tmovq\t%ld(%%rsp), %d(%%%s)\n", srcOffset * 8, calculatedPosition, getThisRegister());
+}
+
+void writeMoveClassVarIntoClassVar(int srcClassVaroffset, int dstClassVaroffset)
+{
+    //NOTE: the stack offset you provide will be mulitplied by 8 so take care of that!!!
+
+    // offset starts at 0
+    int dstCalculatedPosition = 8 + (8 * dstClassVaroffset);
+    int srcCalculatedPosition = 8 + (8 * srcClassVaroffset);
+
+    // movq calculatedPosition(getThisRegister()), dst
+    fprintf(stdout, "\tmovq\t%d(%%%s), %d(%%%s)\n", srcCalculatedPosition, getThisRegister(), dstCalculatedPosition, getThisRegister());
+}
+
 void writeThisMovq(char *dst)
 {
     fprintf(stdout, "\tmovq\t%%%s, %%%s\n", getThisRegister(), dst);

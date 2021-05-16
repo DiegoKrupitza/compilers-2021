@@ -48,6 +48,10 @@ void generateClassTableForASingleClass(char *className, node_t *abstractMethds, 
 void generateMethodeLabel(char *classname, char *meth_name);
 
 void writeMoveForClassVar(int classVaroffset, char *dst);
+void writeMoveVIntoClassVar(long value, int classVaroffset);
+void writeMoveRegIntoClassVar(char *src, int classVaroffset);
+void writeMoveStackIntoClassVar(long srcOffset, int classVaroffset);
+void writeMoveClassVarIntoClassVar(int srcClassVaroffset, int dstClassVaroffset);
 
 char *getThisRegister();
 
