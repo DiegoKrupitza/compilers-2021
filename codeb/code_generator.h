@@ -71,3 +71,9 @@ void writeMoveVInStack(long value, long offset);
 void writeMoveRegInStack(char *src, long offset);
 void writeMoveStackInStack(long srcOffset, long dstOffset);
 void writeMoveClassVarInStack(int classVaroffset, long dstOffset);
+
+void writeElseLabel(char *name);
+void writeIfEndLabel(char *name);
+void writeJumpToIfEnd(char *name);
+void writeJumpEvenIf(char *src, char *jumpName);
+void writeJumpEvenIfElse(char *src, char *jumpName);

@@ -18,7 +18,9 @@ typedef enum
     OP_CLASS_VAR_ID,
     OP_THIS,
     OP_NULL,
-    OP_ASSIGN
+    OP_ASSIGN,
+    OP_IF,
+    OP_IF_ID,
 } operators_t;
 
 typedef struct tree_t
@@ -55,6 +57,8 @@ typedef tree_t *NODEPTR_TYPE;
 
 tree_t *createNode(operators_t op, tree_t *left, tree_t *right);
 tree_t *createNumericalLeaf(long value);
+
+tree_t *createIfLabelLeaf(char* name);
 
 tree_t *createLocalVarIdentifierLeaf(char *name, int offset);
 tree_t *createClassVarIdentifierLead(char *name, int offset);

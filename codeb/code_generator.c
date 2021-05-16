@@ -400,3 +400,30 @@ void writeMoveClassVarInStack(int classVaroffset, long dstOffset)
     // movq calculatedPosition(getThisRegister()), dst
     fprintf(stdout, "\tmovq\t%d(%%%s), %ld(%%rsp)\n", calculatedPosition, getThisRegister(), dstOffset * 8);
 }
+
+void writeElseLabel(char *name)
+{
+    fprintf(stdout, "\n\t%s_else:\n", name);
+}
+
+void writeIfEndLabel(char *name)
+{
+    fprintf(stdout, "\n\t%s_end:\n", name);
+}
+
+void writeJumpToIfEnd(char *name)
+{
+    fprintf(stdout, "\tjmp\t%s_end\n", name);
+}
+
+void writeJumpEvenIf(char *src, char *jumpName)
+{
+    fprintf(stdout, "\tcmpq\t$-1, %%%s\n", src);
+    fprintf(stdout, "\tjnz\t%s_end\n", jumpName);
+}
+
+void writeJumpEvenIfElse(char *src, char *jumpName)
+{
+    fprintf(stdout, "\tand\t$1, %%%s\n", getByteRegisterName(src));
+    fprintf(stdout, "\tjz\t%s_else\n", jumpName);
+}

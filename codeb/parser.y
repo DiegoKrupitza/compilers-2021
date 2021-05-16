@@ -22,6 +22,17 @@ extern int yylex();
 extern void burm_reduce(NODEPTR_TYPE, int);
 extern void burm_label(NODEPTR_TYPE);
 
+char* lastIfLabelName = "if_label_";
+int lastId = 0;
+
+char* prepareIfString(int inc)
+{
+    lastId = lastId + inc;
+    char *ifName = calloc(strlen(lastIfLabelName) + 25 + lastId, sizeof(char));
+    sprintf(ifName, "%s%d", lastIfLabelName, lastId);
+    return ifName;
+}
+
 %}
 
 /*%define parse.error verbose
@@ -61,6 +72,7 @@ extern void burm_label(NODEPTR_TYPE);
 
 @traversal @postorder genMeth
 @traversal @postorder burm
+@traversal @postorder endLabel
 
 %%
 
@@ -348,7 +360,12 @@ Stat                    :   RETURN Expr
                             @i @Stats.in@ = @Stat.in@ ;
                             @i @Stat.out@ = @Stat.in@ ;
 
-                            @i @Stat.tree@ = NULL; /*TODO change later */
+                            
+                            @i @Stat.tree@ = createNode(OP_IF, createIfLabelLeaf(prepareIfString(1)), @Expr.tree@);
+                            @reg @Stat.tree@->regStor = getFirstRegister(); @Expr.tree@->regStor = @Stat.tree@->regStor;
+                            
+                            @burm writeIfEndLabel(prepareIfString(0));
+
                         @}
                         |   IF Expr THEN Stats ELSE Stats END
                         @{
@@ -393,7 +410,7 @@ Stat                    :   RETURN Expr
                             @i @Expr.ids@ = @Stat.in@ ;
                             @i @Stat.out@ = @Stat.in@ ;
 
-                            @i @Stat.tree@ = NULL; /*TODO change later */
+                            @i @Stat.tree@ = NULL; /*TODO change later check if this is really ok! */
                         @}
                         ;
 

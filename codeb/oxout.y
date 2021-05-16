@@ -25,6 +25,17 @@ extern int yylex();
 extern void burm_reduce(NODEPTR_TYPE, int);
 extern void burm_label(NODEPTR_TYPE);
 
+char* lastIfLabelName = "if_label_";
+int lastId = 0;
+
+char* prepareIfString(int inc)
+{
+    lastId = lastId + inc;
+    char *ifName = calloc(strlen(lastIfLabelName) + 25 + lastId, sizeof(char));
+    sprintf(ifName, "%s%d", lastIfLabelName, lastId);
+    return ifName;
+}
+
 %}
 
 /*%define parse.error verbose
@@ -55,6 +66,7 @@ extern void burm_label(NODEPTR_TYPE);
 
  
        
+
 
 
 
@@ -433,8 +445,7 @@ yyyAdjustINRC(yyyRCIL+273,yyyRCIL+282);}}
                         {if(yyyYok){
 yyyRSU(37,5,3,8);
 yyyGenIntNode();
- (((yyyP8)yyySTsn)->tree) = NULL; /*TODO change later */
-                        yyyAdjustINRC(yyyRCIL+282,yyyRCIL+294);}}
+yyyAdjustINRC(yyyRCIL+282,yyyRCIL+294);}}
                         |   IF Expr THEN Stats ELSE Stats END
                         {if(yyyYok){
 yyyRSU(38,7,3,8);
@@ -461,7 +472,7 @@ yyyAdjustINRC(yyyRCIL+333,yyyRCIL+342);}}
                         {if(yyyYok){
 yyyRSU(42,1,3,8);
 yyyGenIntNode();
- (((yyyP8)yyySTsn)->tree) = NULL; /*TODO change later */
+ (((yyyP8)yyySTsn)->tree) = NULL; /*TODO change later check if this is really ok! */
                         yyyAdjustINRC(yyyRCIL+342,yyyRCIL+351);}}
                         ;
 
@@ -709,7 +720,7 @@ yyyR,1,1, yyyR,3,0, yyyR,1,1, yyyR,4,1, 0,0,1, 0,2,1,
 3,0,1, 5,0,1, yyyR,1,1, 0,0,1, 1,0,1, yyyR,1,1, 
 0,0,1, yyyR,1,1, 0,0,1, 1,0,1, yyyR,1,1, 0,0,1, 
 yyyR,1,1, 2,0,1, 0,0,1, yyyR,1,1, 0,0,1, 2,0,1, 
-yyyR,1,1, yyyR,1,1, yyyR,2,1, 1,0,1, yyyR,1,1, yyyR,2,0, 
+yyyR,1,1, yyyR,1,1, yyyR,2,1, 1,0,1, yyyR,1,1, yyyR,2,1, 
 1,0,1, 3,0,1, yyyR,1,1, yyyR,2,0, 1,0,1, 3,0,1, 
 5,0,1, yyyR,1,1, yyyR,2,0, 1,0,1, 3,0,1, yyyR,1,1, 
 yyyR,2,2, 3,0,1, 5,0,1, yyyR,1,1, yyyR,2,2, 2,0,1, 
@@ -788,28 +799,28 @@ long yyyIEL[] = {
 206,206,206,208,212,212,214,216,
 216,218,218,218,220,220,220,222,
 222,222,224,226,226,230,230,230,
-230,232,238,238,238,238,238,238,
-238,246,246,246,246,246,246,246,
-246,246,252,252,252,252,252,252,
-252,260,260,260,264,266,266,266,
-268,274,274,274,276,276,276,278,
-282,282,282,282,282,284,284,284,
-286,290,290,290,292,292,294,298,
-298,298,300,300,302,306,306,306,
-308,308,310,314,314,314,316,316,
-318,322,322,322,324,324,326,330,
-330,330,332,332,334,334,334,334,
-334,336,336,336,338,340,340,340,
-342,346,346,346,348,348,350,352,
-352,352,354,358,358,358,360,360,
-362,364,364,364,366,370,370,370,
-372,372,374,376,376,376,378,380,
-380,380,382,382,382,384,384,384,
-384,384,384,384,386,386,388,388,
-390,390,390,390,390,390,394,394,
-394,394,394,394,394,396,396,396,
-400,400,400,400,402,402,402,406,
-406,406,406,
+230,232,238,238,238,238,240,240,
+240,248,248,248,248,248,248,248,
+248,248,254,254,254,254,254,254,
+254,262,262,262,266,268,268,268,
+270,276,276,276,278,278,278,280,
+284,284,284,284,284,286,286,286,
+288,292,292,292,294,294,296,300,
+300,300,302,302,304,308,308,308,
+310,310,312,316,316,316,318,318,
+320,324,324,324,326,326,328,332,
+332,332,334,334,336,336,336,336,
+336,338,338,338,340,342,342,342,
+344,348,348,348,350,350,352,354,
+354,354,356,360,360,360,362,362,
+364,366,366,366,368,372,372,372,
+374,374,376,378,378,378,380,382,
+382,382,384,384,384,386,386,386,
+386,386,386,386,388,388,390,390,
+392,392,392,392,392,392,396,396,
+396,396,396,396,396,398,398,398,
+402,402,402,402,404,404,404,408,
+408,408,408,
 };
 
 yyyFT yyyEntL[] = {
@@ -827,18 +838,18 @@ yyyFT yyyEntL[] = {
 0,1,4,0,0,4,0,4,0,4,6,0,1,0,2,0,
 0,1,1,0,0,1,1,0,2,0,0,1,1,0,0,1,
 0,1,3,0,0,1,0,1,1,0,1,0,3,0,0,1,
-0,1,0,1,2,0,0,2,0,1,4,0,2,0,0,1,
-6,0,4,0,2,0,0,1,4,0,2,0,0,1,0,2,
-4,0,6,0,0,1,0,2,0,1,0,2,0,1,0,2,
-3,0,0,2,0,2,0,1,1,0,1,0,0,1,2,0,
-1,0,0,1,0,1,2,0,1,0,0,1,0,1,2,0,
-1,0,0,1,0,1,3,0,1,0,0,1,0,1,3,0,
-1,0,0,1,0,1,3,0,1,0,0,1,0,1,1,0,
-0,1,2,0,0,1,3,0,2,0,0,1,0,1,2,0,
-0,1,3,0,2,0,0,1,0,1,2,0,0,1,3,0,
-2,0,0,1,0,1,2,0,0,1,2,0,0,1,0,1,
-0,1,0,1,1,0,5,0,1,0,1,0,2,0,1,0,
-1,0,2,0,1,0,
+0,1,0,1,2,0,0,2,0,1,4,0,2,0,0,2,
+0,1,6,0,4,0,2,0,0,1,4,0,2,0,0,1,
+0,2,4,0,6,0,0,1,0,2,0,1,0,2,0,1,
+0,2,3,0,0,2,0,2,0,1,1,0,1,0,0,1,
+2,0,1,0,0,1,0,1,2,0,1,0,0,1,0,1,
+2,0,1,0,0,1,0,1,3,0,1,0,0,1,0,1,
+3,0,1,0,0,1,0,1,3,0,1,0,0,1,0,1,
+1,0,0,1,2,0,0,1,3,0,2,0,0,1,0,1,
+2,0,0,1,3,0,2,0,0,1,0,1,2,0,0,1,
+3,0,2,0,0,1,0,1,2,0,0,1,2,0,0,1,
+0,1,0,1,0,1,1,0,5,0,1,0,1,0,2,0,
+1,0,1,0,2,0,1,0,
 };
 
 #define yyyPermitUserAlloc  0 
@@ -1779,6 +1790,10 @@ case 37:  /***yacc rule 37***/
     case 1:
  (((yyyP8)(((char *)yyyRSTopN)+yyyGNSz))->out) = (((yyyP8)(((char *)yyyRefN)+yyyGNSz))->in) ;
 
+                            
+                                break;
+    case 2:
+ (((yyyP8)(((char *)yyyRSTopN)+yyyGNSz))->tree) = createNode(OP_IF, createIfLabelLeaf(prepareIfString(1)), (((yyyP9)(((char *)((yyyRefN->cL)[1]))+yyyGNSz))->tree));
                                 break;
     }
   break;
@@ -2550,7 +2565,7 @@ yyyAfterTravStack = yyyTravStack + yyyTravStackMaxSize;
 yyyTravStack++; 
 
 
-for (yyyi=0; yyyi<5; yyyi++) {
+for (yyyi=0; yyyi<6; yyyi++) {
 yyyTST = yyyTravStack; 
 yyyTST->node = yyyStack->node;
 yyyTST->isReady = 0;
@@ -2657,6 +2672,15 @@ yyyRL = 0;
 				break;
 					}
 		break;
+		case 5:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
 			}
 
 break;
@@ -2699,6 +2723,15 @@ yyyRL = 0;
 					}
 		break;
 		case 4:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
+		case 5:
 			switch(yyyPass)	{
 				case 0:
 yyyRL = 0;
@@ -2757,6 +2790,15 @@ yyyRL = 0;
 				break;
 					}
 		break;
+		case 5:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
 			}
 
 break;
@@ -2799,6 +2841,15 @@ yyyRL = 0;
 					}
 		break;
 		case 4:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
+		case 5:
 			switch(yyyPass)	{
 				case 0:
 yyyRL = 0;
@@ -2857,6 +2908,15 @@ yyyRL = 0;
 				break;
 					}
 		break;
+		case 5:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
 			}
 
 break;
@@ -2899,6 +2959,15 @@ yyyRL = 0;
 					}
 		break;
 		case 4:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
+		case 5:
 			switch(yyyPass)	{
 				case 0:
 yyyRL = 0;
@@ -2957,6 +3026,15 @@ yyyRL = 0;
 				break;
 					}
 		break;
+		case 5:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
 			}
 
 break;
@@ -2999,6 +3077,15 @@ yyyRL = 0;
 					}
 		break;
 		case 4:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
+		case 5:
 			switch(yyyPass)	{
 				case 0:
 yyyRL = 0;
@@ -3057,6 +3144,15 @@ yyyRL = 0;
 				break;
 					}
 		break;
+		case 5:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
 			}
 
 break;
@@ -3099,6 +3195,15 @@ yyyRL = 0;
 					}
 		break;
 		case 4:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
+		case 5:
 			switch(yyyPass)	{
 				case 0:
 yyyRL = 0;
@@ -3157,6 +3262,15 @@ yyyRL = 0;
 				break;
 					}
 		break;
+		case 5:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
 			}
 
 break;
@@ -3199,6 +3313,15 @@ yyyRL = 0;
 					}
 		break;
 		case 4:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
+		case 5:
 			switch(yyyPass)	{
 				case 0:
 yyyRL = 0;
@@ -3257,6 +3380,15 @@ yyyRL = 0;
 				break;
 					}
 		break;
+		case 5:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
 			}
 
 break;
@@ -3299,6 +3431,15 @@ yyyRL = 0;
 					}
 		break;
 		case 4:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
+		case 5:
 			switch(yyyPass)	{
 				case 0:
 yyyRL = 0;
@@ -3357,6 +3498,15 @@ yyyRL = 0;
 				break;
 					}
 		break;
+		case 5:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
 			}
 
 break;
@@ -3399,6 +3549,15 @@ yyyRL = 0;
 					}
 		break;
 		case 4:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
+		case 5:
 			switch(yyyPass)	{
 				case 0:
 yyyRL = 0;
@@ -3457,6 +3616,15 @@ yyyRL = 0;
 				break;
 					}
 		break;
+		case 5:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
 			}
 
 break;
@@ -3499,6 +3667,15 @@ yyyRL = 0;
 					}
 		break;
 		case 4:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
+		case 5:
 			switch(yyyPass)	{
 				case 0:
 yyyRL = 0;
@@ -3557,6 +3734,15 @@ yyyRL = 0;
 				break;
 					}
 		break;
+		case 5:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
 			}
 
 break;
@@ -3599,6 +3785,15 @@ yyyRL = 0;
 					}
 		break;
 		case 4:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
+		case 5:
 			switch(yyyPass)	{
 				case 0:
 yyyRL = 0;
@@ -3659,6 +3854,15 @@ yyyRL = 0;
 				break;
 					}
 		break;
+		case 5:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
 			}
 
 break;
@@ -3711,6 +3915,15 @@ yyyRL = 0;
 				break;
 					}
 		break;
+		case 5:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
 			}
 
 break;
@@ -3753,6 +3966,15 @@ yyyRL = 0;
 					}
 		break;
 		case 4:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
+		case 5:
 			switch(yyyPass)	{
 				case 0:
 yyyRL = 0;
@@ -3818,6 +4040,15 @@ if (yyyCond(1) != yyyPass) { generateMethodeLabel((((yyyP7)(((char *)yyyTSTn)+yy
 				break;
 					}
 		break;
+		case 5:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
 			}
 
 break;
@@ -3875,6 +4106,15 @@ if (yyyCond(1) != yyyPass) { generateMethodeLabel((((yyyP7)(((char *)yyyTSTn)+yy
 				break;
 					}
 		break;
+		case 5:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
 			}
 
 break;
@@ -3917,6 +4157,15 @@ yyyRL = 0;
 					}
 		break;
 		case 4:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
+		case 5:
 			switch(yyyPass)	{
 				case 0:
 yyyRL = 0;
@@ -3977,6 +4226,15 @@ yyyRL = 0;
 				break;
 					}
 		break;
+		case 5:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
 			}
 
 break;
@@ -4019,6 +4277,15 @@ yyyRL = 0;
 					}
 		break;
 		case 4:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
+		case 5:
 			switch(yyyPass)	{
 				case 0:
 yyyRL = 0;
@@ -4077,6 +4344,15 @@ yyyRL = 0;
 				break;
 					}
 		break;
+		case 5:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
 			}
 
 break;
@@ -4119,6 +4395,15 @@ yyyRL = 0;
 					}
 		break;
 		case 4:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
+		case 5:
 			switch(yyyPass)	{
 				case 0:
 yyyRL = 0;
@@ -4177,6 +4462,15 @@ yyyRL = 0;
 				break;
 					}
 		break;
+		case 5:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
 			}
 
 break;
@@ -4227,6 +4521,15 @@ yyyRL = 0;
 				break;
 					}
 		break;
+		case 5:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
 			}
 
 break;
@@ -4269,6 +4572,15 @@ yyyRL = 0;
 					}
 		break;
 		case 4:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
+		case 5:
 			switch(yyyPass)	{
 				case 0:
 yyyRL = 0;
@@ -4337,6 +4649,15 @@ if (yyyCond(1) != yyyPass) { if((((yyyP8)(((char *)((yyyTSTn->cL)[0]))+yyyGNSz))
 				break;
 					}
 		break;
+		case 5:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
 			}
 
 break;
@@ -4379,6 +4700,15 @@ yyyRL = 0;
 					}
 		break;
 		case 4:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
+		case 5:
 			switch(yyyPass)	{
 				case 0:
 yyyRL = 0;
@@ -4440,6 +4770,15 @@ yyyRL = 0;
 				break;
 					}
 		break;
+		case 5:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
 			}
 
 break;
@@ -4457,9 +4796,13 @@ yyyRL = 0;
 		case 1:
 			switch(yyyPass)	{
 				case 0:
-yyyRL = 0;
+yyyRL = 0;yyySetCond(0)
+
 				case 1:
 
+if (yyyCond(0) != yyyPass) { (((yyyP8)(((char *)yyyTSTn)+yyyGNSz))->tree)->regStor = getFirstRegister(); (((yyyP9)(((char *)((yyyTSTn->cL)[1]))+yyyGNSz))->tree)->regStor = (((yyyP8)(((char *)yyyTSTn)+yyyGNSz))->tree)->regStor;
+                            
+                            }
 				break;
 					}
 		break;
@@ -4482,6 +4825,18 @@ yyyRL = 0;
 					}
 		break;
 		case 4:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+if (yyyCond(0) != yyyPass) { writeIfEndLabel(prepareIfString(0));
+
+                        }
+				break;
+					}
+		break;
+		case 5:
 			switch(yyyPass)	{
 				case 0:
 yyyRL = 0;
@@ -4540,6 +4895,15 @@ yyyRL = 0;
 				break;
 					}
 		break;
+		case 5:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
 			}
 
 break;
@@ -4582,6 +4946,15 @@ yyyRL = 0;
 					}
 		break;
 		case 4:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
+		case 5:
 			switch(yyyPass)	{
 				case 0:
 yyyRL = 0;
@@ -4636,6 +5009,15 @@ yyyRL = 0;
 					}
 		break;
 		case 4:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
+		case 5:
 			switch(yyyPass)	{
 				case 0:
 yyyRL = 0;
@@ -4699,6 +5081,15 @@ yyyRL = 0;
 				break;
 					}
 		break;
+		case 5:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
 			}
 
 break;
@@ -4741,6 +5132,15 @@ yyyRL = 0;
 					}
 		break;
 		case 4:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
+		case 5:
 			switch(yyyPass)	{
 				case 0:
 yyyRL = 0;
@@ -4802,6 +5202,15 @@ yyyRL = 0;
 				break;
 					}
 		break;
+		case 5:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
 			}
 
 break;
@@ -4847,6 +5256,15 @@ yyyRL = 0;
 					}
 		break;
 		case 4:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
+		case 5:
 			switch(yyyPass)	{
 				case 0:
 yyyRL = 0;
@@ -4908,6 +5326,15 @@ yyyRL = 0;
 				break;
 					}
 		break;
+		case 5:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
 			}
 
 break;
@@ -4953,6 +5380,15 @@ yyyRL = 0;
 					}
 		break;
 		case 4:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
+		case 5:
 			switch(yyyPass)	{
 				case 0:
 yyyRL = 0;
@@ -5014,6 +5450,15 @@ yyyRL = 0;
 				break;
 					}
 		break;
+		case 5:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
 			}
 
 break;
@@ -5059,6 +5504,15 @@ yyyRL = 0;
 					}
 		break;
 		case 4:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
+		case 5:
 			switch(yyyPass)	{
 				case 0:
 yyyRL = 0;
@@ -5120,6 +5574,15 @@ yyyRL = 0;
 				break;
 					}
 		break;
+		case 5:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
 			}
 
 break;
@@ -5164,6 +5627,15 @@ yyyRL = 0;
 					}
 		break;
 		case 4:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
+		case 5:
 			switch(yyyPass)	{
 				case 0:
 yyyRL = 0;
@@ -5225,6 +5697,15 @@ yyyRL = 0;
 				break;
 					}
 		break;
+		case 5:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
 			}
 
 break;
@@ -5270,6 +5751,15 @@ yyyRL = 0;
 					}
 		break;
 		case 4:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
+		case 5:
 			switch(yyyPass)	{
 				case 0:
 yyyRL = 0;
@@ -5331,6 +5821,15 @@ yyyRL = 0;
 				break;
 					}
 		break;
+		case 5:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
 			}
 
 break;
@@ -5373,6 +5872,15 @@ yyyRL = 0;
 					}
 		break;
 		case 4:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
+		case 5:
 			switch(yyyPass)	{
 				case 0:
 yyyRL = 0;
@@ -5434,6 +5942,15 @@ yyyRL = 0;
 				break;
 					}
 		break;
+		case 5:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
 			}
 
 break;
@@ -5476,6 +5993,15 @@ yyyRL = 0;
 					}
 		break;
 		case 4:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
+		case 5:
 			switch(yyyPass)	{
 				case 0:
 yyyRL = 0;
@@ -5537,6 +6063,15 @@ yyyRL = 0;
 				break;
 					}
 		break;
+		case 5:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
 			}
 
 break;
@@ -5579,6 +6114,15 @@ yyyRL = 0;
 					}
 		break;
 		case 4:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
+		case 5:
 			switch(yyyPass)	{
 				case 0:
 yyyRL = 0;
@@ -5637,6 +6181,15 @@ yyyRL = 0;
 				break;
 					}
 		break;
+		case 5:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
 			}
 
 break;
@@ -5679,6 +6232,15 @@ yyyRL = 0;
 					}
 		break;
 		case 4:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
+		case 5:
 			switch(yyyPass)	{
 				case 0:
 yyyRL = 0;
@@ -5737,6 +6299,15 @@ yyyRL = 0;
 				break;
 					}
 		break;
+		case 5:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
 			}
 
 break;
@@ -5781,6 +6352,15 @@ yyyRL = 0;
 					}
 		break;
 		case 4:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
+		case 5:
 			switch(yyyPass)	{
 				case 0:
 yyyRL = 0;
@@ -5842,6 +6422,15 @@ yyyRL = 0;
 				break;
 					}
 		break;
+		case 5:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
 			}
 
 break;
@@ -5887,6 +6476,15 @@ yyyRL = 0;
 					}
 		break;
 		case 4:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
+		case 5:
 			switch(yyyPass)	{
 				case 0:
 yyyRL = 0;
@@ -5948,6 +6546,15 @@ yyyRL = 0;
 				break;
 					}
 		break;
+		case 5:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
 			}
 
 break;
@@ -5990,6 +6597,15 @@ yyyRL = 0;
 					}
 		break;
 		case 4:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
+		case 5:
 			switch(yyyPass)	{
 				case 0:
 yyyRL = 0;
@@ -6048,6 +6664,15 @@ yyyRL = 0;
 				break;
 					}
 		break;
+		case 5:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
 			}
 
 break;
@@ -6098,6 +6723,15 @@ yyyRL = 0;
 				break;
 					}
 		break;
+		case 5:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
 			}
 
 break;
@@ -6140,6 +6774,15 @@ yyyRL = 0;
 					}
 		break;
 		case 4:
+			switch(yyyPass)	{
+				case 0:
+yyyRL = 0;
+				case 1:
+
+				break;
+					}
+		break;
+		case 5:
 			switch(yyyPass)	{
 				case 0:
 yyyRL = 0;
@@ -6743,7 +7386,7 @@ char *yyyStringTab[] = {
 0,0,0,0,0,
 0,0,0,0,0,
 0,0,0,0,0,
-0,0,0,0,0,
+"endLabel",0,0,0,0,
 0,0,0,0,0,
 0,0,0,0,0,
 "':'",0,"currentClassName",0,0,
@@ -6754,9 +7397,9 @@ char *yyyStringTab[] = {
 0,0,0,"gen",0,
 0,0,0,0,0,
 0,0,0,0,0,
+0,0,"writeIfEndLabel",0,0,
 0,0,0,0,0,
-0,0,0,0,0,
-0,"createThisLeaf","createNULLLeaf",0,0,
+0,"createThisLeaf","createNULLLeaf",0,"createIfLabelLeaf",
 0,"createNumericalLeaf",0,0,0,
 0,0,0,0,"createComplexIdentifierLeaf",
 0,0,0,0,0,
@@ -6872,7 +7515,7 @@ char *yyyStringTab[] = {
 0,0,0,0,0,
 0,0,0,0,0,
 "NOT",0,0,0,0,
-0,0,0,0,0,
+"prepareIfString",0,0,0,0,
 0,0,0,0,0,
 0,0,0,0,0,
 0,0,0,0,0,
