@@ -2661,7 +2661,7 @@ RET(Class1.nestedVariables(0, -5, 6) == 7 && Class1.nestedVariables(0, 25, 13) =
 	
 	Class1.nestedControl(0, 3, 4) == 1 && Class1.nestedControl(0, -1000, 1000) == 1 &&
 	Class1.nestedControl(0, 1000, -1000) == 1 && Class1.nestedControl(0, 1000, 1002) == 0);
-/usr/ftp/pub/ubvl/test/codeb/test: line 34: 15149 Segmentation fault      ./a.out
+/usr/ftp/pub/ubvl/test/codeb/test: line 34:  4258 Segmentation fault      ./a.out
 [Error] Erzeugter Code verhaelt sich bezueglich Signalerzeugung anders als erwartet.
 Rueckgabewert = 139
 
@@ -3142,8 +3142,8 @@ Class1_gcd:
 	ret
 
 Übersetze und linke das Testprogramm:
-testcodebout14363.s: Assembler messages:
-testcodebout14363.s:47: Error: symbol `if_label_2_end' is already defined
+testcodebout3487.s: Assembler messages:
+testcodebout3487.s:47: Error: symbol `if_label_2_end' is already defined
 [Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-18.0:
 interface Interface1:
@@ -3206,7 +3206,7 @@ extern struct vft {
 RET(Class1.fib(0, 0) == 1 && Class1.fib(0, 1) == 1 && Class1.fib(0, 2) == 2 &&
 	Class1.fib(0, 3) == 3 && Class1.fib(0, 4) == 5 && Class1.fib(0, 5) == 8 &&
 	Class1.fib(0, 6) == 13 && Class1.fib(0, 20) == 10946 && Class1.fib(0, 40) == 165580141);
-/usr/ftp/pub/ubvl/test/codeb/test: line 34: 15210 Segmentation fault      ./a.out
+/usr/ftp/pub/ubvl/test/codeb/test: line 34:  4319 Segmentation fault      ./a.out
 [Error] Erzeugter Code verhaelt sich bezueglich Signalerzeugung anders als erwartet.
 Rueckgabewert = 139
 
@@ -3233,7 +3233,7 @@ class Class1 implements Interface1:
 		return new Class1;
 	end;
 end;
-/usr/ftp/pub/ubvl/test/codeb/test: line 34: 15213 Segmentation fault      $PROGRAM < $i > $RESFILE
+/usr/ftp/pub/ubvl/test/codeb/test: line 34:  4322 Segmentation fault      $PROGRAM < $i > $RESFILE
 Übersetzung: [Errot] Status=139. Erwartet: 0
 
 Ausgabe:
@@ -3244,13 +3244,13 @@ In file included from /usr/ftp/pub/ubvl/test/codeb/testmain.c:13:0:
 /home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:21:24: warning: comparison of distinct pointer types lacks a cast
   Class1.construct(obj) == reg15 && heapptr - reg15 == 2 && constructed->vftc == &Class1);
                         ^~
-/tmp/ccTz2nmp.o: In function `call':
+/tmp/cctxOBiY.o: In function `call':
 /home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:13: undefined reference to `Class1'
 /home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:20: undefined reference to `Class1'
 /home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:20: undefined reference to `Class1'
 /home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:20: undefined reference to `Class1'
 /home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:21: undefined reference to `Class1'
-/tmp/ccTz2nmp.o:/home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:21: more undefined references to `Class1' follow
+/tmp/cctxOBiY.o:/home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:21: more undefined references to `Class1' follow
 collect2: error: ld returned 1 exit status
 [Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-20.0:

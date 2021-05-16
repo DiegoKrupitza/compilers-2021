@@ -58,7 +58,7 @@ typedef tree_t *NODEPTR_TYPE;
 tree_t *createNode(operators_t op, tree_t *left, tree_t *right);
 tree_t *createNumericalLeaf(long value);
 
-tree_t *createIfLabelLeaf(char* name);
+tree_t *createIfLabelLeaf(char *name);
 
 tree_t *createLocalVarIdentifierLeaf(char *name, int offset);
 tree_t *createClassVarIdentifierLead(char *name, int offset);
