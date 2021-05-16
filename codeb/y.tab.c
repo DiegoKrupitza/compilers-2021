@@ -6025,7 +6025,7 @@ if ( (1)) yyySetCond(1)
 				case 1:
 
 if (yyyCond(0) != yyyPass) { }
-if (yyyCond(1) != yyyPass) { print2D((((yyyP8)(((char *)((yyyTSTn->cL)[0]))+yyyGNSz))->tree));
+if (yyyCond(1) != yyyPass) { /* print2D(@Stat.tree@); */
                             }
 				break;
 					}
@@ -8413,7 +8413,7 @@ char *yyyStringTab[] = {
 0,0,0,0,0,
 0,0,0,0,0,
 0,0,0,0,0,
-0,0,0,"print2D",0,
+0,0,0,0,0,
 0,0,0,0,0,
 0,0,0,0,0,
 0,0,"NULL","reduce",0,

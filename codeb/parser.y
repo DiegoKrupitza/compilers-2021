@@ -325,7 +325,7 @@ Stats                   :   Stat ';' Stats
                             @i @Stat.in@ = @Stats.0.in@ ;
                             @i @Stats.1.in@ = @Stat.out@ ;
                             @i @Stats.0.out@ = @Stats.1.out@;
-                            @visCheck @revorder(1) print2D(@Stat.tree@);
+                            @visCheck @revorder(1) /* print2D(@Stat.tree@); */
                             @burm @revorder(1) if(@Stat.tree@ != NULL) { burm_label(@Stat.tree@); burm_reduce(@Stat.tree@, 1); } 
                         @}
                         |

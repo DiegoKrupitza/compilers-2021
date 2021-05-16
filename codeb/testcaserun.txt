@@ -1,6 +1,6 @@
 Teste "make clean"
 rm -f codea codegen.c *.o oxout.* lex.yy.c y.tab.* y.output parser
-codeb: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 2.6.32, BuildID[sha1]=006588706c43bd4943946e35b459f5038b7ffc1c, not stripped
+codeb: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 2.6.32, BuildID[sha1]=c09571db00524a32c04156b78dffd6f96c5c4fd8, not stripped
 codeb is object or executable
 Teste "make"
 ox parser.y scanner.l
@@ -26,6 +26,12 @@ end;
 Übersetzung: Status korrekt
 
 Ausgabe:
+=======================================
+
+RET
+
+          PARAM: x
+=======================================
 
 .globl c
 c:   
@@ -37,15 +43,11 @@ c_f:
 	ret
 
 Übersetze und linke das Testprogramm:
-
-Rufe folgendes Codefragment auf:
-struct objectc { struct vft *vftc; };
-extern struct vft { long (*f)(struct objectc *, long); } c;
-RET(c.f(0,6) == 6 && c.f(0,-3)==-3);
-
-Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
-und das Ergebnis des Ausdrucks ist korrekt.
-
+testcodebout18199.s: Assembler messages:
+testcodebout18199.s:1: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:5: Error: no such instruction: `x'
+testcodebout18199.s:6: Error: junk at end of line, first unrecognized character is `='
+[Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-0.0:
 interface i: f(int):int end;
 class c implements i:
@@ -55,6 +57,16 @@ end;
 Übersetzung: Status korrekt
 
 Ausgabe:
+=======================================
+
+RET
+
+                    3 
+
+          +
+
+                    PARAM: x
+=======================================
 
 .globl c
 c:   
@@ -67,15 +79,13 @@ c_f:
 	ret
 
 Übersetze und linke das Testprogramm:
-
-Rufe folgendes Codefragment auf:
-struct objectc { struct vft *vftc; };
-extern struct vft { long (*f)(struct objectc *, long); } c;
-RET(c.f(0,6) == 9 && c.f(0,-3)==0);
-
-Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
-und das Ergebnis des Ausdrucks ist korrekt.
-
+testcodebout18199.s: Assembler messages:
+testcodebout18199.s:1: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:5: Error: junk at end of line, first unrecognized character is `3'
+testcodebout18199.s:7: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:9: Error: no such instruction: `x'
+testcodebout18199.s:10: Error: junk at end of line, first unrecognized character is `='
+[Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-1.0:
 interface i: f(int):int end;
 class c implements i:
@@ -85,6 +95,16 @@ end;
 Übersetzung: Status korrekt
 
 Ausgabe:
+=======================================
+
+RET
+
+                    3 
+
+          -
+
+                    PARAM: x
+=======================================
 
 .globl c
 c:   
@@ -97,15 +117,13 @@ c_f:
 	ret
 
 Übersetze und linke das Testprogramm:
-
-Rufe folgendes Codefragment auf:
-struct objectc { struct vft *vftc; };
-extern struct vft { long (*f)(struct objectc *, long); } c;
-RET(c.f(0,6) == 3 && c.f(0,-3)==-6);
-
-Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
-und das Ergebnis des Ausdrucks ist korrekt.
-
+testcodebout18199.s: Assembler messages:
+testcodebout18199.s:1: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:5: Error: junk at end of line, first unrecognized character is `3'
+testcodebout18199.s:7: Error: junk at end of line, first unrecognized character is `-'
+testcodebout18199.s:9: Error: no such instruction: `x'
+testcodebout18199.s:10: Error: junk at end of line, first unrecognized character is `='
+[Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-10.0:
 interface i: 
     f(int,int):int 
@@ -122,6 +140,24 @@ end;
 Übersetzung: Status korrekt
 
 Ausgabe:
+=======================================
+
+RET
+
+                              60 
+
+                    +
+
+                              CVAR: giveMe
+
+          +
+
+                              PARAM: x
+
+                    *
+
+                              CVAR: kingD
+=======================================
 
 .globl c
 c:   
@@ -138,20 +174,17 @@ c_f:
 	ret
 
 Übersetze und linke das Testprogramm:
-
-Rufe folgendes Codefragment auf:
-struct objectc { struct vft *vftc; long kingD; long giveMe; };
-extern struct vft { long (*f)(struct objectc *, long, long); } c;
-
-struct objectc *myObj = (struct objectc *)malloc(sizeof(struct objectc));
-myObj->kingD= 69;
-myObj->giveMe = 2;
-
-RET(c.f(myObj,3,10) == 269);
-
-Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
-und das Ergebnis des Ausdrucks ist korrekt.
-
+testcodebout18199.s: Assembler messages:
+testcodebout18199.s:1: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:5: Error: junk at end of line, first unrecognized character is `6'
+testcodebout18199.s:7: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:9: Error: no such instruction: `giveme'
+testcodebout18199.s:11: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:13: Error: no such instruction: `x'
+testcodebout18199.s:15: Error: junk at end of line, first unrecognized character is `*'
+testcodebout18199.s:17: Error: no such instruction: `kingd'
+testcodebout18199.s:18: Error: junk at end of line, first unrecognized character is `='
+[Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-11.0:
 interface i: 
     f(int):int 
@@ -177,6 +210,46 @@ end;
 Übersetzung: Status korrekt
 
 Ausgabe:
+=======================================
+
+RET
+
+                    3 
+
+          <
+
+                    PARAM: x
+=======================================
+=======================================
+
+RET
+
+                    PARAM: x
+
+          <
+
+                    3 
+=======================================
+=======================================
+
+RET
+
+                    PARAM: x
+
+          <
+
+                    PARAM: y
+=======================================
+=======================================
+
+RET
+
+                    PARAM: y
+
+          <
+
+                    PARAM: x
+=======================================
 
 .globl c
 c:   
@@ -218,20 +291,33 @@ c_j:
 	ret
 
 Übersetze und linke das Testprogramm:
-
-Rufe folgendes Codefragment auf:
-struct objectc { struct vft *vftc; };
-extern struct vft { 
-    long (*f)(struct objectc *, long); 
-    long (*g)(struct objectc *, long); 
-    long (*h)(struct objectc *, long, long);
-    long (*j)(struct objectc *, long, long);
-} c;
-RET(c.f(0,3) == 0);
-
-Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
-und das Ergebnis des Ausdrucks ist korrekt.
-
+testcodebout18199.s: Assembler messages:
+testcodebout18199.s:1: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:5: Error: junk at end of line, first unrecognized character is `3'
+testcodebout18199.s:7: Error: junk at end of line, first unrecognized character is `<'
+testcodebout18199.s:9: Error: no such instruction: `x'
+testcodebout18199.s:10: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:11: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:15: Error: symbol `PARAM' is already defined
+testcodebout18199.s:15: Error: no such instruction: `x'
+testcodebout18199.s:17: Error: junk at end of line, first unrecognized character is `<'
+testcodebout18199.s:19: Error: junk at end of line, first unrecognized character is `3'
+testcodebout18199.s:20: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:21: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:25: Error: symbol `PARAM' is already defined
+testcodebout18199.s:25: Error: no such instruction: `x'
+testcodebout18199.s:27: Error: junk at end of line, first unrecognized character is `<'
+testcodebout18199.s:29: Error: symbol `PARAM' is already defined
+testcodebout18199.s:29: Error: no such instruction: `y'
+testcodebout18199.s:30: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:31: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:35: Error: symbol `PARAM' is already defined
+testcodebout18199.s:35: Error: no such instruction: `y'
+testcodebout18199.s:37: Error: junk at end of line, first unrecognized character is `<'
+testcodebout18199.s:39: Error: symbol `PARAM' is already defined
+testcodebout18199.s:39: Error: no such instruction: `x'
+testcodebout18199.s:40: Error: junk at end of line, first unrecognized character is `='
+[Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-12.0:
 interface i: 
     g(int):int 
@@ -245,6 +331,16 @@ end;
 Übersetzung: Status korrekt
 
 Ausgabe:
+=======================================
+
+RET
+
+                    PARAM: x
+
+          <
+
+                    3 
+=======================================
 
 .globl c
 c:   
@@ -260,17 +356,13 @@ c_g:
 	ret
 
 Übersetze und linke das Testprogramm:
-
-Rufe folgendes Codefragment auf:
-struct objectc { struct vft *vftc; };
-extern struct vft { 
-    long (*g)(struct objectc *, long); 
-} c;
-RET(c.g(0,3) == 0);
-
-Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
-und das Ergebnis des Ausdrucks ist korrekt.
-
+testcodebout18199.s: Assembler messages:
+testcodebout18199.s:1: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:5: Error: no such instruction: `x'
+testcodebout18199.s:7: Error: junk at end of line, first unrecognized character is `<'
+testcodebout18199.s:9: Error: junk at end of line, first unrecognized character is `3'
+testcodebout18199.s:10: Error: junk at end of line, first unrecognized character is `='
+[Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-13.0:
 interface i: 
     f(int):int 
@@ -296,6 +388,46 @@ end;
 Übersetzung: Status korrekt
 
 Ausgabe:
+=======================================
+
+RET
+
+                    3 
+
+          <
+
+                    PARAM: x
+=======================================
+=======================================
+
+RET
+
+                    PARAM: x
+
+          <
+
+                    3 
+=======================================
+=======================================
+
+RET
+
+                    PARAM: x
+
+          <
+
+                    PARAM: y
+=======================================
+=======================================
+
+RET
+
+                    PARAM: y
+
+          <
+
+                    PARAM: x
+=======================================
 
 .globl c
 c:   
@@ -337,20 +469,33 @@ c_j:
 	ret
 
 Übersetze und linke das Testprogramm:
-
-Rufe folgendes Codefragment auf:
-struct objectc { struct vft *vftc; };
-extern struct vft { 
-    long (*f)(struct objectc *, long); 
-    long (*g)(struct objectc *, long); 
-    long (*h)(struct objectc *, long, long);
-    long (*j)(struct objectc *, long, long);
-} c;
-RET(c.h(0,3,3) == 0);
-
-Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
-und das Ergebnis des Ausdrucks ist korrekt.
-
+testcodebout18199.s: Assembler messages:
+testcodebout18199.s:1: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:5: Error: junk at end of line, first unrecognized character is `3'
+testcodebout18199.s:7: Error: junk at end of line, first unrecognized character is `<'
+testcodebout18199.s:9: Error: no such instruction: `x'
+testcodebout18199.s:10: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:11: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:15: Error: symbol `PARAM' is already defined
+testcodebout18199.s:15: Error: no such instruction: `x'
+testcodebout18199.s:17: Error: junk at end of line, first unrecognized character is `<'
+testcodebout18199.s:19: Error: junk at end of line, first unrecognized character is `3'
+testcodebout18199.s:20: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:21: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:25: Error: symbol `PARAM' is already defined
+testcodebout18199.s:25: Error: no such instruction: `x'
+testcodebout18199.s:27: Error: junk at end of line, first unrecognized character is `<'
+testcodebout18199.s:29: Error: symbol `PARAM' is already defined
+testcodebout18199.s:29: Error: no such instruction: `y'
+testcodebout18199.s:30: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:31: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:35: Error: symbol `PARAM' is already defined
+testcodebout18199.s:35: Error: no such instruction: `y'
+testcodebout18199.s:37: Error: junk at end of line, first unrecognized character is `<'
+testcodebout18199.s:39: Error: symbol `PARAM' is already defined
+testcodebout18199.s:39: Error: no such instruction: `x'
+testcodebout18199.s:40: Error: junk at end of line, first unrecognized character is `='
+[Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-14.0:
 interface i: 
     j(int,int):int 
@@ -364,6 +509,16 @@ end;
 Übersetzung: Status korrekt
 
 Ausgabe:
+=======================================
+
+RET
+
+                    PARAM: y
+
+          <
+
+                    PARAM: x
+=======================================
 
 .globl c
 c:   
@@ -380,17 +535,13 @@ c_j:
 	ret
 
 Übersetze und linke das Testprogramm:
-
-Rufe folgendes Codefragment auf:
-struct objectc { struct vft *vftc; };
-extern struct vft {
-    long (*j)(struct objectc *, long, long);
-} c;
-RET(c.j(0,3,3) == 0);
-
-Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
-und das Ergebnis des Ausdrucks ist korrekt.
-
+testcodebout18199.s: Assembler messages:
+testcodebout18199.s:1: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:5: Error: no such instruction: `y'
+testcodebout18199.s:7: Error: junk at end of line, first unrecognized character is `<'
+testcodebout18199.s:9: Error: no such instruction: `x'
+testcodebout18199.s:10: Error: junk at end of line, first unrecognized character is `='
+[Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-15.0:
 interface i: 
     f(int):int 
@@ -416,6 +567,46 @@ end;
 Übersetzung: Status korrekt
 
 Ausgabe:
+=======================================
+
+RET
+
+                    3 
+
+          <
+
+                    PARAM: x
+=======================================
+=======================================
+
+RET
+
+                    PARAM: x
+
+          <
+
+                    3 
+=======================================
+=======================================
+
+RET
+
+                    PARAM: x
+
+          <
+
+                    PARAM: y
+=======================================
+=======================================
+
+RET
+
+                    PARAM: y
+
+          <
+
+                    PARAM: x
+=======================================
 
 .globl c
 c:   
@@ -457,20 +648,33 @@ c_j:
 	ret
 
 Übersetze und linke das Testprogramm:
-
-Rufe folgendes Codefragment auf:
-struct objectc { struct vft *vftc; };
-extern struct vft { 
-    long (*f)(struct objectc *, long); 
-    long (*g)(struct objectc *, long); 
-    long (*h)(struct objectc *, long, long);
-    long (*j)(struct objectc *, long, long);
-} c;
-RET(c.f(0,2) == -1 && c.g(0,4) == -1  && c.h(0,3,2) == -1  && c.j(0,2,3) == -1  && c.j(0,3,10) == -1);
-
-Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
-und das Ergebnis des Ausdrucks ist korrekt.
-
+testcodebout18199.s: Assembler messages:
+testcodebout18199.s:1: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:5: Error: junk at end of line, first unrecognized character is `3'
+testcodebout18199.s:7: Error: junk at end of line, first unrecognized character is `<'
+testcodebout18199.s:9: Error: no such instruction: `x'
+testcodebout18199.s:10: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:11: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:15: Error: symbol `PARAM' is already defined
+testcodebout18199.s:15: Error: no such instruction: `x'
+testcodebout18199.s:17: Error: junk at end of line, first unrecognized character is `<'
+testcodebout18199.s:19: Error: junk at end of line, first unrecognized character is `3'
+testcodebout18199.s:20: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:21: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:25: Error: symbol `PARAM' is already defined
+testcodebout18199.s:25: Error: no such instruction: `x'
+testcodebout18199.s:27: Error: junk at end of line, first unrecognized character is `<'
+testcodebout18199.s:29: Error: symbol `PARAM' is already defined
+testcodebout18199.s:29: Error: no such instruction: `y'
+testcodebout18199.s:30: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:31: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:35: Error: symbol `PARAM' is already defined
+testcodebout18199.s:35: Error: no such instruction: `y'
+testcodebout18199.s:37: Error: junk at end of line, first unrecognized character is `<'
+testcodebout18199.s:39: Error: symbol `PARAM' is already defined
+testcodebout18199.s:39: Error: no such instruction: `x'
+testcodebout18199.s:40: Error: junk at end of line, first unrecognized character is `='
+[Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-2.0:
 interface i: f(int):int end;
 class c implements i:
@@ -480,6 +684,16 @@ end;
 Übersetzung: Status korrekt
 
 Ausgabe:
+=======================================
+
+RET
+
+                    3 
+
+          *
+
+                    PARAM: x
+=======================================
 
 .globl c
 c:   
@@ -492,15 +706,13 @@ c_f:
 	ret
 
 Übersetze und linke das Testprogramm:
-
-Rufe folgendes Codefragment auf:
-struct objectc { struct vft *vftc; };
-extern struct vft { long (*f)(struct objectc *, long); } c;
-RET(c.f(0,2) == 6 && c.f(0,-1)==-3);
-
-Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
-und das Ergebnis des Ausdrucks ist korrekt.
-
+testcodebout18199.s: Assembler messages:
+testcodebout18199.s:1: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:5: Error: junk at end of line, first unrecognized character is `3'
+testcodebout18199.s:7: Error: junk at end of line, first unrecognized character is `*'
+testcodebout18199.s:9: Error: no such instruction: `x'
+testcodebout18199.s:10: Error: junk at end of line, first unrecognized character is `='
+[Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-3.0:
 interface i: f(int):int end;
 class c implements i:
@@ -510,6 +722,16 @@ end;
 Übersetzung: Status korrekt
 
 Ausgabe:
+=======================================
+
+RET
+
+                    3 
+
+          <
+
+                    PARAM: x
+=======================================
 
 .globl c
 c:   
@@ -525,15 +747,13 @@ c_f:
 	ret
 
 Übersetze und linke das Testprogramm:
-
-Rufe folgendes Codefragment auf:
-struct objectc { struct vft *vftc; };
-extern struct vft { long (*f)(struct objectc *, long); } c;
-RET(c.f(0,2) == -1 && c.f(0,-1)==-1 && c.f(0,100) == 0);
-
-Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
-und das Ergebnis des Ausdrucks ist korrekt.
-
+testcodebout18199.s: Assembler messages:
+testcodebout18199.s:1: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:5: Error: junk at end of line, first unrecognized character is `3'
+testcodebout18199.s:7: Error: junk at end of line, first unrecognized character is `<'
+testcodebout18199.s:9: Error: no such instruction: `x'
+testcodebout18199.s:10: Error: junk at end of line, first unrecognized character is `='
+[Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-4.0:
 interface i: f(int):int end;
 class c implements i:
@@ -543,6 +763,16 @@ end;
 Übersetzung: Status korrekt
 
 Ausgabe:
+=======================================
+
+RET
+
+                    PARAM: x
+
+          <
+
+                    3 
+=======================================
 
 .globl c
 c:   
@@ -558,15 +788,13 @@ c_f:
 	ret
 
 Übersetze und linke das Testprogramm:
-
-Rufe folgendes Codefragment auf:
-struct objectc { struct vft *vftc; };
-extern struct vft { long (*f)(struct objectc *, long); } c;
-RET(c.f(0,2) == 0 && c.f(0,-1)== 0 && c.f(0,100) == -1);
-
-Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
-und das Ergebnis des Ausdrucks ist korrekt.
-
+testcodebout18199.s: Assembler messages:
+testcodebout18199.s:1: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:5: Error: no such instruction: `x'
+testcodebout18199.s:7: Error: junk at end of line, first unrecognized character is `<'
+testcodebout18199.s:9: Error: junk at end of line, first unrecognized character is `3'
+testcodebout18199.s:10: Error: junk at end of line, first unrecognized character is `='
+[Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-5.0:
 interface i: 
     f(int,int):int 
@@ -580,6 +808,16 @@ end;
 Übersetzung: Status korrekt
 
 Ausgabe:
+=======================================
+
+RET
+
+                    PARAM: y
+
+          +
+
+                    PARAM: x
+=======================================
 
 .globl c
 c:   
@@ -593,15 +831,13 @@ c_f:
 	ret
 
 Übersetze und linke das Testprogramm:
-
-Rufe folgendes Codefragment auf:
-struct objectc { struct vft *vftc; };
-extern struct vft { long (*f)(struct objectc *, long, long); } c;
-RET(c.f(0,2,1) == 3 && c.f(0,-1,1)== 0 && c.f(0,100,23) == 123);
-
-Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
-und das Ergebnis des Ausdrucks ist korrekt.
-
+testcodebout18199.s: Assembler messages:
+testcodebout18199.s:1: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:5: Error: no such instruction: `y'
+testcodebout18199.s:7: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:9: Error: no such instruction: `x'
+testcodebout18199.s:10: Error: junk at end of line, first unrecognized character is `='
+[Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-6.0:
 interface i: 
     f(int,int):int 
@@ -615,6 +851,24 @@ end;
 Übersetzung: Status korrekt
 
 Ausgabe:
+=======================================
+
+RET
+
+                    PARAM: y
+
+          =
+
+                              1 
+
+                    +
+
+                                        PARAM: y
+
+                              +
+
+                                        PARAM: x
+=======================================
 
 .globl c
 c:   
@@ -634,15 +888,17 @@ c_f:
 	ret
 
 Übersetze und linke das Testprogramm:
-
-Rufe folgendes Codefragment auf:
-struct objectc { struct vft *vftc; };
-extern struct vft { long (*f)(struct objectc *, long, long); } c;
-RET(c.f(0,-1,10) == -1 && c.f(0,123,1)== 0 && c.f(0,-1,23) == -1);
-
-Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
-und das Ergebnis des Ausdrucks ist korrekt.
-
+testcodebout18199.s: Assembler messages:
+testcodebout18199.s:1: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:5: Error: no such instruction: `y'
+testcodebout18199.s:7: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:9: Error: junk at end of line, first unrecognized character is `1'
+testcodebout18199.s:11: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:13: Error: no such instruction: `y'
+testcodebout18199.s:15: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:17: Error: no such instruction: `x'
+testcodebout18199.s:18: Error: junk at end of line, first unrecognized character is `='
+[Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-7.0:
 interface i: 
     f(int,int):int 
@@ -656,6 +912,20 @@ end;
 Übersetzung: Status korrekt
 
 Ausgabe:
+=======================================
+
+RET
+
+                    PARAM: y
+
+          +
+
+                              2 
+
+                    *
+
+                              PARAM: x
+=======================================
 
 .globl c
 c:   
@@ -670,15 +940,15 @@ c_f:
 	ret
 
 Übersetze und linke das Testprogramm:
-
-Rufe folgendes Codefragment auf:
-struct objectc { struct vft *vftc; };
-extern struct vft { long (*f)(struct objectc *, long, long); } c;
-RET(c.f(0,-1,10) == 8 && c.f(0,123,1)== 247 && c.f(0,23,-1) == 45);
-
-Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
-und das Ergebnis des Ausdrucks ist korrekt.
-
+testcodebout18199.s: Assembler messages:
+testcodebout18199.s:1: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:5: Error: no such instruction: `y'
+testcodebout18199.s:7: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:9: Error: junk at end of line, first unrecognized character is `2'
+testcodebout18199.s:11: Error: junk at end of line, first unrecognized character is `*'
+testcodebout18199.s:13: Error: no such instruction: `x'
+testcodebout18199.s:14: Error: junk at end of line, first unrecognized character is `='
+[Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-8.0:
 interface i: 
     f(int,int):int 
@@ -692,6 +962,14 @@ end;
 Übersetzung: Status korrekt
 
 Ausgabe:
+=======================================
+
+RET
+
+          NOT
+
+                    PARAM: x
+=======================================
 
 .globl c
 c:   
@@ -704,15 +982,12 @@ c_f:
 	ret
 
 Übersetze und linke das Testprogramm:
-
-Rufe folgendes Codefragment auf:
-struct objectc { struct vft *vftc; };
-extern struct vft { long (*f)(struct objectc *, long, long); } c;
-RET(c.f(0,0,10) != 0);
-
-Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
-und das Ergebnis des Ausdrucks ist korrekt.
-
+testcodebout18199.s: Assembler messages:
+testcodebout18199.s:1: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:5: Error: number of operands mismatch for `not'
+testcodebout18199.s:7: Error: no such instruction: `x'
+testcodebout18199.s:8: Error: junk at end of line, first unrecognized character is `='
+[Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-9.0:
 interface i: 
     f(int,int):int 
@@ -727,6 +1002,12 @@ end;
 Übersetzung: Status korrekt
 
 Ausgabe:
+=======================================
+
+RET
+
+          CVAR: kingD
+=======================================
 
 .globl c
 c:   
@@ -738,19 +1019,11 @@ c_f:
 	ret
 
 Übersetze und linke das Testprogramm:
-
-Rufe folgendes Codefragment auf:
-struct objectc { struct vft *vftc; long kingD; };
-extern struct vft { long (*f)(struct objectc *, long, long); } c;
-
-struct objectc *myObj = (struct objectc *)malloc(sizeof(struct objectc));
-myObj->kingD = 69;
-
-RET(c.f(myObj,0,10) == 69);
-
-Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
-und das Ergebnis des Ausdrucks ist korrekt.
-
+testcodebout18199.s: Assembler messages:
+testcodebout18199.s:1: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:5: Error: no such instruction: `kingd'
+testcodebout18199.s:6: Error: junk at end of line, first unrecognized character is `='
+[Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-11.0:
 interface Interface1:
 	binaryOr(int, int): int
@@ -799,6 +1072,98 @@ end;
 Übersetzung: Status korrekt
 
 Ausgabe:
+=======================================
+
+RET
+
+          NOT
+
+                              NOT
+
+                                        PARAM: b
+
+                    AND
+
+                              NOT
+
+                                        PARAM: a
+=======================================
+=======================================
+
+RET
+
+                              PARAM: b
+
+                    *
+
+                              PARAM: b
+
+          +
+
+                              PARAM: a
+
+                    *
+
+                              PARAM: a
+=======================================
+=======================================
+
+RET
+
+          NOT
+
+                              NOT
+
+                                                  PARAM: b
+
+                                        =
+
+                                                  PARAM: a
+
+                    AND
+
+                              NOT
+
+                                                  PARAM: b
+
+                                        <
+
+                                                  PARAM: a
+=======================================
+=======================================
+
+RET
+
+                              PARAM: a21
+
+                    *
+
+                              PARAM: a12
+
+          -
+
+                              PARAM: a22
+
+                    *
+
+                              PARAM: a11
+=======================================
+=======================================
+
+RET
+
+                    64 
+
+          +
+
+                    THIS
+=======================================
+=======================================
+
+RET
+
+          NULLOP
+=======================================
 
 .globl Class1
 Class1:   
@@ -896,52 +1261,66 @@ In file included from /usr/ftp/pub/ubvl/test/codeb/testmain.c:13:0:
   Class2.getNull(64) == 0 && Class2.getNull(-3)==0 && Class2.getNull(5)==0);
                                                                      ^
 /home/ublu21/u11808206/test/codeb/thenotoriousj-11.call:41:69: note: expected ‘struct objectc *’ but argument is of type ‘int’
-
-Rufe folgendes Codefragment auf:
-struct objectc { 
-	struct vft *vftc;
-};
-
-struct objectClass1 { 
-	struct vft *vftc;
-	long v1;
-	long v2;
-	struct objectc* var3;
-};
-
-struct objectClass2 { 
-	struct vft *vftc;
-};
-
-extern struct vft { 
-	long (*binaryOr)(struct objectc *, long, long);
-	long (*squareSum)(struct objectc *, long, long);
-	long (*lessOrEqual)(struct objectc *, long, long);
-	long (*determinant)(struct objectc *, long, long, long, long);
-	long (*offsetThisBy64)(struct objectc *);
-	struct objectc* (*getNull)(struct objectc *);
-} Class1, Class2;
-
-long a = 0xABCD;
-long b = 0xDEAD;
-long res = a*a+b*b;
-
-RET(Class1.binaryOr(0, 0xABCD, 0xDEAD) == (0xABCD | 0xDEAD) && Class1.binaryOr(0, 0xABCD, 0xABCD) == 0xABCD && 
-	Class1.binaryOr(0, 0, 0) == 0 && Class1.binaryOr(0, 4, 2) == 6 &&
-	Class1.squareSum(0, 3, 4) == 25 && Class1.squareSum(0, a, a) == 2*a*a &&
-	Class1.squareSum(0, 0, 0) == 0 && Class1.squareSum(0, a, b) == res &&
-
-	Class1.lessOrEqual(0, 3, 4) == -1 && Class1.lessOrEqual(0, 4, 5) == -1 &&
-	Class1.lessOrEqual(0, 0, 0) == -1 && Class1.lessOrEqual(0, 2, -2) == 0 &&
-
-	Class1.determinant(0, 3, 4, 5, 6) == -2 && Class1.determinant(0, 12, 5, 1, 8) == 91 &&
-	Class1.determinant(0, 0, 0, 0, 0) == 0 && Class1.determinant(0, 2, -2, 6, -5) == 2 &&
-
-	Class2.offsetThisBy64(0) == 64 && Class2.offsetThisBy64(-3)==61 && Class2.offsetThisBy64(5)==69 &&
-	Class2.getNull(64) == 0 && Class2.getNull(-3)==0 && Class2.getNull(5)==0);
-Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
-und das Ergebnis des Ausdrucks ist korrekt.
-
+testcodebout18199.s: Assembler messages:
+testcodebout18199.s:1: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:5: Error: number of operands mismatch for `not'
+testcodebout18199.s:7: Error: number of operands mismatch for `not'
+testcodebout18199.s:9: Error: no such instruction: `b'
+testcodebout18199.s:11: Error: number of operands mismatch for `and'
+testcodebout18199.s:13: Error: number of operands mismatch for `not'
+testcodebout18199.s:15: Error: no such instruction: `a'
+testcodebout18199.s:16: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:17: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:21: Error: symbol `PARAM' is already defined
+testcodebout18199.s:21: Error: no such instruction: `b'
+testcodebout18199.s:23: Error: junk at end of line, first unrecognized character is `*'
+testcodebout18199.s:25: Error: symbol `PARAM' is already defined
+testcodebout18199.s:25: Error: no such instruction: `b'
+testcodebout18199.s:27: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:29: Error: symbol `PARAM' is already defined
+testcodebout18199.s:29: Error: no such instruction: `a'
+testcodebout18199.s:31: Error: junk at end of line, first unrecognized character is `*'
+testcodebout18199.s:33: Error: symbol `PARAM' is already defined
+testcodebout18199.s:33: Error: no such instruction: `a'
+testcodebout18199.s:34: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:35: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:39: Error: number of operands mismatch for `not'
+testcodebout18199.s:41: Error: number of operands mismatch for `not'
+testcodebout18199.s:43: Error: symbol `PARAM' is already defined
+testcodebout18199.s:43: Error: no such instruction: `b'
+testcodebout18199.s:45: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:47: Error: symbol `PARAM' is already defined
+testcodebout18199.s:47: Error: no such instruction: `a'
+testcodebout18199.s:49: Error: number of operands mismatch for `and'
+testcodebout18199.s:51: Error: number of operands mismatch for `not'
+testcodebout18199.s:53: Error: symbol `PARAM' is already defined
+testcodebout18199.s:53: Error: no such instruction: `b'
+testcodebout18199.s:55: Error: junk at end of line, first unrecognized character is `<'
+testcodebout18199.s:57: Error: symbol `PARAM' is already defined
+testcodebout18199.s:57: Error: no such instruction: `a'
+testcodebout18199.s:58: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:59: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:63: Error: symbol `PARAM' is already defined
+testcodebout18199.s:63: Error: no such instruction: `a21'
+testcodebout18199.s:65: Error: junk at end of line, first unrecognized character is `*'
+testcodebout18199.s:67: Error: symbol `PARAM' is already defined
+testcodebout18199.s:67: Error: no such instruction: `a12'
+testcodebout18199.s:69: Error: junk at end of line, first unrecognized character is `-'
+testcodebout18199.s:71: Error: symbol `PARAM' is already defined
+testcodebout18199.s:71: Error: no such instruction: `a22'
+testcodebout18199.s:73: Error: junk at end of line, first unrecognized character is `*'
+testcodebout18199.s:75: Error: symbol `PARAM' is already defined
+testcodebout18199.s:75: Error: no such instruction: `a11'
+testcodebout18199.s:76: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:77: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:81: Error: junk at end of line, first unrecognized character is `6'
+testcodebout18199.s:83: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:85: Error: no such instruction: `this'
+testcodebout18199.s:86: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:87: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:91: Error: no such instruction: `nullop'
+testcodebout18199.s:92: Error: junk at end of line, first unrecognized character is `='
+[Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-12.0:
 interface Interface1:
 	add2(int, int) : int
@@ -967,6 +1346,126 @@ end;
 Übersetzung: Status korrekt
 
 Ausgabe:
+=======================================
+
+RET
+
+                    PARAM: in2
+
+          +
+
+                    PARAM: in1
+=======================================
+=======================================
+
+RET
+
+                                                                      PARAM: b
+
+                                                            +
+
+                                                                      PARAM: a
+
+                                                  +
+
+                                                                      PARAM: b
+
+                                                            *
+
+                                                                      PARAM: a
+
+                                        +
+
+                                                  PARAM: b
+
+                              +
+
+                                        PARAM: a
+
+                    +
+
+                              PARAM: b
+
+          +
+
+                                        PARAM: b
+
+                              +
+
+                                        PARAM: a
+
+                    +
+
+                                        PARAM: b
+
+                              *
+
+                                        PARAM: a
+=======================================
+=======================================
+
+RET
+
+                                                            PARAM: b
+
+                                                  -
+
+                                                            PARAM: a
+
+                                        +
+
+                                                  PARAM: b
+
+                              +
+
+                                        PARAM: a
+
+                    +
+
+                              PARAM: b
+
+          +
+
+                                        PARAM: b
+
+                              -
+
+                                        PARAM: a
+
+                    *
+
+                                        PARAM: b
+
+                              -
+
+                                        PARAM: a
+=======================================
+=======================================
+
+RET
+
+                                                            PARAM: c
+
+                                                  +
+
+                                                            PARAM: b
+
+                                        +
+
+                                                  PARAM: a
+
+                              +
+
+                                        PARAM: c
+
+                    +
+
+                              PARAM: b
+
+          +
+
+                    PARAM: a
+=======================================
 
 .globl Class1
 Class1:   
@@ -1038,51 +1537,94 @@ Class1_calc3:
 	ret
 
 Übersetze und linke das Testprogramm:
-
-Rufe folgendes Codefragment auf:
-struct objectc { 
-	struct vft *vftc;
-};
-
-struct objectClass1 { 
-	struct vft *vftc;
-	long v1;
-	long v2;
-	struct objectc* var3;
-};
-
-struct objectClass2 { 
-	struct vft *vftc;
-};
-
-extern struct vft { 
-	long (*add2)(struct objectc *, long, long);
-	long (*calc1)(struct objectc *, long, long);
-	long (*calc2)(struct objectc *, long, long);
-	long (*calc3)(struct objectc *, long, long, long);
-} Class1;
-
-long a = 0xABCD;
-long b = 0xDEAD;
-long res2 = ((a * b) + (a + b)) + b + a + b + ((a * b) + (a + b));
-b = a;
-long res1 = ((a * b) + (a + b)) + b + a + b + ((a * b) + (a + b));
-b = 0xDEAD;
-
-RET(Class1.add2(0, 0xABCD, 0xDEAD) == (0xABCD + 0xDEAD) && Class1.add2(0, 0xABCD, 0xABCD) == 2*0xABCD && 
-	Class1.add2(0, 0, 0) == 0 && Class1.add2(0, 4, 2) == 6 &&
-	
-	Class1.calc1(0, 3, 4) == 49 && Class1.calc1(0, a, a) == res1 &&
-	Class1.calc1(0, 0, 0) == 0 && Class1.calc1(0, a, b) == res2 &&
-
-	Class1.calc2(0, 3, 4) == 11 && Class1.calc2(0, 4, 5) == 14 &&
-	Class1.calc2(0, 0, 0) == 0 && Class1.calc2(0, 2, -2) == 18 &&
-
-	Class1.calc3(0, 3, 4, 5) == 24 && Class1.calc3(0, 12, 5, 1) == 36 &&
-	Class1.calc3(0, 0, 0, 0) == 0 && Class1.calc3(0, 2, -2, 6) == 12);
-Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
-und das Ergebnis des Ausdrucks ist korrekt.
-
+testcodebout18199.s: Assembler messages:
+testcodebout18199.s:1: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:5: Error: no such instruction: `in2'
+testcodebout18199.s:7: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:9: Error: no such instruction: `in1'
+testcodebout18199.s:10: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:11: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:15: Error: symbol `PARAM' is already defined
+testcodebout18199.s:15: Error: no such instruction: `b'
+testcodebout18199.s:17: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:19: Error: symbol `PARAM' is already defined
+testcodebout18199.s:19: Error: no such instruction: `a'
+testcodebout18199.s:21: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:23: Error: symbol `PARAM' is already defined
+testcodebout18199.s:23: Error: no such instruction: `b'
+testcodebout18199.s:25: Error: junk at end of line, first unrecognized character is `*'
+testcodebout18199.s:27: Error: symbol `PARAM' is already defined
+testcodebout18199.s:27: Error: no such instruction: `a'
+testcodebout18199.s:29: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:31: Error: symbol `PARAM' is already defined
+testcodebout18199.s:31: Error: no such instruction: `b'
+testcodebout18199.s:33: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:35: Error: symbol `PARAM' is already defined
+testcodebout18199.s:35: Error: no such instruction: `a'
+testcodebout18199.s:37: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:39: Error: symbol `PARAM' is already defined
+testcodebout18199.s:39: Error: no such instruction: `b'
+testcodebout18199.s:41: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:43: Error: symbol `PARAM' is already defined
+testcodebout18199.s:43: Error: no such instruction: `b'
+testcodebout18199.s:45: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:47: Error: symbol `PARAM' is already defined
+testcodebout18199.s:47: Error: no such instruction: `a'
+testcodebout18199.s:49: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:51: Error: symbol `PARAM' is already defined
+testcodebout18199.s:51: Error: no such instruction: `b'
+testcodebout18199.s:53: Error: junk at end of line, first unrecognized character is `*'
+testcodebout18199.s:55: Error: symbol `PARAM' is already defined
+testcodebout18199.s:55: Error: no such instruction: `a'
+testcodebout18199.s:56: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:57: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:61: Error: symbol `PARAM' is already defined
+testcodebout18199.s:61: Error: no such instruction: `b'
+testcodebout18199.s:63: Error: junk at end of line, first unrecognized character is `-'
+testcodebout18199.s:65: Error: symbol `PARAM' is already defined
+testcodebout18199.s:65: Error: no such instruction: `a'
+testcodebout18199.s:67: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:69: Error: symbol `PARAM' is already defined
+testcodebout18199.s:69: Error: no such instruction: `b'
+testcodebout18199.s:71: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:73: Error: symbol `PARAM' is already defined
+testcodebout18199.s:73: Error: no such instruction: `a'
+testcodebout18199.s:75: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:77: Error: symbol `PARAM' is already defined
+testcodebout18199.s:77: Error: no such instruction: `b'
+testcodebout18199.s:79: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:81: Error: symbol `PARAM' is already defined
+testcodebout18199.s:81: Error: no such instruction: `b'
+testcodebout18199.s:83: Error: junk at end of line, first unrecognized character is `-'
+testcodebout18199.s:85: Error: symbol `PARAM' is already defined
+testcodebout18199.s:85: Error: no such instruction: `a'
+testcodebout18199.s:87: Error: junk at end of line, first unrecognized character is `*'
+testcodebout18199.s:89: Error: symbol `PARAM' is already defined
+testcodebout18199.s:89: Error: no such instruction: `b'
+testcodebout18199.s:91: Error: junk at end of line, first unrecognized character is `-'
+testcodebout18199.s:93: Error: symbol `PARAM' is already defined
+testcodebout18199.s:93: Error: no such instruction: `a'
+testcodebout18199.s:94: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:95: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:99: Error: symbol `PARAM' is already defined
+testcodebout18199.s:99: Error: no such instruction: `c'
+testcodebout18199.s:101: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:103: Error: symbol `PARAM' is already defined
+testcodebout18199.s:103: Error: no such instruction: `b'
+testcodebout18199.s:105: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:107: Error: symbol `PARAM' is already defined
+testcodebout18199.s:107: Error: no such instruction: `a'
+testcodebout18199.s:109: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:111: Error: symbol `PARAM' is already defined
+testcodebout18199.s:111: Error: no such instruction: `c'
+testcodebout18199.s:113: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:115: Error: symbol `PARAM' is already defined
+testcodebout18199.s:115: Error: no such instruction: `b'
+testcodebout18199.s:117: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:119: Error: symbol `PARAM' is already defined
+testcodebout18199.s:119: Error: no such instruction: `a'
+testcodebout18199.s:120: Error: junk at end of line, first unrecognized character is `='
+[Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-13.0:
 interface Interface1:
 	nestedVariables(int, int) : int 
@@ -1125,10 +1667,194 @@ class Class1 implements Interface1 :
 	end;
 end;
 
-/usr/ftp/pub/ubvl/test/codeb/test: line 34: 18077 Segmentation fault      $PROGRAM < $i > $RESFILE
-Übersetzung: [Errot] Status=139. Erwartet: 0
+Übersetzung: Status korrekt
 
 Ausgabe:
+=======================================
+
+                    PARAM: b
+
+          +
+
+                    PARAM: a
+
+:=
+
+          ID: sum (Offset: 1) 
+=======================================
+=======================================
+=======================================
+=======================================
+
+                    PARAM: a
+
+          +
+
+                    ID: sum (Offset: 1) 
+
+:=
+
+          ID: nested1 (Offset: 2) 
+=======================================
+=======================================
+
+                    ID: nested1 (Offset: 2) 
+
+          +
+
+                    ID: sum (Offset: 1) 
+
+:=
+
+          ID: sum (Offset: 1) 
+=======================================
+=======================================
+
+                    PARAM: a
+
+          -
+
+                    ID: sum (Offset: 1) 
+
+:=
+
+          ID: nested2 (Offset: 2) 
+=======================================
+=======================================
+
+                    ID: nested2 (Offset: 2) 
+
+          +
+
+                    ID: sum (Offset: 1) 
+
+:=
+
+          ID: sum (Offset: 1) 
+=======================================
+=======================================
+
+RET
+
+          ID: sum (Offset: 1) 
+=======================================
+=======================================
+
+                    1000 
+
+          -
+
+                    0 
+
+:=
+
+          ID: guess1 (Offset: 1) 
+=======================================
+=======================================
+=======================================
+=======================================
+=======================================
+=======================================
+
+                    1000 
+
+          -
+
+                    0 
+
+:=
+
+          ID: guess2 (Offset: 2) 
+=======================================
+=======================================
+=======================================
+=======================================
+=======================================
+=======================================
+
+RET
+
+          1 
+=======================================
+=======================================
+
+                    1 
+
+          +
+
+                    ID: guess2 (Offset: 2) 
+
+:=
+
+          ID: guess2 (Offset: 2) 
+=======================================
+=======================================
+
+                    1 
+
+          +
+
+                    ID: guess1 (Offset: 1) 
+
+:=
+
+          ID: guess1 (Offset: 1) 
+=======================================
+=======================================
+
+RET
+
+          0 
+=======================================
+
+.globl Class1
+Class1:   
+.quad Class1_nestedVariables
+.quad Class1_nestedControl
+
+
+Class1_nestedVariables:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	addq	%r11, %rax
+	movq	%rax, 8(%rsp)
+	movq	8(%rsp), %rax
+	movq	%rsi, %r11
+	addq	%r11, %rax
+	movq	%rax, 16(%rsp)
+	movq	8(%rsp), %rax
+	movq	16(%rsp), %r11
+	addq	%r11, %rax
+	movq	%rax, 8(%rsp)
+	movq	8(%rsp), %rax
+	movq	%rsi, %r11
+	subq	%r11, %rax
+	movq	%rax, 16(%rsp)
+	movq	8(%rsp), %rax
+	movq	16(%rsp), %r11
+	addq	%r11, %rax
+	movq	%rax, 8(%rsp)
+	movq	8(%rsp), %rax
+	ret
+Class1_nestedControl:
+	movq	$1000, %r11
+	movq	$0, %rax
+	subq	%r11, %rax
+	movq	%rax, 8(%rsp)
+	movq	$1000, %r11
+	movq	$0, %rax
+	subq	%r11, %rax
+	movq	%rax, 16(%rsp)
+	movq	$1, %rax
+	ret
+	movq	16(%rsp), %rax
+	addq	$1, %rax
+	movq	%rax, 16(%rsp)
+	movq	8(%rsp), %rax
+	addq	$1, %rax
+	movq	%rax, 8(%rsp)
+	movq	$0, %rax
+	ret
 
 Übersetze und linke das Testprogramm:
 In file included from /usr/ftp/pub/ubvl/test/codeb/testmain.c:13:0:
@@ -1139,14 +1865,96 @@ In file included from /usr/ftp/pub/ubvl/test/codeb/testmain.c:13:0:
 /home/ublu21/u11808206/test/codeb/thenotoriousj-13.call:7:31: warning: ‘struct objectc’ declared inside parameter list will not be visible outside of this definition or declaration
   long (*nestedControl)(struct objectc *, long, long);
                                ^~~~~~~
-/tmp/ccvt3WGL.o: In function `call':
-/home/ublu21/u11808206/test/codeb/thenotoriousj-13.call:10: undefined reference to `Class1'
-/home/ublu21/u11808206/test/codeb/thenotoriousj-13.call:10: undefined reference to `Class1'
-/home/ublu21/u11808206/test/codeb/thenotoriousj-13.call:11: undefined reference to `Class1'
-/home/ublu21/u11808206/test/codeb/thenotoriousj-13.call:11: undefined reference to `Class1'
-/home/ublu21/u11808206/test/codeb/thenotoriousj-13.call:13: undefined reference to `Class1'
-/tmp/ccvt3WGL.o:/home/ublu21/u11808206/test/codeb/thenotoriousj-13.call:13: more undefined references to `Class1' follow
-collect2: error: ld returned 1 exit status
+testcodebout18199.s: Assembler messages:
+testcodebout18199.s:1: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:3: Error: no such instruction: `b'
+testcodebout18199.s:5: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:7: Error: no such instruction: `a'
+testcodebout18199.s:9: Error: junk at end of line, first unrecognized character is `:'
+testcodebout18199.s:11: Error: no such instruction: `sum (Offset:1)'
+testcodebout18199.s:12: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:13: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:14: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:15: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:17: Error: no such instruction: `a'
+testcodebout18199.s:19: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:21: Error: no such instruction: `sum (Offset:1)'
+testcodebout18199.s:23: Error: junk at end of line, first unrecognized character is `:'
+testcodebout18199.s:25: Error: no such instruction: `nested1 (Offset:2)'
+testcodebout18199.s:26: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:27: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:29: Error: no such instruction: `nested1 (Offset:2)'
+testcodebout18199.s:31: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:33: Error: no such instruction: `sum (Offset:1)'
+testcodebout18199.s:35: Error: junk at end of line, first unrecognized character is `:'
+testcodebout18199.s:37: Error: no such instruction: `sum (Offset:1)'
+testcodebout18199.s:38: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:39: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:41: Error: no such instruction: `a'
+testcodebout18199.s:43: Error: junk at end of line, first unrecognized character is `-'
+testcodebout18199.s:45: Error: no such instruction: `sum (Offset:1)'
+testcodebout18199.s:47: Error: junk at end of line, first unrecognized character is `:'
+testcodebout18199.s:49: Error: no such instruction: `nested2 (Offset:2)'
+testcodebout18199.s:50: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:51: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:53: Error: no such instruction: `nested2 (Offset:2)'
+testcodebout18199.s:55: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:57: Error: no such instruction: `sum (Offset:1)'
+testcodebout18199.s:59: Error: junk at end of line, first unrecognized character is `:'
+testcodebout18199.s:61: Error: no such instruction: `sum (Offset:1)'
+testcodebout18199.s:62: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:63: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:67: Error: symbol `ID' is already defined
+testcodebout18199.s:67: Error: no such instruction: `sum (Offset:1)'
+testcodebout18199.s:68: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:69: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:71: Error: junk at end of line, first unrecognized character is `1'
+testcodebout18199.s:73: Error: junk at end of line, first unrecognized character is `-'
+testcodebout18199.s:75: Error: junk at end of line, first unrecognized character is `0'
+testcodebout18199.s:77: Error: junk at end of line, first unrecognized character is `:'
+testcodebout18199.s:79: Error: symbol `ID' is already defined
+testcodebout18199.s:79: Error: no such instruction: `guess1 (Offset:1)'
+testcodebout18199.s:80: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:81: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:82: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:83: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:84: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:85: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:87: Error: junk at end of line, first unrecognized character is `1'
+testcodebout18199.s:89: Error: junk at end of line, first unrecognized character is `-'
+testcodebout18199.s:91: Error: junk at end of line, first unrecognized character is `0'
+testcodebout18199.s:93: Error: junk at end of line, first unrecognized character is `:'
+testcodebout18199.s:95: Error: symbol `ID' is already defined
+testcodebout18199.s:95: Error: no such instruction: `guess2 (Offset:2)'
+testcodebout18199.s:96: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:97: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:98: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:99: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:100: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:101: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:105: Error: junk at end of line, first unrecognized character is `1'
+testcodebout18199.s:106: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:107: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:109: Error: junk at end of line, first unrecognized character is `1'
+testcodebout18199.s:111: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:113: Error: symbol `ID' is already defined
+testcodebout18199.s:113: Error: no such instruction: `guess2 (Offset:2)'
+testcodebout18199.s:115: Error: junk at end of line, first unrecognized character is `:'
+testcodebout18199.s:117: Error: symbol `ID' is already defined
+testcodebout18199.s:117: Error: no such instruction: `guess2 (Offset:2)'
+testcodebout18199.s:118: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:119: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:121: Error: junk at end of line, first unrecognized character is `1'
+testcodebout18199.s:123: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:125: Error: symbol `ID' is already defined
+testcodebout18199.s:125: Error: no such instruction: `guess1 (Offset:1)'
+testcodebout18199.s:127: Error: junk at end of line, first unrecognized character is `:'
+testcodebout18199.s:129: Error: symbol `ID' is already defined
+testcodebout18199.s:129: Error: no such instruction: `guess1 (Offset:1)'
+testcodebout18199.s:130: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:131: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:135: Error: junk at end of line, first unrecognized character is `0'
+testcodebout18199.s:136: Error: junk at end of line, first unrecognized character is `='
 [Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-14.0:
 interface Interface1:
@@ -1203,10 +2011,194 @@ class Cacher implements Interface2 :
 	end;
 end;
 
-/usr/ftp/pub/ubvl/test/codeb/test: line 34: 18088 Segmentation fault      $PROGRAM < $i > $RESFILE
-Übersetzung: [Errot] Status=139. Erwartet: 0
+Übersetzung: Status korrekt
 
 Ausgabe:
+=======================================
+
+          0 
+
+:=
+
+          ID: c (Offset: 1) 
+=======================================
+=======================================
+=======================================
+=======================================
+
+                              1 
+
+                    -
+
+                              PARAM: i
+
+          AND
+
+                    PARAM: i
+
+:=
+
+          PARAM: i
+=======================================
+=======================================
+
+                    1 
+
+          +
+
+                    ID: c (Offset: 1) 
+
+:=
+
+          ID: c (Offset: 1) 
+=======================================
+=======================================
+
+RET
+
+          ID: c (Offset: 1) 
+=======================================
+=======================================
+
+          0 
+
+:=
+
+          CVAR: lastN
+=======================================
+=======================================
+
+          0 
+
+:=
+
+          CVAR: lastResult
+=======================================
+=======================================
+
+RET
+
+          0 
+=======================================
+=======================================
+
+                    1 
+
+          -
+
+                    2 
+
+:=
+
+          ID: temp (Offset: 1) 
+=======================================
+=======================================
+=======================================
+=======================================
+
+RET
+
+          CVAR: lastResult
+=======================================
+=======================================
+
+          PARAM: n
+
+:=
+
+          CVAR: lastN
+=======================================
+=======================================
+=======================================
+=======================================
+
+                    PARAM: n
+
+          *
+
+                    ID: temp (Offset: 1) 
+
+:=
+
+          ID: temp (Offset: 1) 
+=======================================
+=======================================
+
+                    1 
+
+          -
+
+                    PARAM: n
+
+:=
+
+          PARAM: n
+=======================================
+=======================================
+
+          ID: temp (Offset: 1) 
+
+:=
+
+          CVAR: lastResult
+=======================================
+=======================================
+
+RET
+
+          ID: temp (Offset: 1) 
+=======================================
+
+.globl Class1
+Class1:   
+.quad Class1_bitcount
+.quad 0 #init
+.quad 0 #factorial
+
+
+
+.globl Cacher
+Cacher:   
+.quad 0 #bitcount
+.quad Cacher_init
+.quad Cacher_factorial
+
+
+Class1_bitcount:
+	movq	$0, 8(%rsp)
+	movq	%rsi, %rax
+	movq	%rsi, %r11
+	subq	$1, %r11
+	and	%r11, %rax
+	movq	%rax, %rsi
+	movq	8(%rsp), %rax
+	addq	$1, %rax
+	movq	%rax, 8(%rsp)
+	movq	8(%rsp), %rax
+	ret
+Cacher_init:
+	movq	$0, 8(%rdi)
+	movq	$0, 16(%rdi)
+	movq	$0, %rax
+	ret
+Cacher_factorial:
+	movq	$1, %r11
+	movq	$2, %rax
+	subq	%r11, %rax
+	movq	%rax, 8(%rsp)
+	movq	16(%rdi), %rax
+	ret
+	movq	%rsi, 8(%rdi)
+	movq	8(%rsp), %rax
+	movq	%rsi, %r11
+	imulq	%r11, %rax
+	movq	%rax, 8(%rsp)
+	movq	%rsi, %rax
+	subq	$1, %rax
+	movq	%rax, %rsi
+	movq	8(%rsp), 16(%rdi)
+	movq	8(%rsp), %rax
+	ret
 
 Übersetze und linke das Testprogramm:
 In file included from /usr/ftp/pub/ubvl/test/codeb/testmain.c:13:0:
@@ -1231,18 +2223,101 @@ In file included from /usr/ftp/pub/ubvl/test/codeb/testmain.c:13:0:
   Cacher.factorial(cacher, 5) == 120 && Cacher.factorial(cacher, 5) == 120);
                                                          ^~~~~~
 /home/ublu21/u11808206/test/codeb/thenotoriousj-14.call:25:57: note: expected ‘struct objectc *’ but argument is of type ‘struct objectClass1 *’
-/tmp/cck4TJLR.o: In function `call':
-/home/ublu21/u11808206/test/codeb/thenotoriousj-14.call:18: undefined reference to `Cacher'
-/home/ublu21/u11808206/test/codeb/thenotoriousj-14.call:20: undefined reference to `Class1'
-/home/ublu21/u11808206/test/codeb/thenotoriousj-14.call:20: undefined reference to `Class1'
-/home/ublu21/u11808206/test/codeb/thenotoriousj-14.call:21: undefined reference to `Class1'
-/home/ublu21/u11808206/test/codeb/thenotoriousj-14.call:21: undefined reference to `Class1'
-/home/ublu21/u11808206/test/codeb/thenotoriousj-14.call:23: undefined reference to `Cacher'
-/home/ublu21/u11808206/test/codeb/thenotoriousj-14.call:24: undefined reference to `Cacher'
-/home/ublu21/u11808206/test/codeb/thenotoriousj-14.call:24: undefined reference to `Cacher'
-/home/ublu21/u11808206/test/codeb/thenotoriousj-14.call:25: undefined reference to `Cacher'
-/home/ublu21/u11808206/test/codeb/thenotoriousj-14.call:25: undefined reference to `Cacher'
-collect2: error: ld returned 1 exit status
+testcodebout18199.s: Assembler messages:
+testcodebout18199.s:1: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:3: Error: junk at end of line, first unrecognized character is `0'
+testcodebout18199.s:5: Error: junk at end of line, first unrecognized character is `:'
+testcodebout18199.s:7: Error: no such instruction: `c (Offset:1)'
+testcodebout18199.s:8: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:9: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:10: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:11: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:13: Error: junk at end of line, first unrecognized character is `1'
+testcodebout18199.s:15: Error: junk at end of line, first unrecognized character is `-'
+testcodebout18199.s:17: Error: no such instruction: `i'
+testcodebout18199.s:19: Error: number of operands mismatch for `and'
+testcodebout18199.s:21: Error: no such instruction: `i'
+testcodebout18199.s:23: Error: junk at end of line, first unrecognized character is `:'
+testcodebout18199.s:25: Error: no such instruction: `i'
+testcodebout18199.s:26: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:27: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:29: Error: junk at end of line, first unrecognized character is `1'
+testcodebout18199.s:31: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:33: Error: no such instruction: `c (Offset:1)'
+testcodebout18199.s:35: Error: junk at end of line, first unrecognized character is `:'
+testcodebout18199.s:37: Error: no such instruction: `c (Offset:1)'
+testcodebout18199.s:38: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:39: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:43: Error: symbol `ID' is already defined
+testcodebout18199.s:43: Error: no such instruction: `c (Offset:1)'
+testcodebout18199.s:44: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:45: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:47: Error: junk at end of line, first unrecognized character is `0'
+testcodebout18199.s:49: Error: junk at end of line, first unrecognized character is `:'
+testcodebout18199.s:51: Error: no such instruction: `lastn'
+testcodebout18199.s:52: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:53: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:55: Error: junk at end of line, first unrecognized character is `0'
+testcodebout18199.s:57: Error: junk at end of line, first unrecognized character is `:'
+testcodebout18199.s:59: Error: no such instruction: `lastresult'
+testcodebout18199.s:60: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:61: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:65: Error: junk at end of line, first unrecognized character is `0'
+testcodebout18199.s:66: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:67: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:69: Error: junk at end of line, first unrecognized character is `1'
+testcodebout18199.s:71: Error: junk at end of line, first unrecognized character is `-'
+testcodebout18199.s:73: Error: junk at end of line, first unrecognized character is `2'
+testcodebout18199.s:75: Error: junk at end of line, first unrecognized character is `:'
+testcodebout18199.s:77: Error: symbol `ID' is already defined
+testcodebout18199.s:77: Error: no such instruction: `temp (Offset:1)'
+testcodebout18199.s:78: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:79: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:80: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:81: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:85: Error: symbol `CVAR' is already defined
+testcodebout18199.s:85: Error: no such instruction: `lastresult'
+testcodebout18199.s:86: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:87: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:89: Error: symbol `PARAM' is already defined
+testcodebout18199.s:89: Error: no such instruction: `n'
+testcodebout18199.s:91: Error: junk at end of line, first unrecognized character is `:'
+testcodebout18199.s:93: Error: symbol `CVAR' is already defined
+testcodebout18199.s:93: Error: no such instruction: `lastn'
+testcodebout18199.s:94: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:95: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:96: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:97: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:99: Error: symbol `PARAM' is already defined
+testcodebout18199.s:99: Error: no such instruction: `n'
+testcodebout18199.s:101: Error: junk at end of line, first unrecognized character is `*'
+testcodebout18199.s:103: Error: symbol `ID' is already defined
+testcodebout18199.s:103: Error: no such instruction: `temp (Offset:1)'
+testcodebout18199.s:105: Error: junk at end of line, first unrecognized character is `:'
+testcodebout18199.s:107: Error: symbol `ID' is already defined
+testcodebout18199.s:107: Error: no such instruction: `temp (Offset:1)'
+testcodebout18199.s:108: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:109: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:111: Error: junk at end of line, first unrecognized character is `1'
+testcodebout18199.s:113: Error: junk at end of line, first unrecognized character is `-'
+testcodebout18199.s:115: Error: symbol `PARAM' is already defined
+testcodebout18199.s:115: Error: no such instruction: `n'
+testcodebout18199.s:117: Error: junk at end of line, first unrecognized character is `:'
+testcodebout18199.s:119: Error: symbol `PARAM' is already defined
+testcodebout18199.s:119: Error: no such instruction: `n'
+testcodebout18199.s:120: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:121: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:123: Error: symbol `ID' is already defined
+testcodebout18199.s:123: Error: no such instruction: `temp (Offset:1)'
+testcodebout18199.s:125: Error: junk at end of line, first unrecognized character is `:'
+testcodebout18199.s:127: Error: symbol `CVAR' is already defined
+testcodebout18199.s:127: Error: no such instruction: `lastresult'
+testcodebout18199.s:128: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:129: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:133: Error: symbol `ID' is already defined
+testcodebout18199.s:133: Error: no such instruction: `temp (Offset:1)'
+testcodebout18199.s:134: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:183: Error: too many memory references for `movq'
 [Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-15.0:
 interface Interface1:
@@ -1261,10 +2336,89 @@ class Class1 implements /* nothing */ :
 		return c5 - a;
 	end;
 end;
-/usr/ftp/pub/ubvl/test/codeb/test: line 34: 18099 Segmentation fault      $PROGRAM < $i > $RESFILE
-Übersetzung: [Errot] Status=139. Erwartet: 0
+Übersetzung: Status korrekt
 
 Ausgabe:
+=======================================
+
+                              PARAM: b
+
+                    *
+
+                              PARAM: b
+
+          +
+
+                              PARAM: a
+
+                    *
+
+                              PARAM: a
+
+:=
+
+          ID: c2 (Offset: 1) 
+=======================================
+=======================================
+
+                    ID: c2 (Offset: 1) 
+
+          *
+
+                    ID: c2 (Offset: 1) 
+
+:=
+
+          ID: c4 (Offset: 2) 
+=======================================
+=======================================
+
+                    1 
+
+          -
+
+                    ID: c4 (Offset: 2) 
+
+:=
+
+          ID: c5 (Offset: 3) 
+=======================================
+=======================================
+
+RET
+
+                    PARAM: a
+
+          -
+
+                    ID: c5 (Offset: 3) 
+=======================================
+
+.globl Class1
+Class1:   
+.quad Class1_calc
+
+
+Class1_calc:
+	movq	%rsi, %rax
+	movq	%rsi, %r11
+	imulq	%r11, %rax
+	movq	%rdx, %r11
+	movq	%rdx, %r10
+	imulq	%r10, %r11
+	addq	%r11, %rax
+	movq	%rax, 8(%rsp)
+	movq	8(%rsp), %rax
+	movq	8(%rsp), %r11
+	imulq	%r11, %rax
+	movq	%rax, 16(%rsp)
+	movq	16(%rsp), %rax
+	subq	$1, %rax
+	movq	%rax, 24(%rsp)
+	movq	24(%rsp), %rax
+	movq	%rsi, %r11
+	subq	%r11, %rax
+	ret
 
 Übersetze und linke das Testprogramm:
 In file included from /usr/ftp/pub/ubvl/test/codeb/testmain.c:13:0:
@@ -1285,13 +2439,39 @@ In file included from /usr/ftp/pub/ubvl/test/codeb/testmain.c:13:0:
   Class1.calc(classobj, 0, 0) == -1 && Class1.calc(classobj, -65, -69) == 80748260);
                                                    ^~~~~~~~
 /home/ublu21/u11808206/test/codeb/thenotoriousj-15.call:19:51: note: expected ‘struct objectc *’ but argument is of type ‘struct objectClass1 *’
-/tmp/ccLf3PcT.o: In function `call':
-/home/ublu21/u11808206/test/codeb/thenotoriousj-15.call:16: undefined reference to `Class1'
-/home/ublu21/u11808206/test/codeb/thenotoriousj-15.call:18: undefined reference to `Class1'
-/home/ublu21/u11808206/test/codeb/thenotoriousj-15.call:18: undefined reference to `Class1'
-/home/ublu21/u11808206/test/codeb/thenotoriousj-15.call:19: undefined reference to `Class1'
-/home/ublu21/u11808206/test/codeb/thenotoriousj-15.call:19: undefined reference to `Class1'
-collect2: error: ld returned 1 exit status
+testcodebout18199.s: Assembler messages:
+testcodebout18199.s:1: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:3: Error: no such instruction: `b'
+testcodebout18199.s:5: Error: junk at end of line, first unrecognized character is `*'
+testcodebout18199.s:7: Error: no such instruction: `b'
+testcodebout18199.s:9: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:11: Error: no such instruction: `a'
+testcodebout18199.s:13: Error: junk at end of line, first unrecognized character is `*'
+testcodebout18199.s:15: Error: no such instruction: `a'
+testcodebout18199.s:17: Error: junk at end of line, first unrecognized character is `:'
+testcodebout18199.s:19: Error: no such instruction: `c2 (Offset:1)'
+testcodebout18199.s:20: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:21: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:23: Error: no such instruction: `c2 (Offset:1)'
+testcodebout18199.s:25: Error: junk at end of line, first unrecognized character is `*'
+testcodebout18199.s:27: Error: no such instruction: `c2 (Offset:1)'
+testcodebout18199.s:29: Error: junk at end of line, first unrecognized character is `:'
+testcodebout18199.s:31: Error: no such instruction: `c4 (Offset:2)'
+testcodebout18199.s:32: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:33: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:35: Error: junk at end of line, first unrecognized character is `1'
+testcodebout18199.s:37: Error: junk at end of line, first unrecognized character is `-'
+testcodebout18199.s:39: Error: no such instruction: `c4 (Offset:2)'
+testcodebout18199.s:41: Error: junk at end of line, first unrecognized character is `:'
+testcodebout18199.s:43: Error: no such instruction: `c5 (Offset:3)'
+testcodebout18199.s:44: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:45: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:49: Error: symbol `PARAM' is already defined
+testcodebout18199.s:49: Error: no such instruction: `a'
+testcodebout18199.s:51: Error: junk at end of line, first unrecognized character is `-'
+testcodebout18199.s:53: Error: symbol `ID' is already defined
+testcodebout18199.s:53: Error: no such instruction: `c5 (Offset:3)'
+testcodebout18199.s:54: Error: junk at end of line, first unrecognized character is `='
 [Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-16.0:
 interface Interface1:
@@ -1320,10 +2500,126 @@ class Class1 implements Interface1 :
 	end;
 end;
 
-/usr/ftp/pub/ubvl/test/codeb/test: line 34: 18110 Segmentation fault      $PROGRAM < $i > $RESFILE
-Übersetzung: [Errot] Status=139. Erwartet: 0
+Übersetzung: Status korrekt
 
 Ausgabe:
+=======================================
+
+          1 
+
+:=
+
+          CVAR: var1
+=======================================
+=======================================
+
+          12 
+
+:=
+
+          CVAR: var2
+=======================================
+=======================================
+
+          123 
+
+:=
+
+          CVAR: var3
+=======================================
+=======================================
+
+                              CVAR: var3
+
+                    +
+
+                              CVAR: var2
+
+          +
+
+                    CVAR: var1
+
+:=
+
+          CVAR: var4
+=======================================
+=======================================
+
+RET
+
+                              CVAR: var3
+
+                    +
+
+                              CVAR: var2
+
+          +
+
+                    CVAR: var1
+=======================================
+=======================================
+
+          CVAR: var1
+
+:=
+
+          ID: sum (Offset: 1) 
+=======================================
+=======================================
+
+                              PARAM: in
+
+                    +
+
+                              CVAR: var2
+
+          +
+
+                    ID: sum (Offset: 1) 
+
+:=
+
+          ID: sum (Offset: 1) 
+=======================================
+=======================================
+
+RET
+
+          ID: sum (Offset: 1) 
+=======================================
+
+.globl Class1
+Class1:   
+.quad Class1_init
+.quad Class1_calc
+
+
+Class1_init:
+	movq	$1, 8(%rdi)
+	movq	$12, 16(%rdi)
+	movq	$123, 24(%rdi)
+	movq	8(%rdi), %rax
+	movq	16(%rdi), %r11
+	movq	24(%rdi), %r10
+	addq	%r10, %r11
+	addq	%r11, %rax
+	movq	%rax, 32(%rdi)
+	movq	8(%rdi), %rax
+	movq	16(%rdi), %r11
+	movq	24(%rdi), %r10
+	addq	%r10, %r11
+	addq	%r11, %rax
+	ret
+Class1_calc:
+	movq	8(%rdi), 8(%rsp)
+	movq	8(%rsp), %rax
+	movq	16(%rdi), %r11
+	movq	%rsi, %r10
+	addq	%r10, %r11
+	addq	%r11, %rax
+	movq	%rax, 8(%rsp)
+	movq	8(%rsp), %rax
+	ret
 
 Übersetze und linke das Testprogramm:
 In file included from /usr/ftp/pub/ubvl/test/codeb/testmain.c:13:0:
@@ -1340,12 +2636,62 @@ In file included from /usr/ftp/pub/ubvl/test/codeb/testmain.c:13:0:
   Class1.calc(classobj, -27) == -14 && Class1.calc(classobj, 255) == 268);
                                                    ^~~~~~~~
 /home/ublu21/u11808206/test/codeb/thenotoriousj-16.call:23:51: note: expected ‘struct objectc *’ but argument is of type ‘struct objectClass1 *’
-/tmp/ccEJADzO.o: In function `call':
-/home/ublu21/u11808206/test/codeb/thenotoriousj-16.call:19: undefined reference to `Class1'
-/home/ublu21/u11808206/test/codeb/thenotoriousj-16.call:21: undefined reference to `Class1'
-/home/ublu21/u11808206/test/codeb/thenotoriousj-16.call:23: undefined reference to `Class1'
-/home/ublu21/u11808206/test/codeb/thenotoriousj-16.call:23: undefined reference to `Class1'
-collect2: error: ld returned 1 exit status
+testcodebout18199.s: Assembler messages:
+testcodebout18199.s:1: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:3: Error: junk at end of line, first unrecognized character is `1'
+testcodebout18199.s:5: Error: junk at end of line, first unrecognized character is `:'
+testcodebout18199.s:7: Error: no such instruction: `var1'
+testcodebout18199.s:8: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:9: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:11: Error: junk at end of line, first unrecognized character is `1'
+testcodebout18199.s:13: Error: junk at end of line, first unrecognized character is `:'
+testcodebout18199.s:15: Error: no such instruction: `var2'
+testcodebout18199.s:16: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:17: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:19: Error: junk at end of line, first unrecognized character is `1'
+testcodebout18199.s:21: Error: junk at end of line, first unrecognized character is `:'
+testcodebout18199.s:23: Error: no such instruction: `var3'
+testcodebout18199.s:24: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:25: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:27: Error: no such instruction: `var3'
+testcodebout18199.s:29: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:31: Error: no such instruction: `var2'
+testcodebout18199.s:33: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:35: Error: no such instruction: `var1'
+testcodebout18199.s:37: Error: junk at end of line, first unrecognized character is `:'
+testcodebout18199.s:39: Error: no such instruction: `var4'
+testcodebout18199.s:40: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:41: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:45: Error: symbol `CVAR' is already defined
+testcodebout18199.s:45: Error: no such instruction: `var3'
+testcodebout18199.s:47: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:49: Error: symbol `CVAR' is already defined
+testcodebout18199.s:49: Error: no such instruction: `var2'
+testcodebout18199.s:51: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:53: Error: symbol `CVAR' is already defined
+testcodebout18199.s:53: Error: no such instruction: `var1'
+testcodebout18199.s:54: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:55: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:57: Error: symbol `CVAR' is already defined
+testcodebout18199.s:57: Error: no such instruction: `var1'
+testcodebout18199.s:59: Error: junk at end of line, first unrecognized character is `:'
+testcodebout18199.s:61: Error: no such instruction: `sum (Offset:1)'
+testcodebout18199.s:62: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:63: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:65: Error: number of operands mismatch for `in'
+testcodebout18199.s:67: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:69: Error: symbol `CVAR' is already defined
+testcodebout18199.s:69: Error: no such instruction: `var2'
+testcodebout18199.s:71: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:73: Error: no such instruction: `sum (Offset:1)'
+testcodebout18199.s:75: Error: junk at end of line, first unrecognized character is `:'
+testcodebout18199.s:77: Error: no such instruction: `sum (Offset:1)'
+testcodebout18199.s:78: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:79: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:83: Error: symbol `ID' is already defined
+testcodebout18199.s:83: Error: no such instruction: `sum (Offset:1)'
+testcodebout18199.s:84: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:109: Error: too many memory references for `movq'
 [Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-17.0:
 interface ICalc:
@@ -1401,20 +2747,248 @@ class Class1 implements ICalc :
 		return a;
 	end;
 end;
-/usr/ftp/pub/ubvl/test/codeb/test: line 34: 18121 Segmentation fault      $PROGRAM < $i > $RESFILE
-Übersetzung: [Errot] Status=139. Erwartet: 0
+Übersetzung: Status korrekt
 
 Ausgabe:
+=======================================
+=======================================
+=======================================
+
+RET
+
+          PARAM: b
+=======================================
+=======================================
+
+RET
+
+          PARAM: a
+=======================================
+=======================================
+
+          0 
+
+:=
+
+          ID: max (Offset: 1) 
+=======================================
+=======================================
+=======================================
+=======================================
+
+          PARAM: b
+
+:=
+
+          ID: max (Offset: 1) 
+=======================================
+=======================================
+
+          PARAM: a
+
+:=
+
+          ID: max (Offset: 1) 
+=======================================
+=======================================
+
+RET
+
+          ID: max (Offset: 1) 
+=======================================
+=======================================
+
+          PARAM: a
+
+:=
+
+          ID: max (Offset: 1) 
+=======================================
+=======================================
+=======================================
+=======================================
+
+          PARAM: b
+
+:=
+
+          ID: max (Offset: 1) 
+=======================================
+=======================================
+
+RET
+
+          ID: max (Offset: 1) 
+=======================================
+=======================================
+=======================================
+=======================================
+
+RET
+
+          PARAM: a
+=======================================
+=======================================
+=======================================
+=======================================
+=======================================
+=======================================
+
+                    PARAM: b
+
+          -
+
+                    PARAM: a
+
+:=
+
+          PARAM: a
+=======================================
+=======================================
+
+                    PARAM: a
+
+          -
+
+                    PARAM: b
+
+:=
+
+          PARAM: b
+=======================================
+=======================================
+
+RET
+
+          PARAM: a
+=======================================
+
+.globl Class1
+Class1:   
+.quad Class1_max1
+.quad Class1_max2
+.quad Class1_max3
+.quad Class1_gcd
+
+
+Class1_max1:
+	movq	%rdx, %rax
+	ret
+	movq	%rsi, %rax
+	ret
+Class1_max2:
+	movq	$0, 8(%rsp)
+	movq	%rdx, 8(%rsp)
+	movq	%rsi, 8(%rsp)
+	movq	8(%rsp), %rax
+	ret
+Class1_max3:
+	movq	%rsi, 8(%rsp)
+	movq	%rdx, 8(%rsp)
+	movq	8(%rsp), %rax
+	ret
+Class1_gcd:
+	movq	%rsi, %rax
+	ret
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	subq	%r11, %rax
+	movq	%rax, %rsi
+	movq	%rdx, %rax
+	movq	%rsi, %r11
+	subq	%r11, %rax
+	movq	%rax, %rdx
+	movq	%rsi, %rax
+	ret
 
 Übersetze und linke das Testprogramm:
-/tmp/ccsWm2yU.o: In function `call':
-/home/ublu21/u11808206/test/codeb/thenotoriousj-17.call:12: undefined reference to `Class1'
-/home/ublu21/u11808206/test/codeb/thenotoriousj-17.call:12: undefined reference to `Class1'
-/home/ublu21/u11808206/test/codeb/thenotoriousj-17.call:12: undefined reference to `Class1'
-/home/ublu21/u11808206/test/codeb/thenotoriousj-17.call:13: undefined reference to `Class1'
-/home/ublu21/u11808206/test/codeb/thenotoriousj-17.call:13: undefined reference to `Class1'
-/tmp/ccsWm2yU.o:/home/ublu21/u11808206/test/codeb/thenotoriousj-17.call:13: more undefined references to `Class1' follow
-collect2: error: ld returned 1 exit status
+testcodebout18199.s: Assembler messages:
+testcodebout18199.s:1: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:2: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:3: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:7: Error: no such instruction: `b'
+testcodebout18199.s:8: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:9: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:13: Error: symbol `PARAM' is already defined
+testcodebout18199.s:13: Error: no such instruction: `a'
+testcodebout18199.s:14: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:15: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:17: Error: junk at end of line, first unrecognized character is `0'
+testcodebout18199.s:19: Error: junk at end of line, first unrecognized character is `:'
+testcodebout18199.s:21: Error: no such instruction: `max (Offset:1)'
+testcodebout18199.s:22: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:23: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:24: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:25: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:27: Error: symbol `PARAM' is already defined
+testcodebout18199.s:27: Error: no such instruction: `b'
+testcodebout18199.s:29: Error: junk at end of line, first unrecognized character is `:'
+testcodebout18199.s:31: Error: no such instruction: `max (Offset:1)'
+testcodebout18199.s:32: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:33: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:35: Error: symbol `PARAM' is already defined
+testcodebout18199.s:35: Error: no such instruction: `a'
+testcodebout18199.s:37: Error: junk at end of line, first unrecognized character is `:'
+testcodebout18199.s:39: Error: no such instruction: `max (Offset:1)'
+testcodebout18199.s:40: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:41: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:45: Error: symbol `ID' is already defined
+testcodebout18199.s:45: Error: no such instruction: `max (Offset:1)'
+testcodebout18199.s:46: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:47: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:49: Error: symbol `PARAM' is already defined
+testcodebout18199.s:49: Error: no such instruction: `a'
+testcodebout18199.s:51: Error: junk at end of line, first unrecognized character is `:'
+testcodebout18199.s:53: Error: symbol `ID' is already defined
+testcodebout18199.s:53: Error: no such instruction: `max (Offset:1)'
+testcodebout18199.s:54: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:55: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:56: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:57: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:59: Error: symbol `PARAM' is already defined
+testcodebout18199.s:59: Error: no such instruction: `b'
+testcodebout18199.s:61: Error: junk at end of line, first unrecognized character is `:'
+testcodebout18199.s:63: Error: symbol `ID' is already defined
+testcodebout18199.s:63: Error: no such instruction: `max (Offset:1)'
+testcodebout18199.s:64: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:65: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:69: Error: symbol `ID' is already defined
+testcodebout18199.s:69: Error: no such instruction: `max (Offset:1)'
+testcodebout18199.s:70: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:71: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:72: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:73: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:77: Error: symbol `PARAM' is already defined
+testcodebout18199.s:77: Error: no such instruction: `a'
+testcodebout18199.s:78: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:79: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:80: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:81: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:82: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:83: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:85: Error: symbol `PARAM' is already defined
+testcodebout18199.s:85: Error: no such instruction: `b'
+testcodebout18199.s:87: Error: junk at end of line, first unrecognized character is `-'
+testcodebout18199.s:89: Error: symbol `PARAM' is already defined
+testcodebout18199.s:89: Error: no such instruction: `a'
+testcodebout18199.s:91: Error: junk at end of line, first unrecognized character is `:'
+testcodebout18199.s:93: Error: symbol `PARAM' is already defined
+testcodebout18199.s:93: Error: no such instruction: `a'
+testcodebout18199.s:94: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:95: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:97: Error: symbol `PARAM' is already defined
+testcodebout18199.s:97: Error: no such instruction: `a'
+testcodebout18199.s:99: Error: junk at end of line, first unrecognized character is `-'
+testcodebout18199.s:101: Error: symbol `PARAM' is already defined
+testcodebout18199.s:101: Error: no such instruction: `b'
+testcodebout18199.s:103: Error: junk at end of line, first unrecognized character is `:'
+testcodebout18199.s:105: Error: symbol `PARAM' is already defined
+testcodebout18199.s:105: Error: no such instruction: `b'
+testcodebout18199.s:106: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:107: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:111: Error: symbol `PARAM' is already defined
+testcodebout18199.s:111: Error: no such instruction: `a'
+testcodebout18199.s:112: Error: junk at end of line, first unrecognized character is `='
 [Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-18.0:
 interface Interface1:
@@ -1437,20 +3011,138 @@ class Class1 implements Interface1:
 		return x1;
 	end;
 end;
-/usr/ftp/pub/ubvl/test/codeb/test: line 34: 18132 Segmentation fault      $PROGRAM < $i > $RESFILE
-Übersetzung: [Errot] Status=139. Erwartet: 0
+Übersetzung: Status korrekt
 
 Ausgabe:
+=======================================
+
+          0 
+
+:=
+
+          ID: x0 (Offset: 1) 
+=======================================
+=======================================
+
+          1 
+
+:=
+
+          ID: x1 (Offset: 2) 
+=======================================
+=======================================
+=======================================
+=======================================
+
+          ID: x0 (Offset: 1) 
+
+:=
+
+          ID: tmp (Offset: 3) 
+=======================================
+=======================================
+
+          ID: x1 (Offset: 2) 
+
+:=
+
+          ID: x0 (Offset: 1) 
+=======================================
+=======================================
+
+                    ID: tmp (Offset: 3) 
+
+          +
+
+                    ID: x1 (Offset: 2) 
+
+:=
+
+          ID: x1 (Offset: 2) 
+=======================================
+=======================================
+
+                    1 
+
+          -
+
+                    PARAM: i
+
+:=
+
+          PARAM: i
+=======================================
+=======================================
+
+RET
+
+          ID: x1 (Offset: 2) 
+=======================================
+
+.globl Class1
+Class1:   
+.quad Class1_fib
+
+
+Class1_fib:
+	movq	$0, 8(%rsp)
+	movq	$1, 16(%rsp)
+	movq	8(%rsp), 24(%rsp)
+	movq	16(%rsp), 8(%rsp)
+	movq	16(%rsp), %rax
+	movq	24(%rsp), %r11
+	addq	%r11, %rax
+	movq	%rax, 16(%rsp)
+	movq	%rsi, %rax
+	subq	$1, %rax
+	movq	%rax, %rsi
+	movq	16(%rsp), %rax
+	ret
 
 Übersetze und linke das Testprogramm:
-/tmp/ccmyaMVV.o: In function `call':
-/home/ublu21/u11808206/test/codeb/thenotoriousj-18.call:9: undefined reference to `Class1'
-/home/ublu21/u11808206/test/codeb/thenotoriousj-18.call:9: undefined reference to `Class1'
-/home/ublu21/u11808206/test/codeb/thenotoriousj-18.call:9: undefined reference to `Class1'
-/home/ublu21/u11808206/test/codeb/thenotoriousj-18.call:10: undefined reference to `Class1'
-/home/ublu21/u11808206/test/codeb/thenotoriousj-18.call:10: undefined reference to `Class1'
-/tmp/ccmyaMVV.o:/home/ublu21/u11808206/test/codeb/thenotoriousj-18.call:10: more undefined references to `Class1' follow
-collect2: error: ld returned 1 exit status
+testcodebout18199.s: Assembler messages:
+testcodebout18199.s:1: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:3: Error: junk at end of line, first unrecognized character is `0'
+testcodebout18199.s:5: Error: junk at end of line, first unrecognized character is `:'
+testcodebout18199.s:7: Error: no such instruction: `x0 (Offset:1)'
+testcodebout18199.s:8: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:9: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:11: Error: junk at end of line, first unrecognized character is `1'
+testcodebout18199.s:13: Error: junk at end of line, first unrecognized character is `:'
+testcodebout18199.s:15: Error: no such instruction: `x1 (Offset:2)'
+testcodebout18199.s:16: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:17: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:18: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:19: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:21: Error: no such instruction: `x0 (Offset:1)'
+testcodebout18199.s:23: Error: junk at end of line, first unrecognized character is `:'
+testcodebout18199.s:25: Error: no such instruction: `tmp (Offset:3)'
+testcodebout18199.s:26: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:27: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:29: Error: no such instruction: `x1 (Offset:2)'
+testcodebout18199.s:31: Error: junk at end of line, first unrecognized character is `:'
+testcodebout18199.s:33: Error: no such instruction: `x0 (Offset:1)'
+testcodebout18199.s:34: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:35: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:37: Error: no such instruction: `tmp (Offset:3)'
+testcodebout18199.s:39: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:41: Error: no such instruction: `x1 (Offset:2)'
+testcodebout18199.s:43: Error: junk at end of line, first unrecognized character is `:'
+testcodebout18199.s:45: Error: no such instruction: `x1 (Offset:2)'
+testcodebout18199.s:46: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:47: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:49: Error: junk at end of line, first unrecognized character is `1'
+testcodebout18199.s:51: Error: junk at end of line, first unrecognized character is `-'
+testcodebout18199.s:53: Error: no such instruction: `i'
+testcodebout18199.s:55: Error: junk at end of line, first unrecognized character is `:'
+testcodebout18199.s:57: Error: no such instruction: `i'
+testcodebout18199.s:58: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:59: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:63: Error: symbol `ID' is already defined
+testcodebout18199.s:63: Error: no such instruction: `x1 (Offset:2)'
+testcodebout18199.s:64: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:74: Error: too many memory references for `movq'
+testcodebout18199.s:75: Error: too many memory references for `movq'
 [Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-19.0:
 interface Interface1:
@@ -1475,7 +3167,7 @@ class Class1 implements Interface1:
 		return new Class1;
 	end;
 end;
-/usr/ftp/pub/ubvl/test/codeb/test: line 34: 18143 Segmentation fault      $PROGRAM < $i > $RESFILE
+/usr/ftp/pub/ubvl/test/codeb/test: line 34: 18620 Segmentation fault      $PROGRAM < $i > $RESFILE
 Übersetzung: [Errot] Status=139. Erwartet: 0
 
 Ausgabe:
@@ -1486,13 +3178,13 @@ In file included from /usr/ftp/pub/ubvl/test/codeb/testmain.c:13:0:
 /home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:21:24: warning: comparison of distinct pointer types lacks a cast
   Class1.construct(obj) == reg15 && heapptr - reg15 == 2 && constructed->vftc == &Class1);
                         ^~
-/tmp/cckHM8Y1.o: In function `call':
+/tmp/ccTiW0jK.o: In function `call':
 /home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:13: undefined reference to `Class1'
 /home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:20: undefined reference to `Class1'
 /home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:20: undefined reference to `Class1'
 /home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:20: undefined reference to `Class1'
 /home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:21: undefined reference to `Class1'
-/tmp/cckHM8Y1.o:/home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:21: more undefined references to `Class1' follow
+/tmp/ccTiW0jK.o:/home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:21: more undefined references to `Class1' follow
 collect2: error: ld returned 1 exit status
 [Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-20.0:
@@ -1567,10 +3259,338 @@ class Class1 implements Interface1 :
 		return 0DEADH * 0BEEFH;
 	end;
 end;
-/usr/ftp/pub/ubvl/test/codeb/test: line 34: 18154 Segmentation fault      $PROGRAM < $i > $RESFILE
-Übersetzung: [Errot] Status=139. Erwartet: 0
+Übersetzung: Status korrekt
 
 Ausgabe:
+=======================================
+
+                    48879 
+
+          *
+
+                    57005 
+
+:=
+
+          ID: x (Offset: 1) 
+=======================================
+=======================================
+
+RET
+
+          ID: x (Offset: 1) 
+=======================================
+=======================================
+
+                    48879 
+
+          *
+
+                    57005 
+
+:=
+
+          CVAR: obj
+=======================================
+=======================================
+
+RET
+
+          CVAR: obj
+=======================================
+=======================================
+
+RET
+
+                    PARAM: in1
+
+          +
+
+                              1 
+
+                    -
+
+                                        2147483647 
+
+                              +
+
+                                        1 
+=======================================
+=======================================
+
+RET
+
+                              1 
+
+                    +
+
+                              2147483647 
+
+          +
+
+                    PARAM: in1
+=======================================
+=======================================
+
+RET
+
+                    PARAM: in1
+
+          +
+
+                              1 
+
+                    -
+
+                                        2147483647 
+
+                              -
+
+                                        0 
+=======================================
+=======================================
+
+RET
+
+                    PARAM: in1
+
+          +
+
+                              1 
+
+                    -
+
+                                        1 
+
+                              -
+
+                                                  2147483647 
+
+                                        -
+
+                                                  0 
+=======================================
+=======================================
+
+RET
+
+                              48879 
+
+                    *
+
+                              57005 
+
+          *
+
+                    PARAM: a
+=======================================
+=======================================
+
+RET
+
+                              48879 
+
+                    *
+
+                              57005 
+
+          =
+
+                    PARAM: a
+=======================================
+=======================================
+
+RET
+
+                              48879 
+
+                    *
+
+                              57005 
+
+          -
+
+                    PARAM: in1
+=======================================
+=======================================
+
+RET
+
+                    PARAM: in1
+
+          -
+
+                              48879 
+
+                    *
+
+                              57005 
+=======================================
+=======================================
+
+RET
+
+                              48879 
+
+                    *
+
+                              57005 
+
+          <
+
+                    PARAM: in1
+=======================================
+=======================================
+
+RET
+
+                    PARAM: in1
+
+          <
+
+                              48879 
+
+                    *
+
+                              57005 
+=======================================
+=======================================
+
+RET
+
+                    48879 
+
+          *
+
+                    57005 
+=======================================
+
+.globl Class2
+Class2:   
+.quad 0 #add1
+.quad 0 #add2
+.quad 0 #add3
+.quad 0 #add4
+.quad 0 #mul
+.quad 0 #equal
+.quad 0 #sub1
+.quad 0 #sub2
+.quad 0 #less1
+.quad 0 #less2
+.quad 0 #constant
+.quad Class2_getVar
+.quad Class2_getObjVar
+
+
+
+.globl Class1
+Class1:   
+.quad Class1_add1
+.quad Class1_add2
+.quad Class1_add3
+.quad Class1_add4
+.quad Class1_mul
+.quad Class1_equal
+.quad Class1_sub1
+.quad Class1_sub2
+.quad Class1_less1
+.quad Class1_less2
+.quad Class1_constant
+.quad 0 #getVar
+.quad 0 #getObjVar
+
+
+Class2_getVar:
+	movq	$57005, %rax
+	imulq	$48879, %rax
+	movq	%rax, 8(%rsp)
+	movq	8(%rsp), %rax
+	ret
+Class2_getObjVar:
+	movq	$57005, %rax
+	imulq	$48879, %rax
+	movq	%rax, 8(%rdi)
+	movq	8(%rdi), %rax
+	ret
+Class1_add1:
+	movq	$1, %rax
+	addq	$2147483647, %rax
+	subq	$1, %rax
+	movq	%rsi, %r11
+	addq	%r11, %rax
+	ret
+Class1_add2:
+	movq	%rsi, %rax
+	movq	$2147483647, %r11
+	addq	$1, %r11
+	addq	%r11, %rax
+	ret
+Class1_add3:
+	movq	$2147483647, %r11
+	movq	$0, %rax
+	subq	%r11, %rax
+	subq	$1, %rax
+	movq	%rsi, %r11
+	addq	%r11, %rax
+	ret
+Class1_add4:
+	movq	$2147483647, %r11
+	movq	$0, %rax
+	subq	%r11, %rax
+	subq	$1, %rax
+	subq	$1, %rax
+	movq	%rsi, %r11
+	addq	%r11, %rax
+	ret
+Class1_mul:
+	movq	%rsi, %rax
+	movq	$57005, %r11
+	imulq	$48879, %r11
+	imulq	%r11, %rax
+	ret
+Class1_equal:
+	movq	%rsi, %rax
+	movq	$57005, %r11
+	imulq	$48879, %r11
+	cmpq	%rax, %r11	# checking if rax equals r11
+	sete	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	ret
+Class1_sub1:
+	movq	%rsi, %rax
+	movq	$57005, %r11
+	imulq	$48879, %r11
+	subq	%r11, %rax
+	ret
+Class1_sub2:
+	movq	$57005, %rax
+	imulq	$48879, %rax
+	movq	%rsi, %r11
+	subq	%r11, %rax
+	ret
+Class1_less1:
+	movq	%rsi, %rax
+	movq	$57005, %r11
+	imulq	$48879, %r11
+	cmpq	%rax, %r11	# checking if rax less r11
+	setg	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	ret
+Class1_less2:
+	movq	$57005, %rax
+	imulq	$48879, %rax
+	movq	%rsi, %r11
+	cmpq	%rax, %r11	# checking if rax less r11
+	setg	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	ret
+Class1_constant:
+	movq	$57005, %rax
+	imulq	$48879, %rax
+	ret
 
 Übersetze und linke das Testprogramm:
 In file included from /usr/ftp/pub/ubvl/test/codeb/testmain.c:13:0:
@@ -1579,17 +3599,121 @@ In file included from /usr/ftp/pub/ubvl/test/codeb/testmain.c:13:0:
   Class2.getObjVar(obj2) == dead*beef
                    ^~~~
 /home/ublu21/u11808206/test/codeb/thenotoriousj-20.call:65:19: note: expected ‘struct objectc *’ but argument is of type ‘struct object2 *’
-/tmp/ccHxS3x4.o: In function `call':
-/home/ublu21/u11808206/test/codeb/thenotoriousj-20.call:32: undefined reference to `Class1'
-/home/ublu21/u11808206/test/codeb/thenotoriousj-20.call:33: undefined reference to `Class1'
-/home/ublu21/u11808206/test/codeb/thenotoriousj-20.call:35: undefined reference to `Class1'
-/home/ublu21/u11808206/test/codeb/thenotoriousj-20.call:36: undefined reference to `Class1'
-/home/ublu21/u11808206/test/codeb/thenotoriousj-20.call:38: undefined reference to `Class1'
-/tmp/ccHxS3x4.o:/home/ublu21/u11808206/test/codeb/thenotoriousj-20.call:39: more undefined references to `Class1' follow
-/tmp/ccHxS3x4.o: In function `call':
-/home/ublu21/u11808206/test/codeb/thenotoriousj-20.call:64: undefined reference to `Class2'
-/home/ublu21/u11808206/test/codeb/thenotoriousj-20.call:65: undefined reference to `Class2'
-collect2: error: ld returned 1 exit status
+testcodebout18199.s: Assembler messages:
+testcodebout18199.s:1: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:3: Error: junk at end of line, first unrecognized character is `4'
+testcodebout18199.s:5: Error: junk at end of line, first unrecognized character is `*'
+testcodebout18199.s:7: Error: junk at end of line, first unrecognized character is `5'
+testcodebout18199.s:9: Error: junk at end of line, first unrecognized character is `:'
+testcodebout18199.s:11: Error: no such instruction: `x (Offset:1)'
+testcodebout18199.s:12: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:13: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:17: Error: symbol `ID' is already defined
+testcodebout18199.s:17: Error: no such instruction: `x (Offset:1)'
+testcodebout18199.s:18: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:19: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:21: Error: junk at end of line, first unrecognized character is `4'
+testcodebout18199.s:23: Error: junk at end of line, first unrecognized character is `*'
+testcodebout18199.s:25: Error: junk at end of line, first unrecognized character is `5'
+testcodebout18199.s:27: Error: junk at end of line, first unrecognized character is `:'
+testcodebout18199.s:29: Error: no such instruction: `obj'
+testcodebout18199.s:30: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:31: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:35: Error: symbol `CVAR' is already defined
+testcodebout18199.s:35: Error: no such instruction: `obj'
+testcodebout18199.s:36: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:37: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:41: Error: no such instruction: `in1'
+testcodebout18199.s:43: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:45: Error: junk at end of line, first unrecognized character is `1'
+testcodebout18199.s:47: Error: junk at end of line, first unrecognized character is `-'
+testcodebout18199.s:49: Error: junk at end of line, first unrecognized character is `2'
+testcodebout18199.s:51: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:53: Error: junk at end of line, first unrecognized character is `1'
+testcodebout18199.s:54: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:55: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:59: Error: junk at end of line, first unrecognized character is `1'
+testcodebout18199.s:61: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:63: Error: junk at end of line, first unrecognized character is `2'
+testcodebout18199.s:65: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:67: Error: symbol `PARAM' is already defined
+testcodebout18199.s:67: Error: no such instruction: `in1'
+testcodebout18199.s:68: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:69: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:73: Error: symbol `PARAM' is already defined
+testcodebout18199.s:73: Error: no such instruction: `in1'
+testcodebout18199.s:75: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:77: Error: junk at end of line, first unrecognized character is `1'
+testcodebout18199.s:79: Error: junk at end of line, first unrecognized character is `-'
+testcodebout18199.s:81: Error: junk at end of line, first unrecognized character is `2'
+testcodebout18199.s:83: Error: junk at end of line, first unrecognized character is `-'
+testcodebout18199.s:85: Error: junk at end of line, first unrecognized character is `0'
+testcodebout18199.s:86: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:87: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:91: Error: symbol `PARAM' is already defined
+testcodebout18199.s:91: Error: no such instruction: `in1'
+testcodebout18199.s:93: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:95: Error: junk at end of line, first unrecognized character is `1'
+testcodebout18199.s:97: Error: junk at end of line, first unrecognized character is `-'
+testcodebout18199.s:99: Error: junk at end of line, first unrecognized character is `1'
+testcodebout18199.s:101: Error: junk at end of line, first unrecognized character is `-'
+testcodebout18199.s:103: Error: junk at end of line, first unrecognized character is `2'
+testcodebout18199.s:105: Error: junk at end of line, first unrecognized character is `-'
+testcodebout18199.s:107: Error: junk at end of line, first unrecognized character is `0'
+testcodebout18199.s:108: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:109: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:113: Error: junk at end of line, first unrecognized character is `4'
+testcodebout18199.s:115: Error: junk at end of line, first unrecognized character is `*'
+testcodebout18199.s:117: Error: junk at end of line, first unrecognized character is `5'
+testcodebout18199.s:119: Error: junk at end of line, first unrecognized character is `*'
+testcodebout18199.s:121: Error: symbol `PARAM' is already defined
+testcodebout18199.s:121: Error: no such instruction: `a'
+testcodebout18199.s:122: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:123: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:127: Error: junk at end of line, first unrecognized character is `4'
+testcodebout18199.s:129: Error: junk at end of line, first unrecognized character is `*'
+testcodebout18199.s:131: Error: junk at end of line, first unrecognized character is `5'
+testcodebout18199.s:133: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:135: Error: symbol `PARAM' is already defined
+testcodebout18199.s:135: Error: no such instruction: `a'
+testcodebout18199.s:136: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:137: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:141: Error: junk at end of line, first unrecognized character is `4'
+testcodebout18199.s:143: Error: junk at end of line, first unrecognized character is `*'
+testcodebout18199.s:145: Error: junk at end of line, first unrecognized character is `5'
+testcodebout18199.s:147: Error: junk at end of line, first unrecognized character is `-'
+testcodebout18199.s:149: Error: symbol `PARAM' is already defined
+testcodebout18199.s:149: Error: no such instruction: `in1'
+testcodebout18199.s:150: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:151: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:155: Error: symbol `PARAM' is already defined
+testcodebout18199.s:155: Error: no such instruction: `in1'
+testcodebout18199.s:157: Error: junk at end of line, first unrecognized character is `-'
+testcodebout18199.s:159: Error: junk at end of line, first unrecognized character is `4'
+testcodebout18199.s:161: Error: junk at end of line, first unrecognized character is `*'
+testcodebout18199.s:163: Error: junk at end of line, first unrecognized character is `5'
+testcodebout18199.s:164: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:165: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:169: Error: junk at end of line, first unrecognized character is `4'
+testcodebout18199.s:171: Error: junk at end of line, first unrecognized character is `*'
+testcodebout18199.s:173: Error: junk at end of line, first unrecognized character is `5'
+testcodebout18199.s:175: Error: junk at end of line, first unrecognized character is `<'
+testcodebout18199.s:177: Error: symbol `PARAM' is already defined
+testcodebout18199.s:177: Error: no such instruction: `in1'
+testcodebout18199.s:178: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:179: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:183: Error: symbol `PARAM' is already defined
+testcodebout18199.s:183: Error: no such instruction: `in1'
+testcodebout18199.s:185: Error: junk at end of line, first unrecognized character is `<'
+testcodebout18199.s:187: Error: junk at end of line, first unrecognized character is `4'
+testcodebout18199.s:189: Error: junk at end of line, first unrecognized character is `*'
+testcodebout18199.s:191: Error: junk at end of line, first unrecognized character is `5'
+testcodebout18199.s:192: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:193: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:197: Error: junk at end of line, first unrecognized character is `4'
+testcodebout18199.s:199: Error: junk at end of line, first unrecognized character is `*'
+testcodebout18199.s:201: Error: junk at end of line, first unrecognized character is `5'
+testcodebout18199.s:202: Error: junk at end of line, first unrecognized character is `='
 [Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-3.0:
 interface Interface1: 
@@ -1660,6 +3784,54 @@ end;
 Übersetzung: Status korrekt
 
 Ausgabe:
+=======================================
+
+RET
+
+          0 
+=======================================
+=======================================
+
+RET
+
+          0 
+=======================================
+=======================================
+
+RET
+
+                    PARAM: in2
+
+          +
+
+                    PARAM: in1
+=======================================
+=======================================
+
+RET
+
+                              PARAM: in3
+
+                    +
+
+                              PARAM: in2
+
+          +
+
+                    PARAM: in1
+=======================================
+=======================================
+
+RET
+
+          THIS
+=======================================
+=======================================
+
+RET
+
+          PARAM: n
+=======================================
 
 .globl Class1
 Class1:   
@@ -1737,45 +3909,36 @@ In file included from /usr/ftp/pub/ubvl/test/codeb/testmain.c:13:0:
    Class2.getThis(0) == 0 && Class2.getThis(-3)==-3 && Class2.getThis(5)==5 &&
                                                                       ^
 /home/ublu21/u11808206/test/codeb/thenotoriousj-4.call:30:70: note: expected ‘struct objectc *’ but argument is of type ‘int’
-
-Rufe folgendes Codefragment auf:
-struct objectc {
-        struct vft *vftc;
-};
-
-struct objectClass1 {
-        struct vft *vftc;
-        long v1;
-        long v2;
-        struct objectc* var3;
-};
-
-struct objectClass2 {
-        struct vft *vftc;
-        long v1;
-        long v2;
-};
-
-extern struct vft {
-        long (*init)(struct objectc *);
-        long (*add2)(struct objectc *, long, long);
-        long (*add3)(struct objectc *, long, long, long);
-        long (*empty)(struct objectc *);
-        long (*single)(struct objectc *);
-        long (*getThis)(struct objectc *);
-        long (*ident)(struct objectc *, long);
-} Class1, Class2;
-
-RET(Class1.init(0) == 0 && Class1.init(-3)==0 && Class1.init(5)==0 &&
-		Class2.init(0) == 0 && Class2.init(-3)==0 && Class2.init(5)==0 &&
-		Class2.getThis(0) == 0 && Class2.getThis(-3)==-3 && Class2.getThis(5)==5 &&
-		Class2.ident(0,4) == 4 && Class2.ident(0,-1)==-1 && Class2.ident(0,5)==5 &&
-		Class2.add2(0,0,0) == 0 && Class2.add2(0,-3,3)==0 && Class2.add2(0,5,-5)==0 && Class2.add2(0,5,15)==20 &&
-		Class2.add3(0,0,0,0) == 0 && Class2.add3(0,-3,-3,6)==0 && Class2.add3(0,5,-5,1)==1 && Class2.add3(0,5,15,-10)==10);
-
-Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
-und das Ergebnis des Ausdrucks ist korrekt.
-
+testcodebout18199.s: Assembler messages:
+testcodebout18199.s:1: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:5: Error: junk at end of line, first unrecognized character is `0'
+testcodebout18199.s:6: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:7: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:11: Error: junk at end of line, first unrecognized character is `0'
+testcodebout18199.s:12: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:13: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:17: Error: no such instruction: `in2'
+testcodebout18199.s:19: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:21: Error: no such instruction: `in1'
+testcodebout18199.s:22: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:23: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:27: Error: symbol `PARAM' is already defined
+testcodebout18199.s:27: Error: no such instruction: `in3'
+testcodebout18199.s:29: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:31: Error: symbol `PARAM' is already defined
+testcodebout18199.s:31: Error: no such instruction: `in2'
+testcodebout18199.s:33: Error: junk at end of line, first unrecognized character is `+'
+testcodebout18199.s:35: Error: symbol `PARAM' is already defined
+testcodebout18199.s:35: Error: no such instruction: `in1'
+testcodebout18199.s:36: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:37: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:41: Error: no such instruction: `this'
+testcodebout18199.s:42: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:43: Error: junk at end of line, first unrecognized character is `='
+testcodebout18199.s:47: Error: symbol `PARAM' is already defined
+testcodebout18199.s:47: Error: no such instruction: `n'
+testcodebout18199.s:48: Error: junk at end of line, first unrecognized character is `='
+[Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
 ==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/x0.1:
 #
 
@@ -1820,6 +3983,10 @@ class ObjectvariableClass implements myInterface:
 end;
 Ausgabe:
 Identifier with name 'global' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
+=======================================
+
+RET
+=======================================
 Status: korrekt
 
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_Andy0n_301.3:
@@ -1851,6 +4018,12 @@ class ObjectvariableClass implements myInterface:
 end;
 Ausgabe:
 Identifier with name 'failMethod' on line 1 is not visible in the current scope
+=======================================
+
+RET
+
+          5 
+=======================================
 Status: korrekt
 
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_Andy0n_303.3:
@@ -1880,6 +4053,8 @@ class ObjectvariableClass implements myInterface:
 end;
 Ausgabe:
 Identifier with name 'ObjectvariableClass' on line 1 is not visible in the current scope
+=======================================
+=======================================
 Status: korrekt
 
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_Andy0n_305.3:
@@ -1895,6 +4070,12 @@ class ObjectvariableClass implements myInterface:
 end;
 Ausgabe:
 Identifier with name 'myInterface' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
+=======================================
+
+          5 
+
+:=
+=======================================
 Status: korrekt
 
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_Andy0n_306.3:
@@ -1912,6 +4093,12 @@ class MyClass implements myInterface:
 end;
 Ausgabe:
 Identifier with name 'global' on line 1 is not visible in the current scope
+=======================================
+
+:=
+
+          CVAR: global
+=======================================
 Status: korrekt
 
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_Andy0n_307.3:
@@ -2054,6 +4241,42 @@ class MyLinkedList implements LinkedList:
 end;
 Ausgabe:
 Identifier with name 'p' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
+=======================================
+=======================================
+=======================================
+
+          PARAM: o
+
+:=
+
+          CVAR: head
+=======================================
+=======================================
+
+RET
+
+          0 
+=======================================
+=======================================
+=======================================
+=======================================
+
+RET
+
+          1 
+=======================================
+=======================================
+=======================================
+=======================================
+
+:=
+
+          CVAR: next
+=======================================
+=======================================
+
+RET
+=======================================
 Status: korrekt
 
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_Andy0n_310.3:
@@ -2070,6 +4293,10 @@ class c implements a:
 end;
 Ausgabe:
 Identifier with name 'd' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
+=======================================
+
+RET
+=======================================
 Status: korrekt
 
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_Andy0n_311.3:
@@ -2102,6 +4329,20 @@ class myClass implements myInterface:
 end;
 Ausgabe:
 Identifier with name 'fail' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
+=======================================
+=======================================
+=======================================
+
+          0 
+
+:=
+
+          ID: fail (Offset: 1) 
+=======================================
+=======================================
+
+RET
+=======================================
 Status: korrekt
 
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_Andy0n_315.3:
@@ -2124,6 +4365,24 @@ class two implements a:
 end;
 Ausgabe:
 Identifier with name 'v1' on line 1 is not visible in the current scope
+=======================================
+
+          27 
+
+:=
+
+          CVAR: v1
+=======================================
+=======================================
+
+:=
+
+          ID: x (Offset: 1) 
+=======================================
+=======================================
+
+RET
+=======================================
 Status: korrekt
 
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_Andy0n_316.3:
@@ -2163,6 +4422,24 @@ class two implements a:
 end;
 Ausgabe:
 Identifier with name 'v1' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
+=======================================
+
+          27 
+
+:=
+
+          CVAR: v1
+=======================================
+=======================================
+
+:=
+
+          ID: x (Offset: 1) 
+=======================================
+=======================================
+
+RET
+=======================================
 Status: korrekt
 
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_Andy0n_318.3:
@@ -2187,6 +4464,10 @@ end;
 
 Ausgabe:
 Identifier with name 'testMethod' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
+=======================================
+
+RET
+=======================================
 /usr/ftp/pub/ubvl/test/codeb/test: line 125: test: 1.3: integer expression expected
 [Error] Status: 3. Erwartet: 1.3
 
@@ -2204,6 +4485,16 @@ end;
 
 Ausgabe:
 Identifier with name 'testMethod' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
+=======================================
+
+          0 
+
+:=
+
+          ID: tmp (Offset: 1) 
+=======================================
+=======================================
+=======================================
 /usr/ftp/pub/ubvl/test/codeb/test: line 125: test: 2.3: integer expression expected
 [Error] Status: 3. Erwartet: 2.3
 
@@ -2249,6 +4540,36 @@ class hello2 implements a2 a1:
 end;
 Ausgabe:
 Identifier with name 'INVALID' on line 1 is not visible in the current scope
+=======================================
+=======================================
+=======================================
+
+          123 
+
+:=
+
+          CVAR: bobbi
+=======================================
+=======================================
+=======================================
+=======================================
+
+          123 
+
+:=
+
+          CVAR: bobbi
+=======================================
+=======================================
+
+          23 
+
+:=
+
+          ID: number1 (Offset: 1) 
+=======================================
+=======================================
+=======================================
 /usr/ftp/pub/ubvl/test/codeb/test: line 125: test: 1.3: integer expression expected
 [Error] Status: 3. Erwartet: 1.3
 
@@ -2264,6 +4585,8 @@ class b implements:
 end;
 Ausgabe:
 Identifier with name 'x' on line 1 is not visible in the current scope
+=======================================
+=======================================
 /usr/ftp/pub/ubvl/test/codeb/test: line 125: test: 10.3: integer expression expected
 [Error] Status: 3. Erwartet: 10.3
 
@@ -2284,6 +4607,8 @@ class x implements:
 end;
 Ausgabe:
 Identifier with name 'x' on line 1 is not visible in the current scope
+=======================================
+=======================================
 /usr/ftp/pub/ubvl/test/codeb/test: line 125: test: 11.3: integer expression expected
 [Error] Status: 3. Erwartet: 11.3
 
@@ -2298,6 +4623,8 @@ class hello implements a:
 end;
 Ausgabe:
 Identifier with name 'a' on line 1 is not visible in the current scope
+=======================================
+=======================================
 /usr/ftp/pub/ubvl/test/codeb/test: line 125: test: 3.3: integer expression expected
 [Error] Status: 3. Erwartet: 3.3
 
@@ -2315,6 +4642,8 @@ interface a2:
 end;
 Ausgabe:
 Identifier with name 'b2' on line 1 is not visible in the current scope
+=======================================
+=======================================
 /usr/ftp/pub/ubvl/test/codeb/test: line 125: test: 5.3: integer expression expected
 [Error] Status: 3. Erwartet: 5.3
 
@@ -2329,6 +4658,8 @@ class x implements:
 end;
 Ausgabe:
 Identifier with name 'a23' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
+=======================================
+=======================================
 /usr/ftp/pub/ubvl/test/codeb/test: line 125: test: 6.3: integer expression expected
 [Error] Status: 3. Erwartet: 6.3
 
@@ -2343,6 +4674,12 @@ class x implements:
 end;
 Ausgabe:
 Identifier with name 'hallo' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
+=======================================
+
+          3 
+
+:=
+=======================================
 /usr/ftp/pub/ubvl/test/codeb/test: line 125: test: 8.3: integer expression expected
 [Error] Status: 3. Erwartet: 8.3
 
@@ -2388,6 +4725,18 @@ class Failed implements Fail:
 end;
 Ausgabe:
 Identifier with name 'hilfsFail' on line 1 is not visible in the current scope
+=======================================
+=======================================
+=======================================
+=======================================
+=======================================
+
+          NULLOP
+
+:=
+
+          PARAM: x
+=======================================
 Status: korrekt
 
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_gutti-8.3:
@@ -2411,6 +4760,18 @@ end;
 
 Ausgabe:
 Identifier with name 'failVariable' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
+=======================================
+=======================================
+=======================================
+=======================================
+=======================================
+
+RET
+=======================================
+=======================================
+
+RET
+=======================================
 Status: korrekt
 
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_stimitom1.3:
@@ -2446,6 +4807,48 @@ class OtherName implements Interf1 :
 end;
 Ausgabe:
 Identifier with name 'Interf1' on line 1 is not visible in the current scope
+=======================================
+
+          15 
+
+:=
+
+          CVAR: count
+=======================================
+=======================================
+=======================================
+=======================================
+=======================================
+=======================================
+
+                    5 
+
+          *
+
+                    CVAR: count
+
+:=
+
+          CVAR: count
+=======================================
+=======================================
+=======================================
+=======================================
+
+                    5 
+
+          *
+
+                    CVAR: count
+
+:=
+
+          CVAR: count
+=======================================
+=======================================
+
+RET
+=======================================
 Status: korrekt
 
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_thenotoriousj-1.3:
@@ -3231,5 +5634,5 @@ Status: korrekt
 Statistics: 
 ===========
            80 Tests total
-           63 Tests passed
-           17 Tests failed
+           43 Tests passed
+           37 Tests failed
