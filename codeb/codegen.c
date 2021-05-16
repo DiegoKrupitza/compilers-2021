@@ -81,18 +81,14 @@ short *burm_nts[] = {
 	burm_nts_3,	/* 33 */
 	burm_nts_2,	/* 34 */
 	burm_nts_8,	/* 35 */
-	burm_nts_8,	/* 36 */
-	burm_nts_8,	/* 37 */
-	burm_nts_3,	/* 38 */
-	burm_nts_2,	/* 39 */
+	burm_nts_3,	/* 36 */
+	burm_nts_2,	/* 37 */
+	burm_nts_8,	/* 38 */
+	burm_nts_8,	/* 39 */
 	burm_nts_8,	/* 40 */
-	burm_nts_8,	/* 41 */
-	burm_nts_8,	/* 42 */
-	burm_nts_3,	/* 43 */
-	burm_nts_2,	/* 44 */
-	burm_nts_8,	/* 45 */
-	burm_nts_8,	/* 46 */
-	burm_nts_8,	/* 47 */
+	burm_nts_3,	/* 41 */
+	burm_nts_2,	/* 42 */
+	burm_nts_8,	/* 43 */
 };
 
 char burm_arity[] = {
@@ -137,10 +133,6 @@ static short burm_decode_assign[] = {
 	41,
 	42,
 	43,
-	44,
-	45,
-	46,
-	47,
 };
 
 static short burm_decode_expr[] = {
@@ -550,17 +542,6 @@ STATEPTR_TYPE burm_state(int op, STATEPTR_TYPE left, STATEPTR_TYPE right) {
 		}
 	case 14: /* OP_ASSIGN */
 		assert(l && r);
-		if (	/* assign: OP_ASSIGN(OP_CLASS_VAR_ID,OP_CLASS_VAR_ID) */
-			l->op == 11 && /* OP_CLASS_VAR_ID */
-			r->op == 11 /* OP_CLASS_VAR_ID */
-		) {
-			c = 1;
-			if (c + 0 < p->cost[burm_assign_NT]) {
-				p->cost[burm_assign_NT] = c + 0;
-				p->rule.burm_assign = 15;
-				burm_closure_assign(p, c + 0);
-			}
-		}
 		if (	/* assign: OP_ASSIGN(OP_CLASS_VAR_ID,OP_PARAM_ID) */
 			l->op == 11 && /* OP_CLASS_VAR_ID */
 			r->op == 10 /* OP_PARAM_ID */
@@ -568,18 +549,7 @@ STATEPTR_TYPE burm_state(int op, STATEPTR_TYPE left, STATEPTR_TYPE right) {
 			c = 1;
 			if (c + 0 < p->cost[burm_assign_NT]) {
 				p->cost[burm_assign_NT] = c + 0;
-				p->rule.burm_assign = 14;
-				burm_closure_assign(p, c + 0);
-			}
-		}
-		if (	/* assign: OP_ASSIGN(OP_CLASS_VAR_ID,OP_ID) */
-			l->op == 11 && /* OP_CLASS_VAR_ID */
-			r->op == 9 /* OP_ID */
-		) {
-			c = 1;
-			if (c + 0 < p->cost[burm_assign_NT]) {
-				p->cost[burm_assign_NT] = c + 0;
-				p->rule.burm_assign = 13;
+				p->rule.burm_assign = 11;
 				burm_closure_assign(p, c + 0);
 			}
 		}
@@ -589,7 +559,7 @@ STATEPTR_TYPE burm_state(int op, STATEPTR_TYPE left, STATEPTR_TYPE right) {
 			c = r->cost[burm_expr_NT] + 1;
 			if (c + 0 < p->cost[burm_assign_NT]) {
 				p->cost[burm_assign_NT] = c + 0;
-				p->rule.burm_assign = 12;
+				p->rule.burm_assign = 10;
 				burm_closure_assign(p, c + 0);
 			}
 		}
@@ -599,7 +569,7 @@ STATEPTR_TYPE burm_state(int op, STATEPTR_TYPE left, STATEPTR_TYPE right) {
 			c = r->cost[burm_const_NT] + 1;
 			if (c + 0 < p->cost[burm_assign_NT]) {
 				p->cost[burm_assign_NT] = c + 0;
-				p->rule.burm_assign = 11;
+				p->rule.burm_assign = 9;
 				burm_closure_assign(p, c + 0);
 			}
 		}
@@ -610,7 +580,7 @@ STATEPTR_TYPE burm_state(int op, STATEPTR_TYPE left, STATEPTR_TYPE right) {
 			c = 1;
 			if (c + 0 < p->cost[burm_assign_NT]) {
 				p->cost[burm_assign_NT] = c + 0;
-				p->rule.burm_assign = 10;
+				p->rule.burm_assign = 8;
 				burm_closure_assign(p, c + 0);
 			}
 		}
@@ -621,7 +591,7 @@ STATEPTR_TYPE burm_state(int op, STATEPTR_TYPE left, STATEPTR_TYPE right) {
 			c = 1;
 			if (c + 0 < p->cost[burm_assign_NT]) {
 				p->cost[burm_assign_NT] = c + 0;
-				p->rule.burm_assign = 9;
+				p->rule.burm_assign = 7;
 				burm_closure_assign(p, c + 0);
 			}
 		}
@@ -632,7 +602,7 @@ STATEPTR_TYPE burm_state(int op, STATEPTR_TYPE left, STATEPTR_TYPE right) {
 			c = 1;
 			if (c + 0 < p->cost[burm_assign_NT]) {
 				p->cost[burm_assign_NT] = c + 0;
-				p->rule.burm_assign = 8;
+				p->rule.burm_assign = 6;
 				burm_closure_assign(p, c + 0);
 			}
 		}
@@ -642,7 +612,7 @@ STATEPTR_TYPE burm_state(int op, STATEPTR_TYPE left, STATEPTR_TYPE right) {
 			c = r->cost[burm_expr_NT] + 1;
 			if (c + 0 < p->cost[burm_assign_NT]) {
 				p->cost[burm_assign_NT] = c + 0;
-				p->rule.burm_assign = 7;
+				p->rule.burm_assign = 5;
 				burm_closure_assign(p, c + 0);
 			}
 		}
@@ -652,35 +622,13 @@ STATEPTR_TYPE burm_state(int op, STATEPTR_TYPE left, STATEPTR_TYPE right) {
 			c = r->cost[burm_const_NT] + 1;
 			if (c + 0 < p->cost[burm_assign_NT]) {
 				p->cost[burm_assign_NT] = c + 0;
-				p->rule.burm_assign = 6;
-				burm_closure_assign(p, c + 0);
-			}
-		}
-		if (	/* assign: OP_ASSIGN(OP_ID,OP_CLASS_VAR_ID) */
-			l->op == 9 && /* OP_ID */
-			r->op == 11 /* OP_CLASS_VAR_ID */
-		) {
-			c = 1;
-			if (c + 0 < p->cost[burm_assign_NT]) {
-				p->cost[burm_assign_NT] = c + 0;
-				p->rule.burm_assign = 5;
+				p->rule.burm_assign = 4;
 				burm_closure_assign(p, c + 0);
 			}
 		}
 		if (	/* assign: OP_ASSIGN(OP_ID,OP_PARAM_ID) */
 			l->op == 9 && /* OP_ID */
 			r->op == 10 /* OP_PARAM_ID */
-		) {
-			c = 1;
-			if (c + 0 < p->cost[burm_assign_NT]) {
-				p->cost[burm_assign_NT] = c + 0;
-				p->rule.burm_assign = 4;
-				burm_closure_assign(p, c + 0);
-			}
-		}
-		if (	/* assign: OP_ASSIGN(OP_ID,OP_ID) */
-			l->op == 9 && /* OP_ID */
-			r->op == 9 /* OP_ID */
 		) {
 			c = 1;
 			if (c + 0 < p->cost[burm_assign_NT]) {
@@ -780,15 +728,11 @@ NODEPTR_TYPE *burm_kids(NODEPTR_TYPE p, int eruleno, NODEPTR_TYPE kids[]) {
 		kids[0] = LEFT_CHILD(p);
 		kids[1] = RIGHT_CHILD(p);
 		break;
-	case 47: /* assign: OP_ASSIGN(OP_CLASS_VAR_ID,OP_CLASS_VAR_ID) */
-	case 46: /* assign: OP_ASSIGN(OP_CLASS_VAR_ID,OP_PARAM_ID) */
-	case 45: /* assign: OP_ASSIGN(OP_CLASS_VAR_ID,OP_ID) */
-	case 42: /* assign: OP_ASSIGN(OP_PARAM_ID,OP_CLASS_VAR_ID) */
-	case 41: /* assign: OP_ASSIGN(OP_PARAM_ID,OP_PARAM_ID) */
-	case 40: /* assign: OP_ASSIGN(OP_PARAM_ID,OP_ID) */
-	case 37: /* assign: OP_ASSIGN(OP_ID,OP_CLASS_VAR_ID) */
-	case 36: /* assign: OP_ASSIGN(OP_ID,OP_PARAM_ID) */
-	case 35: /* assign: OP_ASSIGN(OP_ID,OP_ID) */
+	case 43: /* assign: OP_ASSIGN(OP_CLASS_VAR_ID,OP_PARAM_ID) */
+	case 40: /* assign: OP_ASSIGN(OP_PARAM_ID,OP_CLASS_VAR_ID) */
+	case 39: /* assign: OP_ASSIGN(OP_PARAM_ID,OP_PARAM_ID) */
+	case 38: /* assign: OP_ASSIGN(OP_PARAM_ID,OP_ID) */
+	case 35: /* assign: OP_ASSIGN(OP_ID,OP_PARAM_ID) */
 	case 32: /* const: OP_NUMBER */
 	case 31: /* const: OP_NULL */
 	case 30: /* expr: OP_THIS */
@@ -796,10 +740,10 @@ NODEPTR_TYPE *burm_kids(NODEPTR_TYPE p, int eruleno, NODEPTR_TYPE kids[]) {
 	case 28: /* expr: OP_PARAM_ID */
 	case 27: /* expr: OP_ID */
 		break;
-	case 44: /* assign: OP_ASSIGN(OP_CLASS_VAR_ID,expr) */
-	case 43: /* assign: OP_ASSIGN(OP_CLASS_VAR_ID,const) */
-	case 39: /* assign: OP_ASSIGN(OP_PARAM_ID,expr) */
-	case 38: /* assign: OP_ASSIGN(OP_PARAM_ID,const) */
+	case 42: /* assign: OP_ASSIGN(OP_CLASS_VAR_ID,expr) */
+	case 41: /* assign: OP_ASSIGN(OP_CLASS_VAR_ID,const) */
+	case 37: /* assign: OP_ASSIGN(OP_PARAM_ID,expr) */
+	case 36: /* assign: OP_ASSIGN(OP_PARAM_ID,const) */
 	case 34: /* assign: OP_ASSIGN(OP_ID,expr) */
 	case 33: /* assign: OP_ASSIGN(OP_ID,const) */
 		kids[0] = RIGHT_CHILD(p);
@@ -954,43 +898,31 @@ void burm_reduce(NODEPTR_TYPE bnode, int goalnt)
    writeMoveRegInStack(bnode->kids[1]->regStor, bnode->kids[0]->localVarOffset);
     break;
   case 35:
-   writeMoveStackInStack(bnode->kids[1]->localVarOffset,bnode->kids[0]->localVarOffset);
-    break;
-  case 36:
    writeMoveRegInStack(getParameterRegister(bnode->kids[1]->parameterIndex), bnode->kids[0]->localVarOffset);
     break;
-  case 37:
-   writeMoveClassVarInStack(bnode->kids[1]->classVaroffset, bnode->kids[0]->localVarOffset);
-    break;
-  case 38:
+  case 36:
    writeMovev(bnode->kids[1]->value, getParameterRegister(bnode->kids[0]->parameterIndex));
     break;
-  case 39:
+  case 37:
    writeMove(bnode->kids[1]->regStor, getParameterRegister(bnode->kids[0]->parameterIndex));
     break;
-  case 40:
+  case 38:
    writeMoveStack(bnode->kids[1]->localVarOffset, getParameterRegister(bnode->kids[0]->parameterIndex));
     break;
-  case 41:
+  case 39:
    writeMove(getParameterRegister(bnode->kids[1]->parameterIndex), getParameterRegister(bnode->kids[0]->parameterIndex));
     break;
-  case 42:
+  case 40:
    writeMoveForClassVar(bnode->kids[1]->classVaroffset, getParameterRegister(bnode->kids[0]->parameterIndex));
     break;
-  case 43:
+  case 41:
    writeMoveVIntoClassVar(bnode->kids[1]->value, bnode->kids[0]->classVaroffset);
     break;
-  case 44:
+  case 42:
    writeMoveRegIntoClassVar(bnode->kids[1]->regStor, bnode->kids[0]->classVaroffset);
     break;
-  case 45:
-   writeMoveStackIntoClassVar(bnode->kids[1]->localVarOffset, bnode->kids[0]->classVaroffset);
-    break;
-  case 46:
+  case 43:
    writeMoveRegIntoClassVar(getParameterRegister(bnode->kids[1]->parameterIndex), bnode->kids[0]->classVaroffset);
-    break;
-  case 47:
-   writeMoveClassVarIntoClassVar(bnode->kids[1]->classVaroffset, bnode->kids[0]->classVaroffset);
     break;
   default:    assert (0);
   }
