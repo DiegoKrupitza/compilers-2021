@@ -364,7 +364,7 @@ Stat                    :   RETURN Expr
                             @i @Stat.tree@ = createNode(OP_IF, createIfLabelLeaf(prepareIfString(1)), @Expr.tree@);
                             @reg @Stat.tree@->regStor = getFirstRegister(); @Expr.tree@->regStor = @Stat.tree@->regStor;
                             
-                            @burm writeIfEndLabel(prepareIfString(0));
+                            @burm writeIfEndLabel(prepareIfString(0)); /* there is still a bug when multiple ifs */
 
                         @}
                         |   IF Expr THEN Stats ELSE Stats END

@@ -19,11 +19,17 @@ class c implements a:
         /* e := 5 + 5;*/
         /* var x : int := 5; */
         
-        if 0-1 then 
-            return 5;
+        if 1 then 
+            return 1;
         end;
 
-        return 1;
+        if 1 then 
+            return 2;
+        end;
+
+        if 1 then 
+            return 3;
+        end;
 
         
     end;

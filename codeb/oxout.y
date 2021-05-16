@@ -4830,7 +4830,7 @@ yyyRL = 0;
 yyyRL = 0;
 				case 1:
 
-if (yyyCond(0) != yyyPass) { writeIfEndLabel(prepareIfString(0));
+if (yyyCond(0) != yyyPass) { writeIfEndLabel(prepareIfString(0)); /* there is still a bug when multiple ifs */
 
                         }
 				break;

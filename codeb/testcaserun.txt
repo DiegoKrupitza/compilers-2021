@@ -471,6 +471,167 @@ RET(c.f(0,2) == -1 && c.g(0,4) == -1  && c.h(0,3,2) == -1  && c.j(0,2,3) == -1  
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
+==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-17.0:
+interface i: 
+    h(int,int):int 
+end;
+class c implements i:
+    var kingD1 : int;
+    var kingD2 : int;
+
+    method h(x:int,y:int) 
+        var v1 : int := 5;
+        return v1;
+    end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_h
+
+
+c_h:
+	movq	$5, 8(%rsp)
+	movq	8(%rsp), %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { 
+    struct vft *vftc; 
+    long kingD1; 
+    long kingD2; 
+};
+
+extern struct vft { 
+    long (*h)(struct objectc *, long, long);
+} c;
+
+struct objectc *myObj = (struct objectc *)malloc(sizeof(struct objectc));
+myObj->kingD1 = 69;
+myObj->kingD2 = 99;
+
+RET(
+    c.h(myObj,0,0) == 5 
+);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-18.0:
+interface i: 
+    h(int,int):int 
+end;
+class c implements i:
+    var kingD1 : int;
+    var kingD2 : int;
+
+    method h(x:int,y:int) 
+        var v1 : int := 5;
+        var v2 : int := 10;
+        return v2;
+    end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_h
+
+
+c_h:
+	movq	$5, 8(%rsp)
+	movq	$10, 16(%rsp)
+	movq	16(%rsp), %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { 
+    struct vft *vftc; 
+    long kingD1; 
+    long kingD2; 
+};
+
+extern struct vft { 
+    long (*h)(struct objectc *, long, long);
+} c;
+
+struct objectc *myObj = (struct objectc *)malloc(sizeof(struct objectc));
+myObj->kingD1 = 69;
+myObj->kingD2 = 99;
+
+RET(
+    c.h(myObj,0,0) == 10 
+);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-19.0:
+interface i: 
+    h(int,int):int 
+end;
+class c implements i:
+    var kingD1 : int;
+    var kingD2 : int;
+
+    method h(x:int,y:int) 
+        var v1 : int := 5;
+        var v2 : int := v1;
+        return v2;
+    end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_h
+
+
+c_h:
+	movq	$5, 8(%rsp)
+	movq	8(%rsp), %rax
+	movq	%rax, 16(%rsp)
+	movq	16(%rsp), %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { 
+    struct vft *vftc; 
+    long kingD1; 
+    long kingD2; 
+};
+
+extern struct vft { 
+    long (*h)(struct objectc *, long, long);
+} c;
+
+struct objectc *myObj = (struct objectc *)malloc(sizeof(struct objectc));
+myObj->kingD1 = 69;
+myObj->kingD2 = 99;
+
+RET(
+    c.h(myObj,0,0) == 5 
+);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-2.0:
 interface i: f(int):int end;
 class c implements i:
@@ -497,6 +658,548 @@ Rufe folgendes Codefragment auf:
 struct objectc { struct vft *vftc; };
 extern struct vft { long (*f)(struct objectc *, long); } c;
 RET(c.f(0,2) == 6 && c.f(0,-1)==-3);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-20.0:
+interface i: 
+    h(int,int):int 
+end;
+class c implements i:
+    var kingD1 : int;
+    var kingD2 : int;
+
+    method h(x:int,y:int) 
+        var v1 : int := kingD1;
+        return v1;
+    end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_h
+
+
+c_h:
+	movq	8(%rdi), %rax
+	movq	%rax, 8(%rsp)
+	movq	8(%rsp), %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { 
+    struct vft *vftc; 
+    long kingD1; 
+    long kingD2; 
+};
+
+extern struct vft { 
+    long (*h)(struct objectc *, long, long);
+} c;
+
+struct objectc *myObj = (struct objectc *)malloc(sizeof(struct objectc));
+myObj->kingD1 = 69;
+myObj->kingD2 = 99;
+
+RET(
+    c.h(myObj,0,0) == myObj->kingD1
+);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-21.0:
+interface i: 
+    h(int,int):int 
+end;
+class c implements i:
+    var kingD1 : int;
+    var kingD2 : int;
+
+    method h(x:int,y:int) 
+        var v1 : int := kingD1 + 1;
+        return v1;
+    end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_h
+
+
+c_h:
+	movq	8(%rdi), %rax
+	addq	$1, %rax
+	movq	%rax, 8(%rsp)
+	movq	8(%rsp), %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { 
+    struct vft *vftc; 
+    long kingD1; 
+    long kingD2; 
+};
+
+extern struct vft { 
+    long (*h)(struct objectc *, long, long);
+} c;
+
+struct objectc *myObj = (struct objectc *)malloc(sizeof(struct objectc));
+myObj->kingD1 = 69;
+myObj->kingD2 = 99;
+
+RET(
+    c.h(myObj,0,0) == myObj->kingD1 + 1
+);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-22.0:
+interface i: 
+    h(int,int):int 
+end;
+class c implements i:
+    var kingD1 : int;
+    var kingD2 : int;
+
+    method h(x:int,y:int) 
+        var v1 : int := x;
+        return v1;
+    end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_h
+
+
+c_h:
+	movq	%rsi, 8(%rsp)
+	movq	8(%rsp), %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { 
+    struct vft *vftc; 
+    long kingD1; 
+    long kingD2; 
+};
+
+extern struct vft { 
+    long (*h)(struct objectc *, long, long);
+} c;
+
+struct objectc *myObj = (struct objectc *)malloc(sizeof(struct objectc));
+myObj->kingD1 = 69;
+myObj->kingD2 = 99;
+
+RET(
+    c.h(myObj,50,0) == 50
+);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-23.0:
+interface i: 
+    h(int,int):int 
+end;
+class c implements i:
+    var kingD1 : int;
+    var kingD2 : int;
+
+    method h(x:int,y:int) 
+        var v1 : int := x + y ;
+        return v1 + 1;
+    end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_h
+
+
+c_h:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	addq	%r11, %rax
+	movq	%rax, 8(%rsp)
+	movq	8(%rsp), %rax
+	addq	$1, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { 
+    struct vft *vftc; 
+    long kingD1; 
+    long kingD2; 
+};
+
+extern struct vft { 
+    long (*h)(struct objectc *, long, long);
+} c;
+
+struct objectc *myObj = (struct objectc *)malloc(sizeof(struct objectc));
+myObj->kingD1 = 69;
+myObj->kingD2 = 99;
+
+RET(
+    c.h(myObj,50,18) == 69
+);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-24.0:
+interface i: 
+    h(int,int):int 
+end;
+class c implements i:
+    var kingD1 : int;
+    var kingD2 : int;
+
+    method h(x:int,y:int) 
+        x := x + x;
+        return x;
+    end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_h
+
+
+c_h:
+	movq	%rsi, %rax
+	movq	%rsi, %r11
+	addq	%r11, %rax
+	movq	%rax, %rsi
+	movq	%rsi, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { 
+    struct vft *vftc; 
+    long kingD1; 
+    long kingD2; 
+};
+
+extern struct vft { 
+    long (*h)(struct objectc *, long, long);
+} c;
+
+struct objectc *myObj = (struct objectc *)malloc(sizeof(struct objectc));
+myObj->kingD1 = 69;
+myObj->kingD2 = 99;
+
+RET(
+    c.h(myObj,50,18) == 100
+);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-25.0:
+interface i: 
+    h(int,int):int 
+end;
+class c implements i:
+    var kingD1 : int;
+    var kingD2 : int;
+
+    method h(x:int,y:int) 
+        x := (x + y) < 100;
+        return x;
+    end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_h
+
+
+c_h:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	addq	%r11, %rax
+	cmpq	$100, %rax	# checking if 100 less rax (inverted because right const not allwoed) 
+	setl	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	movq	%rax, %rsi
+	movq	%rsi, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { 
+    struct vft *vftc; 
+    long kingD1; 
+    long kingD2; 
+};
+
+extern struct vft { 
+    long (*h)(struct objectc *, long, long);
+} c;
+
+struct objectc *myObj = (struct objectc *)malloc(sizeof(struct objectc));
+myObj->kingD1 = 69;
+myObj->kingD2 = 99;
+
+RET(
+    c.h(myObj,50,18) == -1
+);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-26.0:
+interface i: 
+    h(int,int):int 
+end;
+class c implements i:
+    var kingD1 : int;
+    var kingD2 : int;
+
+    method h(x:int,y:int) 
+        y := 696942;
+        return y;
+    end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_h
+
+
+c_h:
+	movq	$696942, %rdx
+	movq	%rdx, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { 
+    struct vft *vftc; 
+    long kingD1; 
+    long kingD2; 
+};
+
+extern struct vft { 
+    long (*h)(struct objectc *, long, long);
+} c;
+
+struct objectc *myObj = (struct objectc *)malloc(sizeof(struct objectc));
+myObj->kingD1 = 69;
+myObj->kingD2 = 99;
+
+RET(
+    c.h(myObj,50,18) == 696942
+);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-27.0:
+interface i: 
+    h(int,int):int 
+end;
+class c implements i:
+    var kingD1 : int;
+    var kingD2 : int;
+
+    method h(x:int,y:int) 
+        y := x;
+        x := y;  /* ha tricked you ;) */
+        return y;
+    end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_h
+
+
+c_h:
+	movq	%rsi, %rdx
+	movq	%rdx, %rsi
+	movq	%rdx, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { 
+    struct vft *vftc; 
+    long kingD1; 
+    long kingD2; 
+};
+
+extern struct vft { 
+    long (*h)(struct objectc *, long, long);
+} c;
+
+struct objectc *myObj = (struct objectc *)malloc(sizeof(struct objectc));
+myObj->kingD1 = 69;
+myObj->kingD2 = 99;
+
+RET(
+    c.h(myObj,50,18) == 50
+);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-28.0:
+interface i: 
+    h(int,int):int 
+end;
+class c implements i:
+    var kingD1 : int;
+    var kingD2 : int;
+
+    method h(x:int,y:int) 
+        y := kingD2;
+        x := 10;
+        return y;
+    end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_h
+
+
+c_h:
+	movq	16(%rdi), %rdx
+	movq	$10, %rsi
+	movq	%rdx, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { 
+    struct vft *vftc; 
+    long kingD1; 
+    long kingD2; 
+};
+
+extern struct vft { 
+    long (*h)(struct objectc *, long, long);
+} c;
+
+struct objectc *myObj = (struct objectc *)malloc(sizeof(struct objectc));
+myObj->kingD1 = 69;
+myObj->kingD2 = 99;
+
+RET(
+    c.h(myObj,50,18) == myObj->kingD2
+);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-29.0:
+interface i: 
+    h(int,int):int 
+end;
+class c implements i:
+    var kingD1 : int;
+    var kingD2 : int;
+
+    method h(x:int,y:int) 
+        kingD2 := 10;
+        return kingD2;
+    end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_h
+
+
+c_h:
+	movq	$10, 16(%rdi)
+	movq	16(%rdi), %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { 
+    struct vft *vftc; 
+    long kingD1; 
+    long kingD2; 
+};
+
+extern struct vft { 
+    long (*h)(struct objectc *, long, long);
+} c;
+
+struct objectc *myObj = (struct objectc *)malloc(sizeof(struct objectc));
+myObj->kingD1 = 69;
+myObj->kingD2 = 99;
+
+RET(
+    c.h(myObj,50,18) == 10 &&
+    myObj->kingD2 == 10
+);
 
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
@@ -530,6 +1233,304 @@ Rufe folgendes Codefragment auf:
 struct objectc { struct vft *vftc; };
 extern struct vft { long (*f)(struct objectc *, long); } c;
 RET(c.f(0,2) == -1 && c.f(0,-1)==-1 && c.f(0,100) == 0);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-30.0:
+interface i: 
+    h(int,int):int 
+end;
+class c implements i:
+    var kingD1 : int;
+    var kingD2 : int;
+
+    method h(x:int,y:int) 
+        kingD2 := ((x + y) * kingD1) * 2;
+        return kingD2;
+    end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_h
+
+
+c_h:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	addq	%r11, %rax
+	movq	8(%rdi), %r11
+	imulq	%r11, %rax
+	imulq	$2, %rax
+	movq	%rax, 16(%rdi)
+	movq	16(%rdi), %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { 
+    struct vft *vftc; 
+    long kingD1; 
+    long kingD2; 
+};
+
+extern struct vft { 
+    long (*h)(struct objectc *, long, long);
+} c;
+
+struct objectc *myObj = (struct objectc *)malloc(sizeof(struct objectc));
+myObj->kingD1 = 69;
+myObj->kingD2 = 99;
+
+RET(
+    c.h(myObj,50,18) == ((50 + 18) * myObj->kingD1) * 2 &&
+    myObj->kingD2 == ((50 + 18) * myObj->kingD1) * 2
+);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-31.0:
+interface i: 
+    h(int,int):int 
+end;
+class c implements i:
+    var kingD1 : int;
+    var kingD2 : int;
+
+    method h(x:int,y:int) 
+        kingD1 := y;
+        kingD2 := x;
+        return kingD2;
+    end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_h
+
+
+c_h:
+	movq	%rdx, 8(%rdi)
+	movq	%rsi, 16(%rdi)
+	movq	16(%rdi), %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { 
+    struct vft *vftc; 
+    long kingD1; 
+    long kingD2; 
+};
+
+extern struct vft { 
+    long (*h)(struct objectc *, long, long);
+} c;
+
+struct objectc *myObj = (struct objectc *)malloc(sizeof(struct objectc));
+myObj->kingD1 = 69;
+myObj->kingD2 = 99;
+
+RET(
+    c.h(myObj,50,18) == 50 &&
+    myObj->kingD1 == 18 &&
+    myObj->kingD2 == 50
+);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-32.0:
+interface i: 
+    h(int,int):int 
+end;
+class c implements i:
+    var kingD1 : int;
+    var kingD2 : int;
+
+    method h(x:int,y:int) 
+        var v1: int := 10;
+        kingD1 := v1;
+        return v1;
+    end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_h
+
+
+c_h:
+	movq	$10, 8(%rsp)
+	movq	8(%rsp), %rax
+	movq	%rax, 8(%rdi)
+	movq	8(%rsp), %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { 
+    struct vft *vftc; 
+    long kingD1; 
+    long kingD2; 
+};
+
+extern struct vft { 
+    long (*h)(struct objectc *, long, long);
+} c;
+
+struct objectc *myObj = (struct objectc *)malloc(sizeof(struct objectc));
+myObj->kingD1 = 69;
+myObj->kingD2 = 99;
+
+RET(
+    c.h(myObj,50,18) == 10 &&
+    myObj->kingD1 == 10
+);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-33.0:
+interface i: 
+    h(int,int):int 
+end;
+class c implements i:
+    var kingD1 : int;
+    var kingD2 : int;
+
+    method h(x:int,y:int) 
+        var v1: int := (x * y) + 10;
+        kingD1 := v1;
+        kingD2 := v1 + 1;
+        return v1;
+    end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_h
+
+
+c_h:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	imulq	%r11, %rax
+	addq	$10, %rax
+	movq	%rax, 8(%rsp)
+	movq	8(%rsp), %rax
+	movq	%rax, 8(%rdi)
+	movq	8(%rsp), %rax
+	addq	$1, %rax
+	movq	%rax, 16(%rdi)
+	movq	8(%rsp), %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { 
+    struct vft *vftc; 
+    long kingD1; 
+    long kingD2; 
+};
+
+extern struct vft { 
+    long (*h)(struct objectc *, long, long);
+} c;
+
+struct objectc *myObj = (struct objectc *)malloc(sizeof(struct objectc));
+myObj->kingD1 = 69;
+myObj->kingD2 = 99;
+
+RET(
+    c.h(myObj,50,18) == (50 * 18) + 10 &&
+    myObj->kingD1 == c.h(myObj,50,18) &&
+    myObj->kingD2 == c.h(myObj,50,18) + 1 
+);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-34.0:
+interface i: 
+    h(int,int):int 
+end;
+class c implements i:
+    var kingD1 : int;
+    var kingD2 : int;
+
+    method h(x:int,y:int) 
+        /* switching kingD1 with kingD2 */
+        var helper : int := kingD1;
+        kingD1 := kingD2;
+        kingD2 := helper;
+        return helper;
+    end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_h
+
+
+c_h:
+	movq	8(%rdi), %rax
+	movq	%rax, 8(%rsp)
+	movq	16(%rdi), %rax
+	movq	%rax, 8(%rdi)
+	movq	8(%rsp), %rax
+	movq	%rax, 16(%rdi)
+	movq	8(%rsp), %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { 
+    struct vft *vftc; 
+    long kingD1; 
+    long kingD2; 
+};
+
+extern struct vft { 
+    long (*h)(struct objectc *, long, long);
+} c;
+
+struct objectc *myObj = (struct objectc *)malloc(sizeof(struct objectc));
+myObj->kingD1 = 69;
+myObj->kingD2 = 99;
+
+RET(
+    c.h(myObj,50,18) == 69 &&
+    myObj->kingD1 == 99 &&
+    myObj->kingD2 == 69 
+);
 
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
@@ -1660,7 +2661,7 @@ RET(Class1.nestedVariables(0, -5, 6) == 7 && Class1.nestedVariables(0, 25, 13) =
 	
 	Class1.nestedControl(0, 3, 4) == 1 && Class1.nestedControl(0, -1000, 1000) == 1 &&
 	Class1.nestedControl(0, 1000, -1000) == 1 && Class1.nestedControl(0, 1000, 1002) == 0);
-/usr/ftp/pub/ubvl/test/codeb/test: line 34: 28858 Segmentation fault      ./a.out
+/usr/ftp/pub/ubvl/test/codeb/test: line 34: 15149 Segmentation fault      ./a.out
 [Error] Erzeugter Code verhaelt sich bezueglich Signalerzeugung anders als erwartet.
 Rueckgabewert = 139
 
@@ -2141,8 +3142,8 @@ Class1_gcd:
 	ret
 
 Übersetze und linke das Testprogramm:
-testcodebout28318.s: Assembler messages:
-testcodebout28318.s:47: Error: symbol `if_label_2_end' is already defined
+testcodebout14363.s: Assembler messages:
+testcodebout14363.s:47: Error: symbol `if_label_2_end' is already defined
 [Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-18.0:
 interface Interface1:
@@ -2205,7 +3206,7 @@ extern struct vft {
 RET(Class1.fib(0, 0) == 1 && Class1.fib(0, 1) == 1 && Class1.fib(0, 2) == 2 &&
 	Class1.fib(0, 3) == 3 && Class1.fib(0, 4) == 5 && Class1.fib(0, 5) == 8 &&
 	Class1.fib(0, 6) == 13 && Class1.fib(0, 20) == 10946 && Class1.fib(0, 40) == 165580141);
-/usr/ftp/pub/ubvl/test/codeb/test: line 34: 28919 Segmentation fault      ./a.out
+/usr/ftp/pub/ubvl/test/codeb/test: line 34: 15210 Segmentation fault      ./a.out
 [Error] Erzeugter Code verhaelt sich bezueglich Signalerzeugung anders als erwartet.
 Rueckgabewert = 139
 
@@ -2232,7 +3233,7 @@ class Class1 implements Interface1:
 		return new Class1;
 	end;
 end;
-/usr/ftp/pub/ubvl/test/codeb/test: line 34: 28922 Segmentation fault      $PROGRAM < $i > $RESFILE
+/usr/ftp/pub/ubvl/test/codeb/test: line 34: 15213 Segmentation fault      $PROGRAM < $i > $RESFILE
 Übersetzung: [Errot] Status=139. Erwartet: 0
 
 Ausgabe:
@@ -2243,13 +3244,13 @@ In file included from /usr/ftp/pub/ubvl/test/codeb/testmain.c:13:0:
 /home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:21:24: warning: comparison of distinct pointer types lacks a cast
   Class1.construct(obj) == reg15 && heapptr - reg15 == 2 && constructed->vftc == &Class1);
                         ^~
-/tmp/ccWsGn9Q.o: In function `call':
+/tmp/ccTz2nmp.o: In function `call':
 /home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:13: undefined reference to `Class1'
 /home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:20: undefined reference to `Class1'
 /home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:20: undefined reference to `Class1'
 /home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:20: undefined reference to `Class1'
 /home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:21: undefined reference to `Class1'
-/tmp/ccWsGn9Q.o:/home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:21: more undefined references to `Class1' follow
+/tmp/ccTz2nmp.o:/home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:21: more undefined references to `Class1' follow
 collect2: error: ld returned 1 exit status
 [Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-20.0:
@@ -3116,7 +4117,7 @@ Ausgabe:
 Identifier 'test' on line 1 conflicts with identifier [test] on line 1
 Status: korrekt
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_Dappzydee.1.3:
+==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_Dappzydee_1.3:
 interface myInterface:
     testMethod(): int
 end;
@@ -3129,10 +4130,9 @@ end;
 
 Ausgabe:
 Identifier with name 'testMethod' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
-/usr/ftp/pub/ubvl/test/codeb/test: line 125: test: 1.3: integer expression expected
-[Error] Status: 3. Erwartet: 1.3
+Status: korrekt
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_Dappzydee.2.3:
+==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_Dappzydee_2.3:
 interface myInterface:
     testMethod(): int
 end;
@@ -3146,10 +4146,9 @@ end;
 
 Ausgabe:
 Identifier with name 'testMethod' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
-/usr/ftp/pub/ubvl/test/codeb/test: line 125: test: 2.3: integer expression expected
-[Error] Status: 3. Erwartet: 2.3
+Status: korrekt
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_crazyjack.1.3:
+==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_crazyjack_1.3:
 interface a1:
 end;
 interface a2:
@@ -3191,10 +4190,9 @@ class hello2 implements a2 a1:
 end;
 Ausgabe:
 Identifier with name 'INVALID' on line 1 is not visible in the current scope
-/usr/ftp/pub/ubvl/test/codeb/test: line 125: test: 1.3: integer expression expected
-[Error] Status: 3. Erwartet: 1.3
+Status: korrekt
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_crazyjack.10.3:
+==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_crazyjack_10.3:
 interface i:
     a():int
 end;
@@ -3206,10 +4204,9 @@ class b implements:
 end;
 Ausgabe:
 Identifier with name 'x' on line 1 is not visible in the current scope
-/usr/ftp/pub/ubvl/test/codeb/test: line 125: test: 10.3: integer expression expected
-[Error] Status: 3. Erwartet: 10.3
+Status: korrekt
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_crazyjack.11.3:
+==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_crazyjack_11.3:
 interface i:
     a():int
 end;
@@ -3226,10 +4223,9 @@ class x implements:
 end;
 Ausgabe:
 Identifier with name 'x' on line 1 is not visible in the current scope
-/usr/ftp/pub/ubvl/test/codeb/test: line 125: test: 11.3: integer expression expected
-[Error] Status: 3. Erwartet: 11.3
+Status: korrekt
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_crazyjack.3.3:
+==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_crazyjack_3.3:
 interface a:
     b(int, int):int
 end;
@@ -3240,10 +4236,9 @@ class hello implements a:
 end;
 Ausgabe:
 Identifier with name 'a' on line 1 is not visible in the current scope
-/usr/ftp/pub/ubvl/test/codeb/test: line 125: test: 3.3: integer expression expected
-[Error] Status: 3. Erwartet: 3.3
+Status: korrekt
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_crazyjack.5.3:
+==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_crazyjack_5.3:
 interface a1:
     b(int, int):int
 end;
@@ -3257,10 +4252,9 @@ interface a2:
 end;
 Ausgabe:
 Identifier with name 'b2' on line 1 is not visible in the current scope
-/usr/ftp/pub/ubvl/test/codeb/test: line 125: test: 5.3: integer expression expected
-[Error] Status: 3. Erwartet: 5.3
+Status: korrekt
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_crazyjack.6.3:
+==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_crazyjack_6.3:
 interface i:
     a():int
 end;
@@ -3271,10 +4265,9 @@ class x implements:
 end;
 Ausgabe:
 Identifier with name 'a23' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
-/usr/ftp/pub/ubvl/test/codeb/test: line 125: test: 6.3: integer expression expected
-[Error] Status: 3. Erwartet: 6.3
+Status: korrekt
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_crazyjack.8.3:
+==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_crazyjack_8.3:
 interface i:
     a():int
 end;
@@ -3285,8 +4278,7 @@ class x implements:
 end;
 Ausgabe:
 Identifier with name 'hallo' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
-/usr/ftp/pub/ubvl/test/codeb/test: line 125: test: 8.3: integer expression expected
-[Error] Status: 3. Erwartet: 8.3
+Status: korrekt
 
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_gutti-6.3:
 class Foo implements Bar: /*Bar ist noch nicht sichtbar*/
@@ -4172,6 +5164,6 @@ Status: korrekt
 
 Statistics: 
 ===========
-           87 Tests total
-           71 Tests passed
-           16 Tests failed
+           105 Tests total
+           98 Tests passed
+           7 Tests failed
