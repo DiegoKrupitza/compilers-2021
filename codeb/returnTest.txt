@@ -12,6 +12,7 @@ class c implements a:
         var x : int := 5;
         var y : int := 6;
         var z : int := 10;
-        return 10;
+        return y;
+
     end;
 end;

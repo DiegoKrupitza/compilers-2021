@@ -333,3 +333,23 @@ int calcCurrentLocalVarOffset(node_t *list)
     }
     return index;
 }
+
+int getLocalVarOffset(node_t *list, char *name)
+{
+    node_t *nextNode = list;
+
+    int index = 1;
+    while (nextNode != NULL)
+    {
+        if (nextNode->type == VARIABLE)
+        {
+            if (strcmp(nextNode->name, name) == 0)
+            {
+                return index;
+            }
+            index++;
+        }
+        nextNode = nextNode->next;
+    }
+    return -1;
+}

@@ -752,7 +752,7 @@ void burm_reduce(NODEPTR_TYPE bnode, int goalnt)
    writeMovev(bnode->kids[0]->value,bnode->regStor); writeSub(bnode->kids[1]->regStor,bnode->regStor);
     break;
   case 27:
-   /* TODO: in later angabe da es sich hier um normale vars handel */
+   if (bnode->localVarOffset != -1) writeMoveStack(bnode->localVarOffset, bnode->regStor);
     break;
   case 28:
    if (bnode->parameterIndex != -1) writeMove(getParameterRegister(bnode->parameterIndex), bnode->regStor);   

@@ -504,7 +504,7 @@ Term                    :   '(' Expr ')'
                         @{
                             @visCheck isVisibleForZuweisungOrZugriff(@Term.ids@,@ID.name@,@ID.lineNr@);
 
-                            @i @Term.tree@ = createComplexIdentifierLeaf(@ID.name@, getTypeOfName(@Term.ids@, @ID.name@), getParameterIndex(@Term.ids@, @ID.name@), getClassVarOffset(@Term.ids@, @ID.name@));
+                            @i @Term.tree@ = createComplexIdentifierLeaf(@ID.name@, getTypeOfName(@Term.ids@, @ID.name@), getParameterIndex(@Term.ids@, @ID.name@), getTypeOfName(@Term.ids@, @ID.name@) == CLASS_VAR ? getClassVarOffset(@Term.ids@, @ID.name@) : getLocalVarOffset(@Term.ids@, @ID.name@));
                         @}
                         |   Term '.' ID '(' ')'
                         @{

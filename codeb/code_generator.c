@@ -329,7 +329,8 @@ void writeRegLessReg(char *reg1, char *reg2, char *dst)
 
 void writeMoveStack(long offset, char *dst)
 {
-    fprintf(stdout, "\tmovq\t%ld(%%rsp), %%%s\n", offset, dst);
+    //NOTE: the offset you provide will be mulitplied by 8 so take care of that!!!
+    fprintf(stdout, "\tmovq\t%ld(%%rsp), %%%s\n", offset * 8, dst);
 }
 
 void writeMoveRegInStack(char *src, long offset)
