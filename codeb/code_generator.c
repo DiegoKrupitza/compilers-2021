@@ -344,3 +344,18 @@ void writeMoveVInStack(long value, long offset)
     //NOTE: the offset you provide will be mulitplied by 8 so take care of that!!!
     printf("\tmovq\t$%ld, %ld(%%rsp)\n", value, offset * 8);
 }
+
+void writeMoveStackInStack(long srcOffset, long dstOffset)
+{
+    //NOTE: the offset you provide will be mulitplied by 8 so take care of that!!!
+    printf("\tmovq\t%ld(%%rsp), %ld(%%rsp)\n", srcOffset * 8, dstOffset * 8);
+}
+
+void writeMoveClassVarInStack(int classVaroffset, long dstOffset)
+{
+    // offset starts at 0
+    int calculatedPosition = 8 + (8 * classVaroffset);
+
+    // movq calculatedPosition(getThisRegister()), dst
+    fprintf(stdout, "\tmovq\t%d(%%%s), %ld(%%rsp)\n", calculatedPosition, getThisRegister(), dstOffset * 8);
+}

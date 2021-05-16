@@ -1,0 +1,7 @@
+Possible testcases:
+* make local var and retur
+* make 2 local vars and return
+* var x = 3; var y = x; ret y;
+* var x = classVar; ret x;
+* var x = classVar + 1; ret x;
+* var x = param; ret x + 1;

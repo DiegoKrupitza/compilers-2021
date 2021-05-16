@@ -9,9 +9,12 @@ class c implements a:
     method b(e:int, f:int)
         /* var x : int := 5; */
         /* var x : int := ((not(5 + 5)) < 1) + e; */
-        var x : int := 5;
-        var y : int := 6;
-        var z : int := 10;
+        /* var x : int := 5; */
+        /* var y : int := 6; */
+        /* var z : int := 10;  */
+        /* return y; */
+        /* var y : int := e; */
+        var y: int := adiego;
         return y;
 
     end;

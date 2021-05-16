@@ -28,7 +28,7 @@ struct burm_state {
 	struct {
 		unsigned burm_stat:2;
 		unsigned burm_ret:1;
-		unsigned burm_assign:2;
+		unsigned burm_assign:3;
 		unsigned burm_expr:5;
 		unsigned burm_const:3;
 	} rule;
@@ -80,6 +80,9 @@ short *burm_nts[] = {
 	burm_nts_8,	/* 32 */
 	burm_nts_3,	/* 33 */
 	burm_nts_2,	/* 34 */
+	burm_nts_8,	/* 35 */
+	burm_nts_8,	/* 36 */
+	burm_nts_8,	/* 37 */
 };
 
 char burm_arity[] = {
@@ -115,6 +118,9 @@ static short burm_decode_assign[] = {
 	0,
 	33,
 	34,
+	35,
+	36,
+	37,
 };
 
 static short burm_decode_expr[] = {
@@ -524,6 +530,39 @@ STATEPTR_TYPE burm_state(int op, STATEPTR_TYPE left, STATEPTR_TYPE right) {
 		}
 	case 14: /* OP_ASSIGN */
 		assert(l && r);
+		if (	/* assign: OP_ASSIGN(OP_ID,OP_CLASS_VAR_ID) */
+			l->op == 9 && /* OP_ID */
+			r->op == 11 /* OP_CLASS_VAR_ID */
+		) {
+			c = 1;
+			if (c + 0 < p->cost[burm_assign_NT]) {
+				p->cost[burm_assign_NT] = c + 0;
+				p->rule.burm_assign = 5;
+				burm_closure_assign(p, c + 0);
+			}
+		}
+		if (	/* assign: OP_ASSIGN(OP_ID,OP_PARAM_ID) */
+			l->op == 9 && /* OP_ID */
+			r->op == 10 /* OP_PARAM_ID */
+		) {
+			c = 1;
+			if (c + 0 < p->cost[burm_assign_NT]) {
+				p->cost[burm_assign_NT] = c + 0;
+				p->rule.burm_assign = 4;
+				burm_closure_assign(p, c + 0);
+			}
+		}
+		if (	/* assign: OP_ASSIGN(OP_ID,OP_ID) */
+			l->op == 9 && /* OP_ID */
+			r->op == 9 /* OP_ID */
+		) {
+			c = 1;
+			if (c + 0 < p->cost[burm_assign_NT]) {
+				p->cost[burm_assign_NT] = c + 0;
+				p->rule.burm_assign = 3;
+				burm_closure_assign(p, c + 0);
+			}
+		}
 		if (	/* assign: OP_ASSIGN(OP_ID,expr) */
 			l->op == 9 /* OP_ID */
 		) {
@@ -615,6 +654,9 @@ NODEPTR_TYPE *burm_kids(NODEPTR_TYPE p, int eruleno, NODEPTR_TYPE kids[]) {
 		kids[0] = LEFT_CHILD(p);
 		kids[1] = RIGHT_CHILD(p);
 		break;
+	case 37: /* assign: OP_ASSIGN(OP_ID,OP_CLASS_VAR_ID) */
+	case 36: /* assign: OP_ASSIGN(OP_ID,OP_PARAM_ID) */
+	case 35: /* assign: OP_ASSIGN(OP_ID,OP_ID) */
 	case 32: /* const: OP_NUMBER */
 	case 31: /* const: OP_NULL */
 	case 30: /* expr: OP_THIS */
@@ -774,6 +816,15 @@ void burm_reduce(NODEPTR_TYPE bnode, int goalnt)
     break;
   case 34:
    writeMoveRegInStack(bnode->kids[1]->regStor, bnode->kids[0]->localVarOffset);
+    break;
+  case 35:
+   writeMoveStackInStack(bnode->kids[1]->localVarOffset,bnode->kids[0]->localVarOffset);
+    break;
+  case 36:
+   writeMoveRegInStack(getParameterRegister(bnode->kids[1]->parameterIndex), bnode->kids[0]->localVarOffset);
+    break;
+  case 37:
+   writeMoveClassVarInStack(bnode->kids[1]->classVaroffset, bnode->kids[0]->localVarOffset);
     break;
   default:    assert (0);
   }

@@ -65,3 +65,5 @@ void writeRegLessReg(char *reg1, char *reg2, char *dst);
 void writeMoveStack(long offset, char *dst);
 void writeMoveVInStack(long value, long offset);
 void writeMoveRegInStack(char *src, long offset);
+void writeMoveStackInStack(long srcOffset, long dstOffset);
+void writeMoveClassVarInStack(int classVaroffset, long dstOffset);

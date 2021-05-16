@@ -384,7 +384,9 @@ Stat                    :   RETURN Expr
                             @i @Expr.ids@ = @Stat.in@ ;
                             @i @Stat.out@ = @Stat.in@ ;
 
-                            @i @Stat.tree@ = NULL; /*TODO change later */
+                            @i @Stat.tree@ = createNode(OP_ASSIGN, createComplexIdentifierLeaf(@ID.name@, getTypeOfName(@Stat.in@, @ID.name@), getParameterIndex(@Stat.in@, @ID.name@), getTypeOfName(@Stat.in@, @ID.name@) == CLASS_VAR ? getClassVarOffset(@Stat.in@, @ID.name@) : getLocalVarOffset(@Stat.in@, @ID.name@)), @Expr.tree@);
+
+                            @reg @Stat.tree@->regStor = getFirstRegister(); @Expr.tree@->regStor = @Stat.tree@->regStor;
                         @}
                         |   Expr
                         @{
