@@ -22,14 +22,12 @@ extern int yylex();
 extern void burm_reduce(NODEPTR_TYPE, int);
 extern void burm_label(NODEPTR_TYPE);
 
-char* lastIfLabelName = "if_label_";
-int lastId = 0;
+char* lastIfLabelName = "label";
 
-char* prepareIfString(int inc)
+char* prepareLabelString(char* classname, char* functionname, long counter)
 {
-    lastId = lastId + inc;
-    char *ifName = calloc(strlen(lastIfLabelName) + 25 + lastId, sizeof(char));
-    sprintf(ifName, "%s%d", lastIfLabelName, lastId);
+    char *ifName = calloc(strlen(lastIfLabelName) + strlen(classname) + strlen(functionname) + 25 + counter, sizeof(char));
+    sprintf(ifName, "%s_%s_%s_%d", lastIfLabelName, classname, functionname, counter);
     return ifName;
 }
 
@@ -55,13 +53,18 @@ char* prepareIfString(int inc)
 @attributes { long value; } NUM
 @attributes { char *name; int lineNr; } ID
 @attributes { node_t* in; node_t* out; meth_node_t* inImplList; meth_node_t* outImplList; } Programm ProgrammStart Class
-@attributes { node_t* in; node_t* out; } Interface AbstraktMethodsLoop AbstraktMethod Stats Pars Par ParsLoop
-@attributes { node_t* in; } Type ParamTypesLoop TypesLoop ImplementsLoop StatsMethode
+@attributes { node_t* in; node_t* out; } Interface AbstraktMethodsLoop AbstraktMethod Pars Par ParsLoop
+@attributes { node_t* in; } Type ParamTypesLoop TypesLoop ImplementsLoop
 @attributes { node_t* ids; } ParamsExpr ParamsExprLoop
+
+
+@attributes { node_t* in; char* currentClassName; char* currentFunctionName; long ifcounter; } StatsMethode
+@attributes { node_t* in; node_t* out; char* currentClassName; char* currentFunctionName; long ifcounterIn; long ifcounterOut; } Stats
+@attributes { node_t* in; node_t* out; tree_t* tree; char* currentClassName; char* currentFunctionName; long ifcounterIn; long ifcounterOut; } Stat
 
 @attributes { node_t* in; node_t* out; char* currentClassName; meth_node_t* inImplList; meth_node_t* outImplList; } MemeberLoop Member
 
-@attributes { node_t* in; node_t* out; tree_t* tree; } Stat
+
 @attributes { node_t* ids; tree_t *tree; } Expr OptionaNotTerm OptionalPlusTerm OptionalMalTerm OptionalAndTerm Term 
 
 @traversal @postorder visCheck
@@ -270,6 +273,10 @@ Member                  :   VAR ID ':' Type
                             @i @Member.out@ = @Member.in@;
 
                             @i @Member.outImplList@ = addImpl(@Member.inImplList@, @Member.currentClassName@, @ID.name@);
+                            
+                            @i @StatsMethode.currentClassName@ = @Member.currentClassName@;
+                            @i @StatsMethode.currentFunctionName@ = @ID.name@;
+                            @i @StatsMethode.ifcounter@ = 0;
 
                             @burm @revorder(1) generateMethodeLabel(@Member.currentClassName@, @ID.name@);
                         @}
@@ -281,6 +288,10 @@ Member                  :   VAR ID ':' Type
                             @i @StatsMethode.in@ = @Pars.out@ ;
 
                             @i @Member.outImplList@ = addImpl(@Member.inImplList@, @Member.currentClassName@, @ID.name@);
+
+                            @i @StatsMethode.currentClassName@ = @Member.currentClassName@;
+                            @i @StatsMethode.currentFunctionName@ = @ID.name@;
+                            @i @StatsMethode.ifcounter@ = 0;
 
                             @burm @revorder(1) generateMethodeLabel(@Member.currentClassName@, @ID.name@);
                         @}
@@ -329,6 +340,10 @@ Par                     :   ID ':' Type
 StatsMethode            :   Stats
                         @{
                             @i @Stats.in@ = @StatsMethode.in@ ;
+
+                            @i @Stats.currentClassName@ = @StatsMethode.currentClassName@;
+                            @i @Stats.currentFunctionName@ = @StatsMethode.currentFunctionName@;
+                            @i @Stats.ifcounterIn@ = @StatsMethode.ifcounter@;
                         @}
                         ;
 
@@ -337,12 +352,24 @@ Stats                   :   Stat ';' Stats
                             @i @Stat.in@ = @Stats.0.in@ ;
                             @i @Stats.1.in@ = @Stat.out@ ;
                             @i @Stats.0.out@ = @Stats.1.out@;
+
+                            @i @Stat.currentClassName@ = @Stats.0.currentClassName@;
+                            @i @Stat.currentFunctionName@ = @Stats.0.currentFunctionName@;
+                            @i @Stat.ifcounterIn@ = @Stats.0.ifcounterIn@;
+
+                            @i @Stats.1.currentClassName@ = @Stats.0.currentClassName@;
+                            @i @Stats.1.currentFunctionName@ = @Stats.0.currentFunctionName@;
+                            @i @Stats.1.ifcounterIn@ = @Stat.ifcounterOut@;
+
+                            @i @Stats.0.ifcounterOut@ = @Stats.1.ifcounterOut@;
+
                             @visCheck @revorder(1) /* print2D(@Stat.tree@); */
                             @burm @revorder(1) if(@Stat.tree@ != NULL) { burm_label(@Stat.tree@); burm_reduce(@Stat.tree@, 1); } 
                         @}
                         |
                         @{
                             @i @Stats.out@ = @Stats.in@ ;
+                            @i @Stats.ifcounterOut@ = @Stats.ifcounterIn@;
                         @}
                         ;
 
@@ -352,6 +379,8 @@ Stat                    :   RETURN Expr
                             @i @Stat.out@ = @Stat.in@ ;
                             @i @Stat.tree@ = createNode(OP_RETURN, @Expr.tree@, NULL);
 
+                            @i @Stat.ifcounterOut@ = @Stat.ifcounterIn@;
+
                             @reg @Stat.tree@->regStor = getFirstRegister(); @Expr.tree@->regStor = @Stat.tree@->regStor;
                         @}
                         |   IF Expr THEN Stats END
@@ -360,11 +389,16 @@ Stat                    :   RETURN Expr
                             @i @Stats.in@ = @Stat.in@ ;
                             @i @Stat.out@ = @Stat.in@ ;
 
+                            @i @Stats.currentClassName@ = @Stat.currentClassName@;
+                            @i @Stats.currentFunctionName@ = @Stat.currentFunctionName@;
+
+                            @i @Stats.ifcounterIn@ = @Stat.ifcounterIn@ + 1;
+                            @i @Stat.ifcounterOut@ = @Stats.ifcounterOut@;
                             
-                            @i @Stat.tree@ = createNode(OP_IF, createIfLabelLeaf(prepareIfString(1)), @Expr.tree@);
+                            @i @Stat.tree@ = createNode(OP_IF, createIfLabelLeaf(prepareLabelString(@Stats.currentClassName@,@Stats.currentFunctionName@,@Stat.ifcounterIn@)), @Expr.tree@);
                             @reg @Stat.tree@->regStor = getFirstRegister(); @Expr.tree@->regStor = @Stat.tree@->regStor;
                             
-                            @burm writeIfEndLabel(prepareIfString(0)); /* there is still a bug when multiple ifs */
+                            @burm writeIfEndLabel(prepareLabelString(@Stats.currentClassName@,@Stats.currentFunctionName@,@Stat.ifcounterIn@));
 
                         @}
                         |   IF Expr THEN Stats ELSE Stats END
@@ -374,6 +408,16 @@ Stat                    :   RETURN Expr
                             @i @Stats.1.in@ = @Stat.in@ ;
                             @i @Stat.out@ = @Stat.in@ ;
 
+                            @i @Stats.0.currentClassName@ = @Stat.currentClassName@;
+                            @i @Stats.0.currentFunctionName@ = @Stat.currentFunctionName@;
+
+                            @i @Stats.1.currentClassName@ = @Stat.currentClassName@;
+                            @i @Stats.1.currentFunctionName@ = @Stat.currentFunctionName@;
+
+                            @i @Stats.0.ifcounterIn@ = @Stat.ifcounterIn@ + 1;
+                            @i @Stats.1.ifcounterIn@ = @Stats.0.ifcounterOut@ + 1;
+                            @i @Stat.ifcounterOut@ = @Stats.1.ifcounterOut@;
+
                             @i @Stat.tree@ = NULL; /*TODO change later */
                         @}
                         |   WHILE Expr DO Stats END
@@ -382,6 +426,12 @@ Stat                    :   RETURN Expr
                             @i @Stats.in@ = @Stat.in@ ;
                             @i @Stat.out@ = @Stat.in@ ;
 
+                            @i @Stats.currentClassName@ = @Stat.currentClassName@;
+                            @i @Stats.currentFunctionName@ = @Stat.currentFunctionName@;
+
+                            @i @Stats.ifcounterIn@ = @Stat.ifcounterIn@ + 1;
+                            @i @Stat.ifcounterOut@ = @Stats.ifcounterOut@;
+
                             @i @Stat.tree@ = NULL; /*TODO change later */
                         @}
                         |   VAR ID ':' Type ASSIGNOP Expr
@@ -389,6 +439,8 @@ Stat                    :   RETURN Expr
                             @i @Expr.ids@ = @Stat.in@ ;
                             @i @Stat.out@ = addDev(duplicate(@Stat.in@),@ID.name@,VARIABLE,@ID.lineNr@,"Var assignment in stat");
                             @i @Type.in@ = @Stat.in@ ;
+
+                            @i @Stat.ifcounterOut@ = @Stat.ifcounterIn@;
 
                             @i @Stat.tree@ = createNode(OP_ASSIGN, createComplexIdentifierLeaf(@ID.name@, VARIABLE, -1, calcCurrentLocalVarOffset(@Stat.in@)), @Expr.tree@);
 
@@ -401,6 +453,8 @@ Stat                    :   RETURN Expr
                             @i @Expr.ids@ = @Stat.in@ ;
                             @i @Stat.out@ = @Stat.in@ ;
 
+                            @i @Stat.ifcounterOut@ = @Stat.ifcounterIn@;
+
                             @i @Stat.tree@ = createNode(OP_ASSIGN, createComplexIdentifierLeaf(@ID.name@, getTypeOfName(@Stat.in@, @ID.name@), getParameterIndex(@Stat.in@, @ID.name@), getTypeOfName(@Stat.in@, @ID.name@) == CLASS_VAR ? getClassVarOffset(@Stat.in@, @ID.name@) : getLocalVarOffset(@Stat.in@, @ID.name@)), @Expr.tree@);
 
                             @reg @Stat.tree@->regStor = getFirstRegister(); @Expr.tree@->regStor = @Stat.tree@->regStor;
@@ -409,6 +463,8 @@ Stat                    :   RETURN Expr
                         @{
                             @i @Expr.ids@ = @Stat.in@ ;
                             @i @Stat.out@ = @Stat.in@ ;
+
+                            @i @Stat.ifcounterOut@ = @Stat.ifcounterIn@;
 
                             @i @Stat.tree@ = NULL; /*TODO change later check if this is really ok! */
                         @}

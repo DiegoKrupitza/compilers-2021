@@ -42,16 +42,24 @@ struct yyyT6 { node_t* ids; };
 typedef struct yyyT6 *yyyP6; 
 
 
-struct yyyT7 { node_t* in; node_t* out; char* currentClassName; meth_node_t* inImplList; meth_node_t* outImplList; }; 
+struct yyyT7 { node_t* in; char* currentClassName; char* currentFunctionName; long ifcounter; }; 
 typedef struct yyyT7 *yyyP7; 
 
 
-struct yyyT8 { node_t* in; node_t* out; tree_t* tree; }; 
+struct yyyT8 { node_t* in; node_t* out; char* currentClassName; char* currentFunctionName; long ifcounterIn; long ifcounterOut; }; 
 typedef struct yyyT8 *yyyP8; 
 
 
-struct yyyT9 { node_t* ids; tree_t *tree; }; 
+struct yyyT9 { node_t* in; node_t* out; tree_t* tree; char* currentClassName; char* currentFunctionName; long ifcounterIn; long ifcounterOut; }; 
 typedef struct yyyT9 *yyyP9; 
+
+
+struct yyyT10 { node_t* in; node_t* out; char* currentClassName; meth_node_t* inImplList; meth_node_t* outImplList; }; 
+typedef struct yyyT10 *yyyP10; 
+
+
+struct yyyT11 { node_t* ids; tree_t *tree; }; 
+typedef struct yyyT11 *yyyP11; 
                                                       /*custom*/  
 typedef unsigned char yyyWAT; 
 typedef unsigned char yyyRCT; 

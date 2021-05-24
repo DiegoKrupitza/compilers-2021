@@ -573,16 +573,24 @@ struct yyyT6 { node_t* ids; };
 typedef struct yyyT6 *yyyP6; 
 
 
-struct yyyT7 { node_t* in; node_t* out; char* currentClassName; meth_node_t* inImplList; meth_node_t* outImplList; }; 
+struct yyyT7 { node_t* in; char* currentClassName; char* currentFunctionName; long ifcounter; }; 
 typedef struct yyyT7 *yyyP7; 
 
 
-struct yyyT8 { node_t* in; node_t* out; tree_t* tree; }; 
+struct yyyT8 { node_t* in; node_t* out; char* currentClassName; char* currentFunctionName; long ifcounterIn; long ifcounterOut; }; 
 typedef struct yyyT8 *yyyP8; 
 
 
-struct yyyT9 { node_t* ids; tree_t *tree; }; 
+struct yyyT9 { node_t* in; node_t* out; tree_t* tree; char* currentClassName; char* currentFunctionName; long ifcounterIn; long ifcounterOut; }; 
 typedef struct yyyT9 *yyyP9; 
+
+
+struct yyyT10 { node_t* in; node_t* out; char* currentClassName; meth_node_t* inImplList; meth_node_t* outImplList; }; 
+typedef struct yyyT10 *yyyP10; 
+
+
+struct yyyT11 { node_t* ids; tree_t *tree; }; 
+typedef struct yyyT11 *yyyP11; 
                                                       /*custom*/  
 typedef unsigned char yyyWAT; 
 typedef unsigned char yyyRCT; 
@@ -626,7 +634,7 @@ extern yyyWAT yyyLRCIL[];
 extern void yyyGenLeaf(); 
 
 
-#line 630 "lex.yy.c"
+#line 638 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -844,9 +852,9 @@ YY_DECL
 		}
 
 	{
-#line 99 "oxout.l"
+#line 107 "oxout.l"
 
-#line 850 "lex.yy.c"
+#line 858 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -905,194 +913,194 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 100 "oxout.l"
+#line 108 "oxout.l"
 {   {yyyGenLeaf(0,0,yyyLRCIL+0,yyyLRCIL+0);return IF;}  }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 101 "oxout.l"
+#line 109 "oxout.l"
 {   {yyyGenLeaf(0,0,yyyLRCIL+0,yyyLRCIL+0);return INT;}  }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 102 "oxout.l"
+#line 110 "oxout.l"
 {   {yyyGenLeaf(0,0,yyyLRCIL+0,yyyLRCIL+0);return INTERFACE;}  }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 103 "oxout.l"
+#line 111 "oxout.l"
 {   {yyyGenLeaf(0,0,yyyLRCIL+0,yyyLRCIL+0);return END;}  }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 104 "oxout.l"
+#line 112 "oxout.l"
 {   {yyyGenLeaf(0,0,yyyLRCIL+0,yyyLRCIL+0);return CLASS;}  }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 105 "oxout.l"
+#line 113 "oxout.l"
 {   {yyyGenLeaf(0,0,yyyLRCIL+0,yyyLRCIL+0);return IMPLEMENTS;}  }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 106 "oxout.l"
+#line 114 "oxout.l"
 {   {yyyGenLeaf(0,0,yyyLRCIL+0,yyyLRCIL+0);return VAR;}  }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 107 "oxout.l"
+#line 115 "oxout.l"
 {   {yyyGenLeaf(0,0,yyyLRCIL+0,yyyLRCIL+0);return METHOD;}  }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 108 "oxout.l"
+#line 116 "oxout.l"
 {   {yyyGenLeaf(0,0,yyyLRCIL+0,yyyLRCIL+0);return RETURN;}  }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 109 "oxout.l"
+#line 117 "oxout.l"
 {   {yyyGenLeaf(0,0,yyyLRCIL+0,yyyLRCIL+0);return THEN;}  }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 110 "oxout.l"
+#line 118 "oxout.l"
 {   {yyyGenLeaf(0,0,yyyLRCIL+0,yyyLRCIL+0);return ELSE;}  }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 111 "oxout.l"
+#line 119 "oxout.l"
 {   {yyyGenLeaf(0,0,yyyLRCIL+0,yyyLRCIL+0);return WHILE;}  }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 112 "oxout.l"
+#line 120 "oxout.l"
 {   {yyyGenLeaf(0,0,yyyLRCIL+0,yyyLRCIL+0);return DO;}  }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 113 "oxout.l"
+#line 121 "oxout.l"
 {   {yyyGenLeaf(0,0,yyyLRCIL+0,yyyLRCIL+0);return NOT;}  }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 114 "oxout.l"
+#line 122 "oxout.l"
 {   {yyyGenLeaf(0,0,yyyLRCIL+0,yyyLRCIL+0);return AND;}  }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 115 "oxout.l"
+#line 123 "oxout.l"
 {   {yyyGenLeaf(0,0,yyyLRCIL+0,yyyLRCIL+0);return NEW;}  }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 116 "oxout.l"
+#line 124 "oxout.l"
 {   {yyyGenLeaf(0,0,yyyLRCIL+0,yyyLRCIL+0);return THIS;}  }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 117 "oxout.l"
+#line 125 "oxout.l"
 {   {yyyGenLeaf(0,0,yyyLRCIL+0,yyyLRCIL+0);return NULL_VAL;}  }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 119 "oxout.l"
+#line 127 "oxout.l"
 {yyyGenLeaf(0,0,yyyLRCIL+0,yyyLRCIL+0);return ';';}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 120 "oxout.l"
+#line 128 "oxout.l"
 {yyyGenLeaf(0,0,yyyLRCIL+0,yyyLRCIL+0);return ':';}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 121 "oxout.l"
+#line 129 "oxout.l"
 {yyyGenLeaf(0,0,yyyLRCIL+0,yyyLRCIL+0);return '(';}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 122 "oxout.l"
+#line 130 "oxout.l"
 {yyyGenLeaf(0,0,yyyLRCIL+0,yyyLRCIL+0);return ')';}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 123 "oxout.l"
+#line 131 "oxout.l"
 {yyyGenLeaf(0,0,yyyLRCIL+0,yyyLRCIL+0);return '.';}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 124 "oxout.l"
+#line 132 "oxout.l"
 {yyyGenLeaf(0,0,yyyLRCIL+0,yyyLRCIL+0);return ',';}  
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 125 "oxout.l"
+#line 133 "oxout.l"
 {yyyGenLeaf(0,0,yyyLRCIL+0,yyyLRCIL+0);return ASSIGNOP;}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 126 "oxout.l"
+#line 134 "oxout.l"
 {yyyGenLeaf(0,0,yyyLRCIL+0,yyyLRCIL+0);return '+';}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 127 "oxout.l"
+#line 135 "oxout.l"
 {yyyGenLeaf(0,0,yyyLRCIL+0,yyyLRCIL+0);return '*';}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 128 "oxout.l"
+#line 136 "oxout.l"
 {yyyGenLeaf(0,0,yyyLRCIL+0,yyyLRCIL+0);return '-';}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 129 "oxout.l"
+#line 137 "oxout.l"
 {yyyGenLeaf(0,0,yyyLRCIL+0,yyyLRCIL+0);return '<';}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 130 "oxout.l"
+#line 138 "oxout.l"
 {yyyGenLeaf(0,0,yyyLRCIL+0,yyyLRCIL+0);return '=';}  
 	YY_BREAK
 case 31:
 /* rule 31 can match eol */
 YY_RULE_SETUP
-#line 133 "oxout.l"
+#line 141 "oxout.l"
 { /* DO NOTHING */ } /*https://stackoverflow.com/questions/25395251/detecting-and-skipping-line-comments-with-flex */
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 134 "oxout.l"
+#line 142 "oxout.l"
 { exit(1); }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 137 "oxout.l"
+#line 145 "oxout.l"
 {yyyGenLeaf(2,2,yyyLRCIL+0,yyyLRCIL+2); (((yyyP2)(yyyTermBuffer.snBufPtr))->name) = strdup(yytext); (((yyyP2)(yyyTermBuffer.snBufPtr))->lineNr) = yylineno; return ID;} 
 	YY_BREAK
 case 34:
 /* rule 34 can match eol */
 YY_RULE_SETUP
-#line 139 "oxout.l"
+#line 147 "oxout.l"
 ;
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 140 "oxout.l"
+#line 148 "oxout.l"
 ;
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 142 "oxout.l"
+#line 150 "oxout.l"
 {yyyGenLeaf(1,1,yyyLRCIL+2,yyyLRCIL+3); (((yyyP1)(yyyTermBuffer.snBufPtr))->value) = strtoul(yytext, NULL, 16); return NUM;} 
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 144 "oxout.l"
+#line 152 "oxout.l"
 {yyyGenLeaf(1,1,yyyLRCIL+2,yyyLRCIL+3); (((yyyP1)(yyyTermBuffer.snBufPtr))->value) = strtoul(yytext, NULL, 10); return NUM;} 
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 147 "oxout.l"
+#line 155 "oxout.l"
 {
                                 printf("ERROR on line %d Can not lex the symbol: %s\n",yylineno,yytext);
                                 exit(1);
@@ -1100,10 +1108,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 152 "oxout.l"
+#line 160 "oxout.l"
 ECHO;
 	YY_BREAK
-#line 1107 "lex.yy.c"
+#line 1115 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2104,7 +2112,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 152 "oxout.l"
+#line 160 "oxout.l"
 
 
 

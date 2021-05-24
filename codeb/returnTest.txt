@@ -20,15 +20,15 @@ class c implements a:
         /* var x : int := 5; */
         
         if 1 then 
-            return 1;
+            return 11;
         end;
 
-        if 1 then 
-            return 2;
+        if 2 then 
+            return 22;
         end;
 
-        if 1 then 
-            return 3;
+        if 3 then 
+            return 33;
         end;
 
         
