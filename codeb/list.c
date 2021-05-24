@@ -322,7 +322,7 @@ int calcCurrentLocalVarOffset(node_t *list)
 {
     node_t *nextNode = list;
 
-    int index = 1;
+    int index = 0;
     while (nextNode != NULL)
     {
         if (nextNode->type == VARIABLE)
@@ -338,7 +338,7 @@ int getLocalVarOffset(node_t *list, char *name)
 {
     node_t *nextNode = list;
 
-    int index = 1;
+    int index = 0;
     while (nextNode != NULL)
     {
         if (nextNode->type == VARIABLE)

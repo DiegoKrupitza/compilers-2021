@@ -275,8 +275,8 @@ void generateMethodeLabel(char *className, char *meth_name, long varCounter)
     if (varCounter > 0)
     {
         //TODO: not working as expected
-        //globalVarCount = varCounter;
-        //fprintf(stdout, "\tenter\t$%li, $0\n", varCounter * 8);
+        globalVarCount = varCounter;
+        fprintf(stdout, "\tenter\t$%li, $0\n", varCounter * 8);
     }
     else
     {
