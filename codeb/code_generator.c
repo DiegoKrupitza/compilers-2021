@@ -274,6 +274,7 @@ void generateMethodeLabel(char *className, char *meth_name, long varCounter)
 
     if (varCounter > 0)
     {
+        //TODO: not working as expected
         //globalVarCount = varCounter;
         //fprintf(stdout, "\tenter\t$%li, $0\n", varCounter * 8);
     }
@@ -465,4 +466,24 @@ void processInjection(code_injection_t *injection)
     {
         writeElseLabel(injection->injectionLabel);
     }
+    else if (injection->op == OP_LOOP_LABEL)
+    {
+        writeLoopEntry(injection->injectionLabel);
+    }
+}
+
+void writeLoopJumpToStart(char *label)
+{
+    fprintf(stdout, "\tjmp\t%s\n", label);
+}
+
+void writeLoopEntry(char *label)
+{
+    fprintf(stdout, "\n\t%s:\n", label);
+}
+
+void writeLoopCheck(char *label, char *src)
+{
+    fprintf(stdout, "\tcmpq\t$0, %%%s\n", src);
+    fprintf(stdout, "\tjns\t%s_end\n", label);
 }

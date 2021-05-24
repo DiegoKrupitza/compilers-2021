@@ -51,7 +51,7 @@ struct yyyT8 { node_t* in; node_t* out; char* currentClassName; char* currentFun
 typedef struct yyyT8 *yyyP8; 
 
 
-struct yyyT9 { node_t* in; node_t* out; tree_t* tree; char* currentClassName; char* currentFunctionName; long ifcounterIn; long ifcounterOut; }; 
+struct yyyT9 { node_t* in; node_t* out; tree_t* tree; char* currentClassName; char* currentFunctionName; long ifcounterIn; long ifcounterOut; code_injection_t* outInjection; }; 
 typedef struct yyyT9 *yyyP9; 
 
 

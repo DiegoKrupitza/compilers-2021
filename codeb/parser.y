@@ -64,7 +64,7 @@ char* prepareLabelString(char* classname, char* functionname, long counter)
 
 @attributes { node_t* in; char* currentClassName; char* currentFunctionName; long ifcounter; } StatsMethode
 @attributes { node_t* in; node_t* out; char* currentClassName; char* currentFunctionName; long ifcounterIn; long ifcounterOut; code_injection_t* injection; } Stats
-@attributes { node_t* in; node_t* out; tree_t* tree; char* currentClassName; char* currentFunctionName; long ifcounterIn; long ifcounterOut; } Stat
+@attributes { node_t* in; node_t* out; tree_t* tree; char* currentClassName; char* currentFunctionName; long ifcounterIn; long ifcounterOut; code_injection_t* outInjection; } Stat
 
 @attributes { node_t* in; node_t* out; char* currentClassName; meth_node_t* inImplList; meth_node_t* outImplList; } MemeberLoop Member
 
@@ -373,6 +373,8 @@ Stats                   :   Stat ';' Stats
 
                             @visCheck @revorder(1) /* print2D(@Stat.tree@); */
 
+                            @burm @revorder(1) if(@Stat.outInjection@ != NULL && @Stat.outInjection@->op == OP_LOOP_LABEL) { processInjection(@Stat.outInjection@); }
+
                             @burm @revorder(1) if(@Stats.injection@ != NULL && @Stats.injection@->op == OP_ELSE_LABEL) { processInjection(@Stats.injection@); }
                             @burm if(@Stats.injection@ != NULL && @Stats.injection@->op == OP_END_JUMP) { processInjection(@Stats.injection@); }
 
@@ -396,6 +398,8 @@ Stat                    :   RETURN Expr
                             @i @Stat.tree@ = createNode(OP_RETURN, @Expr.tree@, NULL);
 
                             @i @Stat.ifcounterOut@ = @Stat.ifcounterIn@;
+                            
+                            @i @Stat.outInjection@ = NULL;
 
                             @reg @Stat.tree@->regStor = getFirstRegister(); @Expr.tree@->regStor = @Stat.tree@->regStor;
                         @}
@@ -404,6 +408,8 @@ Stat                    :   RETURN Expr
                             @i @Expr.ids@ = @Stat.in@ ;
                             @i @Stats.in@ = @Stat.in@ ;
                             @i @Stat.out@ = @Stat.in@ ;
+
+                            @i @Stat.outInjection@ = NULL;
 
                             @i @Stats.currentClassName@ = @Stat.currentClassName@;
                             @i @Stats.currentFunctionName@ = @Stat.currentFunctionName@;
@@ -425,6 +431,8 @@ Stat                    :   RETURN Expr
                             @i @Stats.0.in@ = @Stat.in@ ;
                             @i @Stats.1.in@ = @Stat.in@ ;
                             @i @Stat.out@ = @Stat.in@ ;
+
+                            @i @Stat.outInjection@ = NULL;
 
                             @i @Stats.0.currentClassName@ = @Stat.currentClassName@;
                             @i @Stats.0.currentFunctionName@ = @Stat.currentFunctionName@;
@@ -457,14 +465,25 @@ Stat                    :   RETURN Expr
                             @i @Stats.ifcounterIn@ = @Stat.ifcounterIn@ + 1;
                             @i @Stat.ifcounterOut@ = @Stats.ifcounterOut@;
 
-                            @i @Stats.injection@ = NULL; /* TODO change later */
-                            @i @Stat.tree@ = NULL; /*TODO change later */
+                            @i @Stats.injection@ = NULL;
+
+                            @i @Stat.outInjection@ = createLoopLabel_injection(prepareLabelString(@Stats.currentClassName@,@Stats.currentFunctionName@,@Stat.ifcounterIn@));
+                            
+                            @i @Stat.tree@ = createNode(OP_LOOP, createLoopLabelLeaf(prepareLabelString(@Stats.currentClassName@,@Stats.currentFunctionName@,@Stat.ifcounterIn@)), @Expr.tree@);
+                            @reg @Stat.tree@->regStor = getFirstRegister(); @Expr.tree@->regStor = @Stat.tree@->regStor;
+
+                            @burm @revorder(1) /* writeLoopEntry(prepareLabelString(@Stats.currentClassName@,@Stats.currentFunctionName@,@Stat.ifcounterIn@)); */
+                            @burm writeLoopJumpToStart(prepareLabelString(@Stats.currentClassName@,@Stats.currentFunctionName@,@Stat.ifcounterIn@));
+                            @burm writeIfEndLabel(prepareLabelString(@Stats.currentClassName@,@Stats.currentFunctionName@,@Stat.ifcounterIn@));
+
                         @}
                         |   VAR ID ':' Type ASSIGNOP Expr
                         @{
                             @i @Expr.ids@ = @Stat.in@ ;
                             @i @Stat.out@ = addDev(duplicate(@Stat.in@),@ID.name@,VARIABLE,@ID.lineNr@,"Var assignment in stat"); varCounter++;
                             @i @Type.in@ = @Stat.in@ ;
+
+                            @i @Stat.outInjection@ = NULL;
 
                             @i @Stat.ifcounterOut@ = @Stat.ifcounterIn@;
 
@@ -479,6 +498,8 @@ Stat                    :   RETURN Expr
                             @i @Expr.ids@ = @Stat.in@ ;
                             @i @Stat.out@ = @Stat.in@ ;
 
+                            @i @Stat.outInjection@ = NULL;
+
                             @i @Stat.ifcounterOut@ = @Stat.ifcounterIn@;
 
                             @i @Stat.tree@ = createNode(OP_ASSIGN, createComplexIdentifierLeaf(@ID.name@, getTypeOfName(@Stat.in@, @ID.name@), getParameterIndex(@Stat.in@, @ID.name@), getTypeOfName(@Stat.in@, @ID.name@) == CLASS_VAR ? getClassVarOffset(@Stat.in@, @ID.name@) : getLocalVarOffset(@Stat.in@, @ID.name@)), @Expr.tree@);
@@ -489,6 +510,8 @@ Stat                    :   RETURN Expr
                         @{
                             @i @Expr.ids@ = @Stat.in@ ;
                             @i @Stat.out@ = @Stat.in@ ;
+
+                            @i @Stat.outInjection@ = NULL;
 
                             @i @Stat.ifcounterOut@ = @Stat.ifcounterIn@;
 

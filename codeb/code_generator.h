@@ -80,5 +80,8 @@ void writeJumpEvenIf(char *src, char *jumpName);
 void writeJumpEvenIfElse(char *src, char *jumpName);
 
 void writeJumpEnd(char *jumpName);
+void writeLoopEntry(char *label);
+void writeLoopJumpToStart(char *label);
+void writeLoopCheck(char *label, char *src);
 
 void processInjection(code_injection_t *injection);

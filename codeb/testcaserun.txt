@@ -1,6 +1,6 @@
 Teste "make clean"
 rm -f codea codegen.c *.o oxout.* lex.yy.c y.tab.* y.output parser
-codeb: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 2.6.32, BuildID[sha1]=289f7af7326795414b276c2e6d4fa0bdc60c0049, not stripped
+codeb: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 2.6.32, BuildID[sha1]=ce6e20c039bb5834f6426367b491e706bb9f2e72, not stripped
 codeb is object or executable
 Teste "make"
 ox parser.y scanner.l
@@ -496,10 +496,8 @@ c:
 
 
 c_h:
-	enter	$8, $0
 	movq	$5, 8(%rsp)
 	movq	8(%rsp), %rax
-	leave
 	ret
 
 Übersetze und linke das Testprogramm:
@@ -523,9 +521,8 @@ RET(
     c.h(myObj,0,0) == 5 
 );
 
-/usr/ftp/pub/ubvl/test/codeb/test: line 34: 28484 Segmentation fault      ./a.out
-[Error] Erzeugter Code verhaelt sich bezueglich Signalerzeugung anders als erwartet.
-Rueckgabewert = 139
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
 
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-18.0:
 interface i: 
@@ -552,11 +549,9 @@ c:
 
 
 c_h:
-	enter	$16, $0
 	movq	$5, 8(%rsp)
 	movq	$10, 16(%rsp)
 	movq	16(%rsp), %rax
-	leave
 	ret
 
 Übersetze und linke das Testprogramm:
@@ -580,9 +575,8 @@ RET(
     c.h(myObj,0,0) == 10 
 );
 
-/usr/ftp/pub/ubvl/test/codeb/test: line 34: 28499 Segmentation fault      ./a.out
-[Error] Erzeugter Code verhaelt sich bezueglich Signalerzeugung anders als erwartet.
-Rueckgabewert = 139
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
 
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-19.0:
 interface i: 
@@ -609,12 +603,10 @@ c:
 
 
 c_h:
-	enter	$16, $0
 	movq	$5, 8(%rsp)
 	movq	8(%rsp), %rax
 	movq	%rax, 16(%rsp)
 	movq	16(%rsp), %rax
-	leave
 	ret
 
 Übersetze und linke das Testprogramm:
@@ -638,9 +630,8 @@ RET(
     c.h(myObj,0,0) == 5 
 );
 
-/usr/ftp/pub/ubvl/test/codeb/test: line 34: 28513 Segmentation fault      ./a.out
-[Error] Erzeugter Code verhaelt sich bezueglich Signalerzeugung anders als erwartet.
-Rueckgabewert = 139
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
 
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-2.0:
 interface i: f(int):int end;
@@ -696,11 +687,9 @@ c:
 
 
 c_h:
-	enter	$8, $0
 	movq	8(%rdi), %rax
 	movq	%rax, 8(%rsp)
 	movq	8(%rsp), %rax
-	leave
 	ret
 
 Übersetze und linke das Testprogramm:
@@ -724,9 +713,8 @@ RET(
     c.h(myObj,0,0) == myObj->kingD1
 );
 
-/usr/ftp/pub/ubvl/test/codeb/test: line 34: 28539 Segmentation fault      ./a.out
-[Error] Erzeugter Code verhaelt sich bezueglich Signalerzeugung anders als erwartet.
-Rueckgabewert = 139
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
 
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-21.0:
 interface i: 
@@ -752,12 +740,10 @@ c:
 
 
 c_h:
-	enter	$8, $0
 	movq	8(%rdi), %rax
 	addq	$1, %rax
 	movq	%rax, 8(%rsp)
 	movq	8(%rsp), %rax
-	leave
 	ret
 
 Übersetze und linke das Testprogramm:
@@ -781,9 +767,8 @@ RET(
     c.h(myObj,0,0) == myObj->kingD1 + 1
 );
 
-/usr/ftp/pub/ubvl/test/codeb/test: line 34: 28554 Segmentation fault      ./a.out
-[Error] Erzeugter Code verhaelt sich bezueglich Signalerzeugung anders als erwartet.
-Rueckgabewert = 139
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
 
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-22.0:
 interface i: 
@@ -809,10 +794,8 @@ c:
 
 
 c_h:
-	enter	$8, $0
 	movq	%rsi, 8(%rsp)
 	movq	8(%rsp), %rax
-	leave
 	ret
 
 Übersetze und linke das Testprogramm:
@@ -836,9 +819,8 @@ RET(
     c.h(myObj,50,0) == 50
 );
 
-/usr/ftp/pub/ubvl/test/codeb/test: line 34: 28573 Segmentation fault      ./a.out
-[Error] Erzeugter Code verhaelt sich bezueglich Signalerzeugung anders als erwartet.
-Rueckgabewert = 139
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
 
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-23.0:
 interface i: 
@@ -864,14 +846,12 @@ c:
 
 
 c_h:
-	enter	$8, $0
 	movq	%rsi, %rax
 	movq	%rdx, %r11
 	addq	%r11, %rax
 	movq	%rax, 8(%rsp)
 	movq	8(%rsp), %rax
 	addq	$1, %rax
-	leave
 	ret
 
 Übersetze und linke das Testprogramm:
@@ -895,9 +875,8 @@ RET(
     c.h(myObj,50,18) == 69
 );
 
-/usr/ftp/pub/ubvl/test/codeb/test: line 34: 28590 Segmentation fault      ./a.out
-[Error] Erzeugter Code verhaelt sich bezueglich Signalerzeugung anders als erwartet.
-Rueckgabewert = 139
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
 
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-24.0:
 interface i: 
@@ -1399,12 +1378,10 @@ c:
 
 
 c_h:
-	enter	$8, $0
 	movq	$10, 8(%rsp)
 	movq	8(%rsp), %rax
 	movq	%rax, 8(%rdi)
 	movq	8(%rsp), %rax
-	leave
 	ret
 
 Übersetze und linke das Testprogramm:
@@ -1429,9 +1406,8 @@ RET(
     myObj->kingD1 == 10
 );
 
-/usr/ftp/pub/ubvl/test/codeb/test: line 34: 28747 Segmentation fault      ./a.out
-[Error] Erzeugter Code verhaelt sich bezueglich Signalerzeugung anders als erwartet.
-Rueckgabewert = 139
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
 
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-33.0:
 interface i: 
@@ -1459,7 +1435,6 @@ c:
 
 
 c_h:
-	enter	$8, $0
 	movq	%rsi, %rax
 	movq	%rdx, %r11
 	imulq	%r11, %rax
@@ -1471,7 +1446,6 @@ c_h:
 	addq	$1, %rax
 	movq	%rax, 16(%rdi)
 	movq	8(%rsp), %rax
-	leave
 	ret
 
 Übersetze und linke das Testprogramm:
@@ -1497,9 +1471,8 @@ RET(
     myObj->kingD2 == c.h(myObj,50,18) + 1 
 );
 
-/usr/ftp/pub/ubvl/test/codeb/test: line 34: 28763 Segmentation fault      ./a.out
-[Error] Erzeugter Code verhaelt sich bezueglich Signalerzeugung anders als erwartet.
-Rueckgabewert = 139
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
 
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-34.0:
 interface i: 
@@ -1528,7 +1501,6 @@ c:
 
 
 c_h:
-	enter	$8, $0
 	movq	8(%rdi), %rax
 	movq	%rax, 8(%rsp)
 	movq	16(%rdi), %rax
@@ -1536,7 +1508,6 @@ c_h:
 	movq	8(%rsp), %rax
 	movq	%rax, 16(%rdi)
 	movq	8(%rsp), %rax
-	leave
 	ret
 
 Übersetze und linke das Testprogramm:
@@ -1562,9 +1533,8 @@ RET(
     myObj->kingD2 == 69 
 );
 
-/usr/ftp/pub/ubvl/test/codeb/test: line 34: 28776 Segmentation fault      ./a.out
-[Error] Erzeugter Code verhaelt sich bezueglich Signalerzeugung anders als erwartet.
-Rueckgabewert = 139
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
 
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-35.0:
 interface i: 
@@ -2126,6 +2096,83 @@ RET(
     c.h(myObj,50,18) == 50 &&
     c.h(myObj,-100,18) == 18 &&
     c.h(myObj,-1,-1) == -2
+);
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-43.0:
+interface i: 
+    h(int,int):int 
+end;
+class c implements i:
+    var kingD1 : int;
+    var kingD2 : int;
+
+    method h(x:int,y:int) 
+        var counter: int := 0;
+
+        while 0<x do
+            counter := counter + 1;
+            x := x - 1;
+        end;
+        
+        return counter;
+    end;
+end;
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_h
+
+
+c_h:
+	movq	$0, 8(%rsp)
+
+	label_c_h_0:
+	movq	%rsi, %r11
+	cmpq	$0, %r11	# checking if 0 less r11
+	setg	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	cmpq	$0, %rax
+	jns	label_c_h_0_end
+	movq	8(%rsp), %rax
+	addq	$1, %rax
+	movq	%rax, 8(%rsp)
+	movq	%rsi, %rax
+	subq	$1, %rax
+	movq	%rax, %rsi
+	jmp	label_c_h_0
+
+	label_c_h_0_end:
+	movq	8(%rsp), %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { 
+    struct vft *vftc; 
+    long kingD1; 
+    long kingD2; 
+};
+
+extern struct vft { 
+    long (*h)(struct objectc *, long, long);
+} c;
+
+struct objectc *myObj = (struct objectc *)malloc(sizeof(struct objectc));
+myObj->kingD1 = 69;
+myObj->kingD2 = 99;
+
+RET(
+    c.h(myObj,3,18) == 3 &&
+    c.h(myObj,0,18) == 0 &&
+    c.h(myObj,1,18) == 1 &&
+    c.h(myObj,-1,-1) == 0
 );
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
@@ -2699,7 +2746,6 @@ Class1:
 
 
 Class1_nestedVariables:
-	enter	$40, $0
 	movq	%rsi, %rax
 	movq	%rdx, %r11
 	addq	%r11, %rax
@@ -2733,14 +2779,21 @@ Class1_nestedVariables:
 
 	label_Class1_nestedVariables_0_end:
 	movq	8(%rsp), %rax
-	leave
 	ret
 Class1_nestedControl:
-	enter	$40, $0
 	movq	$1000, %r11
 	movq	$0, %rax
 	subq	%r11, %rax
 	movq	%rax, 8(%rsp)
+
+	label_Class1_nestedControl_0:
+	movq	8(%rsp), %rax
+	cmpq	$1001, %rax	# checking if 1001 less rax (inverted because right const not allwoed) 
+	setl	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	cmpq	$0, %rax
+	jns	label_Class1_nestedControl_0_end
 	movq	8(%rsp), %rax
 	movq	%rsi, %r11
 	cmpq	%rax, %r11	# checking if rax equals r11
@@ -2753,6 +2806,15 @@ Class1_nestedControl:
 	movq	$0, %rax
 	subq	%r11, %rax
 	movq	%rax, 16(%rsp)
+
+	label_Class1_nestedControl_2:
+	movq	16(%rsp), %rax
+	cmpq	$1001, %rax	# checking if 1001 less rax (inverted because right const not allwoed) 
+	setl	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	cmpq	$0, %rax
+	jns	label_Class1_nestedControl_2_end
 	movq	16(%rsp), %rax
 	movq	%rdx, %r11
 	cmpq	%rax, %r11	# checking if rax equals r11
@@ -2762,7 +2824,6 @@ Class1_nestedControl:
 	cmpq	$0, %rax
 	jns	label_Class1_nestedControl_3_else
 	movq	$1, %rax
-	leave
 	ret
 	jmp	label_Class1_nestedControl_3_end
 
@@ -2772,13 +2833,18 @@ Class1_nestedControl:
 	movq	%rax, 16(%rsp)
 
 	label_Class1_nestedControl_3_end:
+	jmp	label_Class1_nestedControl_2
+
+	label_Class1_nestedControl_2_end:
 
 	label_Class1_nestedControl_1_end:
 	movq	8(%rsp), %rax
 	addq	$1, %rax
 	movq	%rax, 8(%rsp)
+	jmp	label_Class1_nestedControl_0
+
+	label_Class1_nestedControl_0_end:
 	movq	$0, %rax
-	leave
 	ret
 
 Übersetze und linke das Testprogramm:
@@ -2806,8 +2872,9 @@ RET(Class1.nestedVariables(0, -5, 6) == 7 && Class1.nestedVariables(0, 25, 13) =
 	
 	Class1.nestedControl(0, 3, 4) == 1 && Class1.nestedControl(0, -1000, 1000) == 1 &&
 	Class1.nestedControl(0, 1000, -1000) == 1 && Class1.nestedControl(0, 1000, 1002) == 0);
-Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
-[Error] aber das Ergebnis des Aufrufs ist falsch.
+/usr/ftp/pub/ubvl/test/codeb/test: line 34: 30458 Segmentation fault      ./a.out
+[Error] Erzeugter Code verhaelt sich bezueglich Signalerzeugung anders als erwartet.
+Rueckgabewert = 139
 
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-14.0:
 interface Interface1:
@@ -2884,8 +2951,17 @@ Cacher:
 
 
 Class1_bitcount:
-	enter	$16, $0
 	movq	$0, 8(%rsp)
+
+	label_Class1_bitcount_0:
+	movq	%rsi, %rax
+	cmpq	$0, %rax	# checking if 0 equals rax
+	sete	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	notq	%rax
+	cmpq	$0, %rax
+	jns	label_Class1_bitcount_0_end
 	movq	%rsi, %rax
 	movq	%rsi, %r11
 	subq	$1, %r11
@@ -2894,18 +2970,17 @@ Class1_bitcount:
 	movq	8(%rsp), %rax
 	addq	$1, %rax
 	movq	%rax, 8(%rsp)
+	jmp	label_Class1_bitcount_0
+
+	label_Class1_bitcount_0_end:
 	movq	8(%rsp), %rax
-	leave
 	ret
 Cacher_init:
-	enter	$16, $0
 	movq	$0, 8(%rdi)
 	movq	$0, 16(%rdi)
 	movq	$0, %rax
-	leave
 	ret
 Cacher_factorial:
-	enter	$16, $0
 	movq	$1, %r11
 	movq	$2, %rax
 	subq	%r11, %rax
@@ -2919,7 +2994,6 @@ Cacher_factorial:
 	cmpq	$0, %rax
 	jns	label_Cacher_factorial_0_else
 	movq	16(%rdi), %rax
-	leave
 	ret
 	jmp	label_Cacher_factorial_0_end
 
@@ -2927,6 +3001,15 @@ Cacher_factorial:
 	movq	%rsi, 8(%rdi)
 
 	label_Cacher_factorial_0_end:
+
+	label_Cacher_factorial_2:
+	movq	%rsi, %r11
+	cmpq	$1, %r11	# checking if 1 less r11
+	setg	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	cmpq	$0, %rax
+	jns	label_Cacher_factorial_2_end
 	movq	8(%rsp), %rax
 	movq	%rsi, %r11
 	imulq	%r11, %rax
@@ -2934,10 +3017,12 @@ Cacher_factorial:
 	movq	%rsi, %rax
 	subq	$1, %rax
 	movq	%rax, %rsi
+	jmp	label_Cacher_factorial_2
+
+	label_Cacher_factorial_2_end:
 	movq	8(%rsp), %rax
 	movq	%rax, 16(%rdi)
 	movq	8(%rsp), %rax
-	leave
 	ret
 
 Übersetze und linke das Testprogramm:
@@ -2991,7 +3076,7 @@ RET(Class1.bitcount(0, 0b101010) == 3 && Class1.bitcount(0, 0xFF) == 8 &&
 	Cacher.factorial(cacher, -10) == 1 && Cacher.factorial(cacher, 10) == 3628800 &&
 	Cacher.factorial(cacher, 5) == 120 && Cacher.factorial(cacher, 5) == 120);
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
-[Error] aber das Ergebnis des Aufrufs ist falsch.
+und das Ergebnis des Ausdrucks ist korrekt.
 
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-15.0:
 interface Interface1:
@@ -3020,7 +3105,6 @@ Class1:
 
 
 Class1_calc:
-	enter	$24, $0
 	movq	%rsi, %rax
 	movq	%rsi, %r11
 	imulq	%r11, %rax
@@ -3039,7 +3123,6 @@ Class1_calc:
 	movq	24(%rsp), %rax
 	movq	%rsi, %r11
 	subq	%r11, %rax
-	leave
 	ret
 
 Übersetze und linke das Testprogramm:
@@ -3082,9 +3165,7 @@ classobj -> vftc = &Class1;
 
 RET(Class1.calc(classobj, -27, 64) == 23280651 && Class1.calc(classobj, 255, -95) == 5483402244 && 
 	Class1.calc(classobj, 0, 0) == -1 && Class1.calc(classobj, -65, -69) == 80748260);
-/usr/ftp/pub/ubvl/test/codeb/test: line 34: 29030 Segmentation fault      ./a.out
-[Error] Erzeugter Code verhaelt sich bezueglich Signalerzeugung anders als erwartet.
-Rueckgabewert = 139
+[Error] Callee-saved register %rbp modified.
 
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-16.0:
 interface Interface1:
@@ -3124,7 +3205,6 @@ Class1:
 
 
 Class1_init:
-	enter	$8, $0
 	movq	$1, 8(%rdi)
 	movq	$12, 16(%rdi)
 	movq	$123, 24(%rdi)
@@ -3139,10 +3219,8 @@ Class1_init:
 	movq	24(%rdi), %r10
 	addq	%r10, %r11
 	addq	%r11, %rax
-	leave
 	ret
 Class1_calc:
-	enter	$8, $0
 	movq	8(%rdi), %rax
 	movq	%rax, 8(%rsp)
 	movq	8(%rsp), %rax
@@ -3152,7 +3230,6 @@ Class1_calc:
 	addq	%r11, %rax
 	movq	%rax, 8(%rsp)
 	movq	8(%rsp), %rax
-	leave
 	ret
 
 Übersetze und linke das Testprogramm:
@@ -3195,9 +3272,8 @@ classobj -> vftc = &Class1;
 RET(Class1.init(classobj) == 136 &&
 
 	Class1.calc(classobj, -27) == -14 && Class1.calc(classobj, 255) == 268);
-/usr/ftp/pub/ubvl/test/codeb/test: line 34: 29043 Segmentation fault      ./a.out
-[Error] Erzeugter Code verhaelt sich bezueglich Signalerzeugung anders als erwartet.
-Rueckgabewert = 139
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
 
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-17.0:
 interface ICalc:
@@ -3266,7 +3342,6 @@ Class1:
 
 
 Class1_max1:
-	enter	$16, $0
 	movq	%rsi, %rax
 	movq	%rdx, %r11
 	cmpq	%rax, %r11	# checking if rax less r11
@@ -3276,18 +3351,15 @@ Class1_max1:
 	cmpq	$0, %rax
 	jns	label_Class1_max1_0_else
 	movq	%rdx, %rax
-	leave
 	ret
 	jmp	label_Class1_max1_0_end
 
 	label_Class1_max1_0_else:
 	movq	%rsi, %rax
-	leave
 	ret
 
 	label_Class1_max1_0_end:
 Class1_max2:
-	enter	$16, $0
 	movq	$0, 8(%rsp)
 	movq	%rsi, %rax
 	movq	%rdx, %r11
@@ -3305,10 +3377,8 @@ Class1_max2:
 
 	label_Class1_max2_0_end:
 	movq	8(%rsp), %rax
-	leave
 	ret
 Class1_max3:
-	enter	$16, $0
 	movq	%rsi, 8(%rsp)
 	movq	%rsi, %rax
 	movq	%rdx, %r11
@@ -3322,10 +3392,8 @@ Class1_max3:
 
 	label_Class1_max3_0_end:
 	movq	8(%rsp), %rax
-	leave
 	ret
 Class1_gcd:
-	enter	$16, $0
 	movq	%rsi, %rax
 	cmpq	$0, %rax	# checking if 0 equals rax
 	sete	%al
@@ -3334,10 +3402,19 @@ Class1_gcd:
 	cmpq	$0, %rax
 	jns	label_Class1_gcd_0_end
 	movq	%rsi, %rax
-	leave
 	ret
 
 	label_Class1_gcd_0_end:
+
+	label_Class1_gcd_1:
+	movq	%rdx, %rax
+	cmpq	$0, %rax	# checking if 0 equals rax
+	sete	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	notq	%rax
+	cmpq	$0, %rax
+	jns	label_Class1_gcd_1_end
 	movq	%rdx, %rax
 	movq	%rsi, %r11
 	cmpq	%rax, %r11	# checking if rax less r11
@@ -3359,8 +3436,10 @@ Class1_gcd:
 	movq	%rax, %rdx
 
 	label_Class1_gcd_2_end:
+	jmp	label_Class1_gcd_1
+
+	label_Class1_gcd_1_end:
 	movq	%rsi, %rax
-	leave
 	ret
 
 Übersetze und linke das Testprogramm:
@@ -3382,8 +3461,7 @@ RET(Class1.max1(0, 0, 0) == 0 && Class1.max1(0, 64, -28) == 64 && Class1.max1(0,
 	Class1.max3(0, 0, 0) == 0 && Class1.max3(0, 64, -28) == 64 && Class1.max3(0, 0xABCD, 0xDEAD) == 0xDEAD &&
 
 	Class1.gcd(0, 1221, 15) == 3 && Class1.gcd(0, 9451565168, 1651321192) == 8);
-Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
-[Error] aber das Ergebnis des Aufrufs ist falsch.
+[Error] Callee-saved register %rbp modified.
 
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-18.0:
 interface Interface1:
@@ -3416,9 +3494,17 @@ Class1:
 
 
 Class1_fib:
-	enter	$24, $0
 	movq	$0, 8(%rsp)
 	movq	$1, 16(%rsp)
+
+	label_Class1_fib_0:
+	movq	%rsi, %r11
+	cmpq	$0, %r11	# checking if 0 less r11
+	setg	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	cmpq	$0, %rax
+	jns	label_Class1_fib_0_end
 	movq	8(%rsp), %rax
 	movq	%rax, 24(%rsp)
 	movq	16(%rsp), %rax
@@ -3430,8 +3516,10 @@ Class1_fib:
 	movq	%rsi, %rax
 	subq	$1, %rax
 	movq	%rax, %rsi
+	jmp	label_Class1_fib_0
+
+	label_Class1_fib_0_end:
 	movq	16(%rsp), %rax
-	leave
 	ret
 
 Übersetze und linke das Testprogramm:
@@ -3448,8 +3536,9 @@ extern struct vft {
 RET(Class1.fib(0, 0) == 1 && Class1.fib(0, 1) == 1 && Class1.fib(0, 2) == 2 &&
 	Class1.fib(0, 3) == 3 && Class1.fib(0, 4) == 5 && Class1.fib(0, 5) == 8 &&
 	Class1.fib(0, 6) == 13 && Class1.fib(0, 20) == 10946 && Class1.fib(0, 40) == 165580141);
-Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
-[Error] aber das Ergebnis des Aufrufs ist falsch.
+/usr/ftp/pub/ubvl/test/codeb/test: line 34: 30529 Segmentation fault      ./a.out
+[Error] Erzeugter Code verhaelt sich bezueglich Signalerzeugung anders als erwartet.
+Rueckgabewert = 139
 
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-19.0:
 interface Interface1:
@@ -3474,7 +3563,7 @@ class Class1 implements Interface1:
 		return new Class1;
 	end;
 end;
-/usr/ftp/pub/ubvl/test/codeb/test: line 34: 29072 Segmentation fault      $PROGRAM < $i > $RESFILE
+/usr/ftp/pub/ubvl/test/codeb/test: line 34: 30532 Segmentation fault      $PROGRAM < $i > $RESFILE
 Übersetzung: [Errot] Status=139. Erwartet: 0
 
 Ausgabe:
@@ -3485,13 +3574,13 @@ In file included from /usr/ftp/pub/ubvl/test/codeb/testmain.c:13:0:
 /home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:21:24: warning: comparison of distinct pointer types lacks a cast
   Class1.construct(obj) == reg15 && heapptr - reg15 == 2 && constructed->vftc == &Class1);
                         ^~
-/tmp/ccYWxQNV.o: In function `call':
+/tmp/ccfXJHzM.o: In function `call':
 /home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:13: undefined reference to `Class1'
 /home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:20: undefined reference to `Class1'
 /home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:20: undefined reference to `Class1'
 /home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:20: undefined reference to `Class1'
 /home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:21: undefined reference to `Class1'
-/tmp/ccYWxQNV.o:/home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:21: more undefined references to `Class1' follow
+/tmp/ccfXJHzM.o:/home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:21: more undefined references to `Class1' follow
 collect2: error: ld returned 1 exit status
 [Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-20.0:
@@ -3606,50 +3695,39 @@ Class1:
 
 
 Class2_getVar:
-	enter	$8, $0
 	movq	$57005, %rax
 	imulq	$48879, %rax
 	movq	%rax, 8(%rsp)
 	movq	8(%rsp), %rax
-	leave
 	ret
 Class2_getObjVar:
-	enter	$8, $0
 	movq	$57005, %rax
 	imulq	$48879, %rax
 	movq	%rax, 8(%rdi)
 	movq	8(%rdi), %rax
-	leave
 	ret
 Class1_add1:
-	enter	$8, $0
 	movq	$1, %rax
 	addq	$2147483647, %rax
 	subq	$1, %rax
 	movq	%rsi, %r11
 	addq	%r11, %rax
-	leave
 	ret
 Class1_add2:
-	enter	$8, $0
 	movq	%rsi, %rax
 	movq	$2147483647, %r11
 	addq	$1, %r11
 	addq	%r11, %rax
-	leave
 	ret
 Class1_add3:
-	enter	$8, $0
 	movq	$2147483647, %r11
 	movq	$0, %rax
 	subq	%r11, %rax
 	subq	$1, %rax
 	movq	%rsi, %r11
 	addq	%r11, %rax
-	leave
 	ret
 Class1_add4:
-	enter	$8, $0
 	movq	$2147483647, %r11
 	movq	$0, %rax
 	subq	%r11, %rax
@@ -3657,18 +3735,14 @@ Class1_add4:
 	subq	$1, %rax
 	movq	%rsi, %r11
 	addq	%r11, %rax
-	leave
 	ret
 Class1_mul:
-	enter	$8, $0
 	movq	%rsi, %rax
 	movq	$57005, %r11
 	imulq	$48879, %r11
 	imulq	%r11, %rax
-	leave
 	ret
 Class1_equal:
-	enter	$8, $0
 	movq	%rsi, %rax
 	movq	$57005, %r11
 	imulq	$48879, %r11
@@ -3676,26 +3750,20 @@ Class1_equal:
 	sete	%al
 	and	$1, %rax
 	imulq	$-1, %rax
-	leave
 	ret
 Class1_sub1:
-	enter	$8, $0
 	movq	%rsi, %rax
 	movq	$57005, %r11
 	imulq	$48879, %r11
 	subq	%r11, %rax
-	leave
 	ret
 Class1_sub2:
-	enter	$8, $0
 	movq	$57005, %rax
 	imulq	$48879, %rax
 	movq	%rsi, %r11
 	subq	%r11, %rax
-	leave
 	ret
 Class1_less1:
-	enter	$8, $0
 	movq	%rsi, %rax
 	movq	$57005, %r11
 	imulq	$48879, %r11
@@ -3703,10 +3771,8 @@ Class1_less1:
 	setg	%al
 	and	$1, %rax
 	imulq	$-1, %rax
-	leave
 	ret
 Class1_less2:
-	enter	$8, $0
 	movq	$57005, %rax
 	imulq	$48879, %rax
 	movq	%rsi, %r11
@@ -3714,13 +3780,10 @@ Class1_less2:
 	setg	%al
 	and	$1, %rax
 	imulq	$-1, %rax
-	leave
 	ret
 Class1_constant:
-	enter	$8, $0
 	movq	$57005, %rax
 	imulq	$48879, %rax
-	leave
 	ret
 
 Übersetze und linke das Testprogramm:
@@ -3798,9 +3861,8 @@ RET(Class1.add1(0, 0xABCD) == maxVal-1 + 0xABCD &&
 	Class2.getVar(0) == dead*beef && 
 	Class2.getObjVar(obj2) == dead*beef
 	);
-/usr/ftp/pub/ubvl/test/codeb/test: line 34: 29093 Segmentation fault      ./a.out
-[Error] Erzeugter Code verhaelt sich bezueglich Signalerzeugung anders als erwartet.
-Rueckgabewert = 139
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+[Error] aber das Ergebnis des Aufrufs ist falsch.
 
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-3.0:
 interface Interface1: 
@@ -5432,6 +5494,6 @@ Status: korrekt
 
 Statistics: 
 ===========
-           106 Tests total
-           88 Tests passed
-           18 Tests failed
+           107 Tests total
+           101 Tests passed
+           6 Tests failed
