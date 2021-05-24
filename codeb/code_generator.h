@@ -1,5 +1,6 @@
 #include "list.h"
 #include "implemented_meth_list.h"
+#include "code_injection.h"
 
 #define TRUE_VAL -1
 #define FALSE_VAL 0
@@ -45,7 +46,7 @@ void writeReturnWithValue(char *);
 void generateClassTable(node_t *node, meth_node_t *implmethds);
 void generateClassTableForASingleClass(char *className, node_t *abstractMethds, meth_node_t *implmethds);
 
-void generateMethodeLabel(char *classname, char *meth_name);
+void generateMethodeLabel(char *classname, char *meth_name, long varCounter);
 
 void writeMoveForClassVar(int classVaroffset, char *dst);
 void writeMoveVIntoClassVar(long value, int classVaroffset);
@@ -77,3 +78,7 @@ void writeIfEndLabel(char *name);
 void writeJumpToIfEnd(char *name);
 void writeJumpEvenIf(char *src, char *jumpName);
 void writeJumpEvenIfElse(char *src, char *jumpName);
+
+void writeJumpEnd(char *jumpName);
+
+void processInjection(code_injection_t *injection);

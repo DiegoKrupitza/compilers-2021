@@ -19,7 +19,7 @@ class c implements a:
         /* e := 5 + 5;*/
         /* var x : int := 5; */
         
-        if 1 then 
+        /* if 1 then 
             return 11;
         end;
 
@@ -29,8 +29,23 @@ class c implements a:
 
         if 3 then 
             return 33;
-        end;
+        end; */
 
-        
+        /*if 1 then
+            if 2 then
+                return 1;
+            else 
+                return 2;
+            end;
+        else 
+            return 3;
+        end;*/
+
+        var x1 : int := 5;
+        var x2 : int := 5;
+        var x3 : int := 5;
+        var x4 : int := 5;
+        var x5 : int := 5;
+        return x1;
     end;
 end;

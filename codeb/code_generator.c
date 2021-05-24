@@ -4,6 +4,8 @@
 
 #include "code_generator.h"
 
+long globalVarCount = 0;
+
 char *getFirstRegister()
 {
     return "rax";
@@ -191,6 +193,10 @@ void writeLessEqualSv(char *first, long value, char *dst)
 
 void writeReturn()
 {
+    if (globalVarCount > 0)
+    {
+        fprintf(stdout, "\tleave\n");
+    }
     fprintf(stdout, "\tret\n");
 }
 
@@ -262,9 +268,19 @@ void generateClassTableForASingleClass(char *className, node_t *abstractMethds, 
     printf("\n\n");
 }
 
-void generateMethodeLabel(char *className, char *meth_name)
+void generateMethodeLabel(char *className, char *meth_name, long varCounter)
 {
     printf("%s_%s:\n", className, meth_name);
+
+    if (varCounter > 0)
+    {
+        //globalVarCount = varCounter;
+        //fprintf(stdout, "\tenter\t$%li, $0\n", varCounter * 8);
+    }
+    else
+    {
+        globalVarCount = 0;
+    }
 }
 
 void writeMoveForClassVar(int classVaroffset, char *dst)
@@ -424,6 +440,29 @@ void writeJumpEvenIf(char *src, char *jumpName)
 
 void writeJumpEvenIfElse(char *src, char *jumpName)
 {
-    fprintf(stdout, "\tand\t$1, %%%s\n", getByteRegisterName(src));
-    fprintf(stdout, "\tjz\t%s_else\n", jumpName);
+    fprintf(stdout, "\tcmpq\t$0, %%%s\n", src);
+    fprintf(stdout, "\tjns\t%s_else\n", jumpName);
+}
+
+void writeJumpEnd(char *jumpName)
+{
+    fprintf(stdout, "\tjmp\t%s_end\n", jumpName);
+}
+
+void processInjection(code_injection_t *injection)
+{
+    if (injection == NULL)
+    {
+        //AKA do nothing since we dont have an injection
+        return;
+    }
+
+    if (injection->op == OP_END_JUMP)
+    {
+        writeJumpEnd(injection->injectionLabel);
+    }
+    else if (injection->op == OP_ELSE_LABEL)
+    {
+        writeElseLabel(injection->injectionLabel);
+    }
 }

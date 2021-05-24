@@ -31,7 +31,7 @@ struct burm_state {
 		unsigned burm_ret:1;
 		unsigned burm_assign:4;
 		unsigned burm_expr:5;
-		unsigned burm_if:1;
+		unsigned burm_if:2;
 		unsigned burm_const:3;
 	} rule;
 };
@@ -95,6 +95,7 @@ short *burm_nts[] = {
 	burm_nts_2,	/* 44 */
 	burm_nts_9,	/* 45 */
 	burm_nts_2,	/* 46 */
+	burm_nts_2,	/* 47 */
 };
 
 char burm_arity[] = {
@@ -115,6 +116,7 @@ char burm_arity[] = {
 	2,	/* 14=OP_ASSIGN */
 	2,	/* 15=OP_IF */
 	0,	/* 16=OP_IF_ID */
+	2,	/* 17=OP_IF_ELSE */
 };
 
 static short burm_decode_stat[] = {
@@ -176,6 +178,7 @@ static short burm_decode_expr[] = {
 static short burm_decode_if[] = {
 	0,
 	46,
+	47,
 };
 
 static short burm_decode_const[] = {
@@ -758,6 +761,19 @@ STATEPTR_TYPE burm_state(int op, STATEPTR_TYPE left, STATEPTR_TYPE right) {
 			};
 			return &z;
 		}
+	case 17: /* OP_IF_ELSE */
+		assert(l && r);
+		if (	/* if: OP_IF_ELSE(OP_IF_ID,expr) */
+			l->op == 16 /* OP_IF_ID */
+		) {
+			c = r->cost[burm_expr_NT] + 1;
+			if (c + 0 < p->cost[burm_if_NT]) {
+				p->cost[burm_if_NT] = c + 0;
+				p->rule.burm_if = 2;
+				burm_closure_if(p, c + 0);
+			}
+		}
+		break;
 	default:
 		burm_assert(0, PANIC("Bad operator %d in burm_state\n", op));
 	}
@@ -842,6 +858,7 @@ NODEPTR_TYPE *burm_kids(NODEPTR_TYPE p, int eruleno, NODEPTR_TYPE kids[]) {
 	case 30: /* expr: OP_PARAM_ID */
 	case 29: /* expr: OP_ID */
 		break;
+	case 47: /* if: OP_IF_ELSE(OP_IF_ID,expr) */
 	case 46: /* if: OP_IF(OP_IF_ID,expr) */
 	case 44: /* assign: OP_ASSIGN(OP_CLASS_VAR_ID,expr) */
 	case 43: /* assign: OP_ASSIGN(OP_CLASS_VAR_ID,const) */
@@ -1035,6 +1052,9 @@ void burm_reduce(NODEPTR_TYPE bnode, int goalnt)
     break;
   case 46:
    writeJumpEvenIf(bnode->regStor, bnode->kids[0]->identifierName);
+    break;
+  case 47:
+   writeJumpEvenIfElse(bnode->regStor, bnode->kids[0]->identifierName);
     break;
   default:    assert (0);
   }

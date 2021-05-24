@@ -8,6 +8,7 @@
 #include "list.h"
 #include "tree.h"
 #include "implemented_meth_list.h"
+#include "code_injection.h"
 
 %}
 
@@ -46,7 +47,7 @@ struct yyyT7 { node_t* in; char* currentClassName; char* currentFunctionName; lo
 typedef struct yyyT7 *yyyP7; 
 
 
-struct yyyT8 { node_t* in; node_t* out; char* currentClassName; char* currentFunctionName; long ifcounterIn; long ifcounterOut; }; 
+struct yyyT8 { node_t* in; node_t* out; char* currentClassName; char* currentFunctionName; long ifcounterIn; long ifcounterOut; code_injection_t* injection; }; 
 typedef struct yyyT8 *yyyP8; 
 
 

@@ -12,7 +12,10 @@
 #include "list.h"
 #include "tree.h"
 
+#include "code_injection.h"
+
 #include "code_generator.h"
+
 #include "implemented_meth_list.h"
 
 void yyerror(char const*);
@@ -23,6 +26,7 @@ extern void burm_reduce(NODEPTR_TYPE, int);
 extern void burm_label(NODEPTR_TYPE);
 
 char* lastIfLabelName = "label";
+long varCounter = 0;
 
 char* prepareLabelString(char* classname, char* functionname, long counter)
 {
@@ -59,7 +63,7 @@ char* prepareLabelString(char* classname, char* functionname, long counter)
 
 
 @attributes { node_t* in; char* currentClassName; char* currentFunctionName; long ifcounter; } StatsMethode
-@attributes { node_t* in; node_t* out; char* currentClassName; char* currentFunctionName; long ifcounterIn; long ifcounterOut; } Stats
+@attributes { node_t* in; node_t* out; char* currentClassName; char* currentFunctionName; long ifcounterIn; long ifcounterOut; code_injection_t* injection; } Stats
 @attributes { node_t* in; node_t* out; tree_t* tree; char* currentClassName; char* currentFunctionName; long ifcounterIn; long ifcounterOut; } Stat
 
 @attributes { node_t* in; node_t* out; char* currentClassName; meth_node_t* inImplList; meth_node_t* outImplList; } MemeberLoop Member
@@ -278,7 +282,7 @@ Member                  :   VAR ID ':' Type
                             @i @StatsMethode.currentFunctionName@ = @ID.name@;
                             @i @StatsMethode.ifcounter@ = 0;
 
-                            @burm @revorder(1) generateMethodeLabel(@Member.currentClassName@, @ID.name@);
+                            @burm @revorder(1) generateMethodeLabel(@Member.currentClassName@, @ID.name@, varCounter);
                         @}
                         |   METHOD ID '(' Pars ')' StatsMethode END
                         @{
@@ -293,7 +297,7 @@ Member                  :   VAR ID ':' Type
                             @i @StatsMethode.currentFunctionName@ = @ID.name@;
                             @i @StatsMethode.ifcounter@ = 0;
 
-                            @burm @revorder(1) generateMethodeLabel(@Member.currentClassName@, @ID.name@);
+                            @burm @revorder(1) generateMethodeLabel(@Member.currentClassName@, @ID.name@,varCounter);
                         @}
                         ;
 
@@ -344,6 +348,8 @@ StatsMethode            :   Stats
                             @i @Stats.currentClassName@ = @StatsMethode.currentClassName@;
                             @i @Stats.currentFunctionName@ = @StatsMethode.currentFunctionName@;
                             @i @Stats.ifcounterIn@ = @StatsMethode.ifcounter@;
+
+                            @i @Stats.injection@ = NULL;
                         @}
                         ;
 
@@ -363,13 +369,23 @@ Stats                   :   Stat ';' Stats
 
                             @i @Stats.0.ifcounterOut@ = @Stats.1.ifcounterOut@;
 
+                            @i @Stats.1.injection@ = NULL;
+
                             @visCheck @revorder(1) /* print2D(@Stat.tree@); */
+
+                            @burm @revorder(1) if(@Stats.injection@ != NULL && @Stats.injection@->op == OP_ELSE_LABEL) { processInjection(@Stats.injection@); }
+                            @burm if(@Stats.injection@ != NULL && @Stats.injection@->op == OP_END_JUMP) { processInjection(@Stats.injection@); }
+
                             @burm @revorder(1) if(@Stat.tree@ != NULL) { burm_label(@Stat.tree@); burm_reduce(@Stat.tree@, 1); } 
                         @}
                         |
                         @{
                             @i @Stats.out@ = @Stats.in@ ;
                             @i @Stats.ifcounterOut@ = @Stats.ifcounterIn@;
+
+                            @burm @revorder(1) if(@Stats.injection@ != NULL && @Stats.injection@->op == OP_ELSE_LABEL) { processInjection(@Stats.injection@); }
+                            @burm if(@Stats.injection@ != NULL && @Stats.injection@->op == OP_END_JUMP) { processInjection(@Stats.injection@); }
+
                         @}
                         ;
 
@@ -394,6 +410,8 @@ Stat                    :   RETURN Expr
 
                             @i @Stats.ifcounterIn@ = @Stat.ifcounterIn@ + 1;
                             @i @Stat.ifcounterOut@ = @Stats.ifcounterOut@;
+
+                            @i @Stats.injection@ = NULL;
                             
                             @i @Stat.tree@ = createNode(OP_IF, createIfLabelLeaf(prepareLabelString(@Stats.currentClassName@,@Stats.currentFunctionName@,@Stat.ifcounterIn@)), @Expr.tree@);
                             @reg @Stat.tree@->regStor = getFirstRegister(); @Expr.tree@->regStor = @Stat.tree@->regStor;
@@ -418,7 +436,14 @@ Stat                    :   RETURN Expr
                             @i @Stats.1.ifcounterIn@ = @Stats.0.ifcounterOut@ + 1;
                             @i @Stat.ifcounterOut@ = @Stats.1.ifcounterOut@;
 
-                            @i @Stat.tree@ = NULL; /*TODO change later */
+                            @i @Stats.0.injection@ = createEndJMP_injection(prepareLabelString(@Stats.currentClassName@,@Stats.currentFunctionName@,@Stat.ifcounterIn@));
+                            @i @Stats.1.injection@ = createElseJMP_injection(prepareLabelString(@Stats.currentClassName@,@Stats.currentFunctionName@,@Stat.ifcounterIn@));
+
+                            @i @Stat.tree@ = createNode(OP_IF_ELSE, createIfLabelLeaf(prepareLabelString(@Stats.currentClassName@,@Stats.currentFunctionName@,@Stat.ifcounterIn@)), @Expr.tree@);
+                            @reg @Stat.tree@->regStor = getFirstRegister(); @Expr.tree@->regStor = @Stat.tree@->regStor;
+
+                            @burm writeIfEndLabel(prepareLabelString(@Stats.currentClassName@,@Stats.currentFunctionName@,@Stat.ifcounterIn@));
+
                         @}
                         |   WHILE Expr DO Stats END
                         @{
@@ -432,12 +457,13 @@ Stat                    :   RETURN Expr
                             @i @Stats.ifcounterIn@ = @Stat.ifcounterIn@ + 1;
                             @i @Stat.ifcounterOut@ = @Stats.ifcounterOut@;
 
+                            @i @Stats.injection@ = NULL; /* TODO change later */
                             @i @Stat.tree@ = NULL; /*TODO change later */
                         @}
                         |   VAR ID ':' Type ASSIGNOP Expr
                         @{
                             @i @Expr.ids@ = @Stat.in@ ;
-                            @i @Stat.out@ = addDev(duplicate(@Stat.in@),@ID.name@,VARIABLE,@ID.lineNr@,"Var assignment in stat");
+                            @i @Stat.out@ = addDev(duplicate(@Stat.in@),@ID.name@,VARIABLE,@ID.lineNr@,"Var assignment in stat"); varCounter++;
                             @i @Type.in@ = @Stat.in@ ;
 
                             @i @Stat.ifcounterOut@ = @Stat.ifcounterIn@;

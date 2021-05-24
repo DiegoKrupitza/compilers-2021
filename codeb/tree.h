@@ -21,6 +21,7 @@ typedef enum
     OP_ASSIGN,
     OP_IF,
     OP_IF_ID,
+    OP_IF_ELSE
 } operators_t;
 
 typedef struct tree_t
