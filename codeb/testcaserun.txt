@@ -1,6 +1,6 @@
 Teste "make clean"
 rm -f codea codegen.c *.o oxout.* lex.yy.c y.tab.* y.output parser
-codeb: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 2.6.32, BuildID[sha1]=337be933bddc4ef06e720d30bc861a8025aae62c, not stripped
+codeb: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 2.6.32, BuildID[sha1]=2c521de8d3aaf3c72a769aa301e7b866b9b3e038, not stripped
 codeb is object or executable
 Teste "make"
 ox parser.y scanner.l
@@ -4115,16 +4115,16 @@ Class1_get:
 	movq	8(%rdi), %rax
 	ret
 Class1_construct:
-	leaq	Class1(%rip), %r15
-	movq	%r15, %rax
-	movq	%rax, %r15
+	leaq	Class1(%rip), %rax
+	movq	%rax, (%r15)
+	leaq	(%r15), %rax
 	addq	$class_size_Class1_class,%r15
 	ret
 
 Übersetze und linke das Testprogramm:
 In file included from /usr/ftp/pub/ubvl/test/codeb/testmain.c:13:0:
 /home/ublu21/u11808206/test/codeb/thenotoriousj-19.call: In function ‘call’:
-/home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:32:24: warning: comparison of distinct pointer types lacks a cast
+/home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:21:24: warning: comparison of distinct pointer types lacks a cast
   Class1.construct(obj) == reg15 && heapptr - reg15 == 2 && constructed->vftc == &Class1);
                         ^~
 
@@ -4148,29 +4148,10 @@ obj->num = 3;
 long *reg15 = heapptr;
 struct objectc *constructed = (struct objectc *) heapptr;
 
-printf("Class1.get(obj):\t%d\n",Class1.get(obj));
-printf("Class1.set(obj, 1):\t%d\n",Class1.set(obj, 1));
-printf("Class1.get(obj):\t%d\n",Class1.get(obj));
-printf("Class1.construct(obj):\t%d\n",Class1.construct(obj));
-printf("heapptr:\t%d\n",heapptr);
-printf("R15:\t%d\n",reg15);
-printf("heapptr - reg15:\t%d\t but should be: 2\n", heapptr - reg15);
-printf("constructed->vftc:\t%d\t&Class1: %d\t vgl: %d \n",constructed->vftc,&Class1,constructed->vftc == &Class1);
-
-
-
 RET(Class1.get(obj) == 3 && Class1.set(obj, 1) == 0 && Class1.get(obj) == 1 &&
 	Class1.construct(obj) == reg15 && heapptr - reg15 == 2 && constructed->vftc == &Class1);
-Class1.get(obj):	3
-Class1.set(obj, 1):	0
-Class1.get(obj):	1
-Class1.construct(obj):	4196538
-heapptr:	4196554
-R15:	6295648
-heapptr - reg15:	-262387	 but should be: 2
-constructed->vftc:	0	&Class1: 4196538	 vgl: 0 
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
-[Error] aber das Ergebnis des Aufrufs ist falsch.
+und das Ergebnis des Ausdrucks ist korrekt.
 
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-20.0:
 interface Interface1:
@@ -6282,5 +6263,5 @@ Status: korrekt
 Statistics: 
 ===========
            138 Tests total
-           137 Tests passed
-           1 Tests failed
+           138 Tests passed
+           0 Tests failed

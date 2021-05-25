@@ -505,12 +505,16 @@ char *getHeapPointer()
 
 void generateNewObjekt(char *className, char *dst)
 {
+
     // shieben von label in addresse
-    fprintf(stdout, "\tleaq\t%s(%%rip), %%r15\n", className);
+    fprintf(stdout, "\tleaq\t%s(%%rip), %%%s\n", className, dst);
+
+    // updating the heap pointer
+    fprintf(stdout, "\tmovq\t%%%s, (%%%s)\n", dst, getHeapPointer());
+
+    // storing the right mem into the rax
+    fprintf(stdout, "\tleaq\t(%%%s), %%%s\n", getHeapPointer(), dst);
 
     // r15 increasen
     fprintf(stdout, "\taddq\t$class_size_%s_class,%%r15\n", className);
-
-    // writing in the return regsiter probided by bnode
-    writeMove("r15", dst);
 }
