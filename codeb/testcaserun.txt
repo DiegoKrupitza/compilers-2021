@@ -1,23 +1,24 @@
 Teste "make clean"
 rm -f codea codegen.c *.o oxout.* lex.yy.c y.tab.* y.output parser
-codeb: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 2.6.32, BuildID[sha1]=e663385f33c11d7e4846263a4e3b457ff6fbb58f, not stripped
+codeb: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 2.6.32, BuildID[sha1]=337be933bddc4ef06e720d30bc861a8025aae62c, not stripped
 codeb is object or executable
 Teste "make"
 ox parser.y scanner.l
-ox: parser.y: warning: line 217: implicit dependent depends on itself
-ox: parser.y: warning: line 225: implicit dependent depends on itself
+ox: parser.y: warning: line 240: implicit dependent depends on itself
+ox: parser.y: warning: line 250: implicit dependent depends on itself
 flex oxout.l
 yacc -d -v oxout.y
 gcc -c lex.yy.c  
 gcc -c y.tab.c	
 gcc -g -c -pedantic -Wall list.c
 gcc -g -c -pedantic -Wall implemented_meth_list.c
+gcc -g -c -pedantic -Wall class_var_list.c
 gcc -g -c -pedantic -Wall code_injection.c
 gcc -g -c -pedantic -Wall tree.c
 gcc -g -c -pedantic -Wall code_generator.c
 bfe < codegen.bfe | iburg > codegen.c
 gcc -g -c -pedantic -Wall codegen.c
-gcc -g list.o tree.o codegen.o implemented_meth_list.o code_injection.o code_generator.o y.tab.o lex.yy.o -ll -o codeb
+gcc -g list.o tree.o codegen.o class_var_list.o implemented_meth_list.o code_injection.o code_generator.o y.tab.o lex.yy.o -ll -o codeb
 ==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/a0.0:
 interface i: f(int):int end;
 class c implements i:
@@ -31,6 +32,7 @@ Ausgabe:
 .globl c
 c:   
 .quad c_f
+class_size_c_class = 8
 
 
 c_f:
@@ -43,6 +45,431 @@ Rufe folgendes Codefragment auf:
 struct objectc { struct vft *vftc; };
 extern struct vft { long (*f)(struct objectc *, long); } c;
 RET(c.f(0,6) == 6 && c.f(0,-3)==-3);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/a1.0:
+interface i: f(int):int end;
+interface i2: g(int):int end;
+class c implements i i2:
+ method g(x:int) return x; end;
+ method f(x:int) return 1; end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_f
+.quad c_g
+class_size_c_class = 8
+
+
+c_g:
+	movq	%rsi, %rax
+	ret
+c_f:
+	movq	$1, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; };
+extern struct vft {
+  long (*f)(struct objectc *, long);
+  long (*g)(struct objectc *, long);
+} c;
+RET(c.g(0,6) == 6 && c.g(0,-3)==-3);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/a2.0:
+interface i: f(int):int end;
+class c implements i:
+ method f(x:int) return 4; end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_f
+class_size_c_class = 8
+
+
+c_f:
+	movq	$4, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; };
+extern struct vft { long (*f)(struct objectc *, long); } c;
+RET(c.f(0,6) == 4 && c.f(0,-3)==4);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/a3.0:
+interface i: f(int):int end;
+class c implements i:
+ method f(x:int) return 4; end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_f
+class_size_c_class = 8
+
+
+c_f:
+	movq	$4, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; };
+extern struct vft { long (*f)(struct objectc *, long); } c;
+RET(c.f(0,6) == 4 && c.f(0,-3)==4);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/a4.0:
+interface i: f(int):int end;
+class c implements i:
+ method f(x:int) return not x; end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_f
+class_size_c_class = 8
+
+
+c_f:
+	movq	%rsi, %rax
+	notq	%rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; };
+extern struct vft { long (*f)(struct objectc *, long); } c;
+RET(c.f(0,6) == ~6L && c.f(0,-3)==~-3L);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/a5.0:
+interface i: f(int):int end;
+class c implements i:
+ method f(x:int) return 1+x+2; end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_f
+class_size_c_class = 8
+
+
+c_f:
+	movq	%rsi, %r11
+	addq	$2, %r11
+	addq	$1, %r11
+	movq	%r11, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; };
+extern struct vft { long (*f)(struct objectc *, long); } c;
+RET(c.f(0,6) == 9 && c.f(0,-3)==0);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/a6.0:
+interface i: f(int):int end;
+class c implements i:
+ method f(x:int) return 2*x*3; end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_f
+class_size_c_class = 8
+
+
+c_f:
+	movq	%rsi, %r11
+	imulq	$3, %r11
+	imulq	$2, %r11
+	movq	%r11, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; };
+extern struct vft { long (*f)(struct objectc *, long); } c;
+RET(c.f(0,6) == 36 && c.f(0,-3)==-18);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/a7.0:
+interface i: f(int):int end;
+class c implements i:
+ method f(x:int, y:int) return x and y; end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_f
+class_size_c_class = 8
+
+
+c_f:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	and	%r11, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; };
+extern struct vft { long (*f)(struct objectc *, long, long); } c;
+RET(c.f(0,5,3) == 1 && c.f(0,-3L,-5L)==-7L);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/a8.0:
+interface i: f(int):int end;
+class c implements i:
+ method f(x:int, y:int) return y-x; end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_f
+class_size_c_class = 8
+
+
+c_f:
+	movq	%rdx, %rax
+	movq	%rsi, %r11
+	subq	%r11, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; };
+extern struct vft { long (*f)(struct objectc *, long, long); } c;
+RET(c.f(0,5,3) == -2L && c.f(0,-3L,3L)==6L);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/a9.0:
+interface i: f(int):int end;
+class c implements i:
+ method f(x:int, y:int) return x<y; end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_f
+class_size_c_class = 8
+
+
+c_f:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	cmpq	%rax, %r11	# checking if rax less r11
+	setg	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; };
+extern struct vft { long (*f)(struct objectc *, long, long); } c;
+RET(c.f(0,1,-1L) == 0 && c.f(0,-3L,3L)==-1L && c.f(0,1,1)==0);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/aa.0:
+interface i: f(int):int end;
+class c implements i:
+ method f(x:int, y:int) return x=y; end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_f
+class_size_c_class = 8
+
+
+c_f:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	cmpq	%rax, %r11	# checking if rax equals r11
+	sete	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; };
+extern struct vft { long (*f)(struct objectc *, long, long); } c;
+RET(c.f(0,1,-1L) == 0 && c.f(0,-3L,3L)==0 && c.f(0,1,1)==-1L);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/ab.0:
+interface i: f(int):i end;
+class c implements i:
+ method f() return this; end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_f
+class_size_c_class = 8
+
+
+c_f:
+	movq	%rdi, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; };
+extern struct vft { struct objectc *(*f)(struct objectc *); } c;
+struct objectc o = { &c };
+RET(c.f(&o) == &o);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/ac.0:
+interface i: f(int):int end;
+class c implements i:
+ var v:int;
+ method f() return v; end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_f
+class_size_c_class = 16
+
+
+c_f:
+	movq	8(%rdi), %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; long v; };
+extern struct vft { long (*f)(struct objectc *); } c;
+struct objectc o = { &c, 9 };
+RET(c.f(&o) == 9);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/ad.0:
+interface i: f(int):i end;
+class c implements i:
+ var v:int;
+ method f() return null i; end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_f
+class_size_c_class = 16
+
+
+c_f:
+	movq	$0, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; long v; };
+extern struct vft { struct objectc *(*f)(struct objectc *); } c;
+struct objectc o = { &c };
+RET(c.f(&o) == NULL);
 
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
@@ -60,6 +487,7 @@ Ausgabe:
 .globl c
 c:   
 .quad c_f
+class_size_c_class = 8
 
 
 c_f:
@@ -90,6 +518,7 @@ Ausgabe:
 .globl c
 c:   
 .quad c_f
+class_size_c_class = 8
 
 
 c_f:
@@ -127,6 +556,7 @@ Ausgabe:
 .globl c
 c:   
 .quad c_f
+class_size_c_class = 24
 
 
 c_f:
@@ -185,6 +615,7 @@ c:
 .quad c_g
 .quad c_h
 .quad c_j
+class_size_c_class = 8
 
 
 c_f:
@@ -250,6 +681,7 @@ Ausgabe:
 .globl c
 c:   
 .quad c_g
+class_size_c_class = 8
 
 
 c_g:
@@ -304,6 +736,7 @@ c:
 .quad c_g
 .quad c_h
 .quad c_j
+class_size_c_class = 8
 
 
 c_f:
@@ -369,6 +802,7 @@ Ausgabe:
 .globl c
 c:   
 .quad c_j
+class_size_c_class = 8
 
 
 c_j:
@@ -424,6 +858,7 @@ c:
 .quad c_g
 .quad c_h
 .quad c_j
+class_size_c_class = 8
 
 
 c_f:
@@ -493,6 +928,7 @@ Ausgabe:
 .globl c
 c:   
 .quad c_h
+class_size_c_class = 24
 
 
 c_h:
@@ -548,6 +984,7 @@ Ausgabe:
 .globl c
 c:   
 .quad c_h
+class_size_c_class = 24
 
 
 c_h:
@@ -604,6 +1041,7 @@ Ausgabe:
 .globl c
 c:   
 .quad c_h
+class_size_c_class = 24
 
 
 c_h:
@@ -652,6 +1090,7 @@ Ausgabe:
 .globl c
 c:   
 .quad c_f
+class_size_c_class = 8
 
 
 c_f:
@@ -690,6 +1129,7 @@ Ausgabe:
 .globl c
 c:   
 .quad c_h
+class_size_c_class = 24
 
 
 c_h:
@@ -745,6 +1185,7 @@ Ausgabe:
 .globl c
 c:   
 .quad c_h
+class_size_c_class = 24
 
 
 c_h:
@@ -801,6 +1242,7 @@ Ausgabe:
 .globl c
 c:   
 .quad c_h
+class_size_c_class = 24
 
 
 c_h:
@@ -855,6 +1297,7 @@ Ausgabe:
 .globl c
 c:   
 .quad c_h
+class_size_c_class = 24
 
 
 c_h:
@@ -913,6 +1356,7 @@ Ausgabe:
 .globl c
 c:   
 .quad c_h
+class_size_c_class = 24
 
 
 c_h:
@@ -968,6 +1412,7 @@ Ausgabe:
 .globl c
 c:   
 .quad c_h
+class_size_c_class = 24
 
 
 c_h:
@@ -1027,6 +1472,7 @@ Ausgabe:
 .globl c
 c:   
 .quad c_h
+class_size_c_class = 24
 
 
 c_h:
@@ -1080,6 +1526,7 @@ Ausgabe:
 .globl c
 c:   
 .quad c_h
+class_size_c_class = 24
 
 
 c_h:
@@ -1134,6 +1581,7 @@ Ausgabe:
 .globl c
 c:   
 .quad c_h
+class_size_c_class = 24
 
 
 c_h:
@@ -1187,6 +1635,7 @@ Ausgabe:
 .globl c
 c:   
 .quad c_h
+class_size_c_class = 24
 
 
 c_h:
@@ -1232,6 +1681,7 @@ Ausgabe:
 .globl c
 c:   
 .quad c_f
+class_size_c_class = 8
 
 
 c_f:
@@ -1273,6 +1723,7 @@ Ausgabe:
 .globl c
 c:   
 .quad c_h
+class_size_c_class = 24
 
 
 c_h:
@@ -1333,6 +1784,7 @@ Ausgabe:
 .globl c
 c:   
 .quad c_h
+class_size_c_class = 24
 
 
 c_h:
@@ -1389,6 +1841,7 @@ Ausgabe:
 .globl c
 c:   
 .quad c_h
+class_size_c_class = 24
 
 
 c_h:
@@ -1448,6 +1901,7 @@ Ausgabe:
 .globl c
 c:   
 .quad c_h
+class_size_c_class = 24
 
 
 c_h:
@@ -1516,6 +1970,7 @@ Ausgabe:
 .globl c
 c:   
 .quad c_h
+class_size_c_class = 24
 
 
 c_h:
@@ -1582,6 +2037,7 @@ Ausgabe:
 .globl c
 c:   
 .quad c_h
+class_size_c_class = 24
 
 
 c_h:
@@ -1645,6 +2101,7 @@ Ausgabe:
 .globl c
 c:   
 .quad c_h
+class_size_c_class = 24
 
 
 c_h:
@@ -1707,6 +2164,7 @@ Ausgabe:
 .globl c
 c:   
 .quad c_h
+class_size_c_class = 24
 
 
 c_h:
@@ -1769,6 +2227,7 @@ Ausgabe:
 .globl c
 c:   
 .quad c_h
+class_size_c_class = 24
 
 
 c_h:
@@ -1829,6 +2288,7 @@ Ausgabe:
 .globl c
 c:   
 .quad c_h
+class_size_c_class = 24
 
 
 c_h:
@@ -1879,6 +2339,7 @@ Ausgabe:
 .globl c
 c:   
 .quad c_f
+class_size_c_class = 8
 
 
 c_f:
@@ -1924,6 +2385,7 @@ Ausgabe:
 .globl c
 c:   
 .quad c_h
+class_size_c_class = 24
 
 
 c_h:
@@ -1993,6 +2455,7 @@ Ausgabe:
 .globl c
 c:   
 .quad c_h
+class_size_c_class = 24
 
 
 c_h:
@@ -2065,6 +2528,7 @@ Ausgabe:
 .globl c
 c:   
 .quad c_h
+class_size_c_class = 24
 
 
 c_h:
@@ -2146,6 +2610,7 @@ Ausgabe:
 .globl c
 c:   
 .quad c_h
+class_size_c_class = 24
 
 
 c_h:
@@ -2216,6 +2681,7 @@ Ausgabe:
 .globl c
 c:   
 .quad c_f
+class_size_c_class = 8
 
 
 c_f:
@@ -2251,6 +2717,7 @@ Ausgabe:
 .globl c
 c:   
 .quad c_f
+class_size_c_class = 8
 
 
 c_f:
@@ -2292,6 +2759,7 @@ Ausgabe:
 .globl c
 c:   
 .quad c_f
+class_size_c_class = 8
 
 
 c_f:
@@ -2328,6 +2796,7 @@ Ausgabe:
 .globl c
 c:   
 .quad c_f
+class_size_c_class = 8
 
 
 c_f:
@@ -2363,6 +2832,7 @@ Ausgabe:
 .globl c
 c:   
 .quad c_f
+class_size_c_class = 16
 
 
 c_f:
@@ -2440,6 +2910,7 @@ Class1:
 .quad Class1_determinant
 .quad 0 #offsetThisBy64
 .quad 0 #getNull
+class_size_Class1_class = 32
 
 
 
@@ -2451,6 +2922,7 @@ Class2:
 .quad 0 #determinant
 .quad Class2_offsetThisBy64
 .quad Class2_getNull
+class_size_Class2_class = 8
 
 
 Class1_binaryOr:
@@ -2606,6 +3078,7 @@ Class1:
 .quad Class1_calc1
 .quad Class1_calc2
 .quad Class1_calc3
+class_size_Class1_class = 8
 
 
 Class1_add2:
@@ -2765,6 +3238,7 @@ Ausgabe:
 Class1:   
 .quad Class1_nestedVariables
 .quad Class1_nestedControl
+class_size_Class1_class = 8
 
 
 Class1_nestedVariables:
@@ -2966,6 +3440,7 @@ Class1:
 .quad Class1_bitcount
 .quad 0 #init
 .quad 0 #factorial
+class_size_Class1_class = 8
 
 
 
@@ -2974,6 +3449,7 @@ Cacher:
 .quad 0 #bitcount
 .quad Cacher_init
 .quad Cacher_factorial
+class_size_Cacher_class = 24
 
 
 Class1_bitcount:
@@ -3135,6 +3611,7 @@ Ausgabe:
 .globl Class1
 Class1:   
 .quad Class1_calc
+class_size_Class1_class = 24
 
 
 Class1_calc:
@@ -3238,6 +3715,7 @@ Ausgabe:
 Class1:   
 .quad Class1_init
 .quad Class1_calc
+class_size_Class1_class = 40
 
 
 Class1_init:
@@ -3379,6 +3857,7 @@ Class1:
 .quad Class1_max2
 .quad Class1_max3
 .quad Class1_gcd
+class_size_Class1_class = 8
 
 
 Class1_max1:
@@ -3542,6 +4021,7 @@ Ausgabe:
 .globl Class1
 Class1:   
 .quad Class1_fib
+class_size_Class1_class = 8
 
 
 Class1_fib:
@@ -3615,26 +4095,83 @@ class Class1 implements Interface1:
 		return new Class1;
 	end;
 end;
-/usr/ftp/pub/ubvl/test/codeb/test: line 34: 27227 Segmentation fault      $PROGRAM < $i > $RESFILE
-Übersetzung: [Errot] Status=139. Erwartet: 0
+Übersetzung: Status korrekt
 
 Ausgabe:
+
+.globl Class1
+Class1:   
+.quad Class1_set
+.quad Class1_get
+.quad Class1_construct
+class_size_Class1_class = 16
+
+
+Class1_set:
+	movq	%rsi, 8(%rdi)
+	movq	$0, %rax
+	ret
+Class1_get:
+	movq	8(%rdi), %rax
+	ret
+Class1_construct:
+	leaq	Class1(%rip), %r15
+	movq	%r15, %rax
+	movq	%rax, %r15
+	addq	$class_size_Class1_class,%r15
+	ret
 
 Übersetze und linke das Testprogramm:
 In file included from /usr/ftp/pub/ubvl/test/codeb/testmain.c:13:0:
 /home/ublu21/u11808206/test/codeb/thenotoriousj-19.call: In function ‘call’:
-/home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:21:24: warning: comparison of distinct pointer types lacks a cast
+/home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:32:24: warning: comparison of distinct pointer types lacks a cast
   Class1.construct(obj) == reg15 && heapptr - reg15 == 2 && constructed->vftc == &Class1);
                         ^~
-/tmp/ccUkIyJL.o: In function `call':
-/home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:13: undefined reference to `Class1'
-/home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:20: undefined reference to `Class1'
-/home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:20: undefined reference to `Class1'
-/home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:20: undefined reference to `Class1'
-/home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:21: undefined reference to `Class1'
-/tmp/ccUkIyJL.o:/home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:21: more undefined references to `Class1' follow
-collect2: error: ld returned 1 exit status
-[Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
+
+Rufe folgendes Codefragment auf:
+struct objectc { 
+	struct vft *vftc;
+	long num;
+};
+
+extern struct vft { 
+	long (*set)(struct objectc *, long);
+	long (*get)(struct objectc *);
+	struct objectc* (*construct)(struct objectc *);
+} Class1;
+
+struct objectc *obj = malloc(sizeof(struct objectc));
+obj->vftc = &Class1;
+obj->num = 3;
+
+/* heapptr comes from the framework, could be unstable if prof changes it*/
+long *reg15 = heapptr;
+struct objectc *constructed = (struct objectc *) heapptr;
+
+printf("Class1.get(obj):\t%d\n",Class1.get(obj));
+printf("Class1.set(obj, 1):\t%d\n",Class1.set(obj, 1));
+printf("Class1.get(obj):\t%d\n",Class1.get(obj));
+printf("Class1.construct(obj):\t%d\n",Class1.construct(obj));
+printf("heapptr:\t%d\n",heapptr);
+printf("R15:\t%d\n",reg15);
+printf("heapptr - reg15:\t%d\t but should be: 2\n", heapptr - reg15);
+printf("constructed->vftc:\t%d\t&Class1: %d\t vgl: %d \n",constructed->vftc,&Class1,constructed->vftc == &Class1);
+
+
+
+RET(Class1.get(obj) == 3 && Class1.set(obj, 1) == 0 && Class1.get(obj) == 1 &&
+	Class1.construct(obj) == reg15 && heapptr - reg15 == 2 && constructed->vftc == &Class1);
+Class1.get(obj):	3
+Class1.set(obj, 1):	0
+Class1.get(obj):	1
+Class1.construct(obj):	4196538
+heapptr:	4196554
+R15:	6295648
+heapptr - reg15:	-262387	 but should be: 2
+constructed->vftc:	0	&Class1: 4196538	 vgl: 0 
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+[Error] aber das Ergebnis des Aufrufs ist falsch.
+
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-20.0:
 interface Interface1:
 	add1(int) : int
@@ -3726,6 +4263,7 @@ Class2:
 .quad 0 #constant
 .quad Class2_getVar
 .quad Class2_getObjVar
+class_size_Class2_class = 16
 
 
 
@@ -3744,6 +4282,7 @@ Class1:
 .quad Class1_constant
 .quad 0 #getVar
 .quad 0 #getObjVar
+class_size_Class1_class = 8
 
 
 Class2_getVar:
@@ -4021,6 +4560,7 @@ Class1:
 .quad 0 #single
 .quad 0 #getThis
 .quad 0 #ident
+class_size_Class1_class = 32
 
 
 
@@ -4033,6 +4573,7 @@ Class2:
 .quad 0 #single
 .quad Class2_getThis
 .quad Class2_ident
+class_size_Class2_class = 24
 
 
 Class1_init:
@@ -4144,11 +4685,93 @@ ERROR on line 1 Can not lex the symbol: /
 Status: korrekt
 
 ==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/y0.2:
-interface x: end;
-class y implements x: end
+class x implements: end
 
 Ausgabe:
 Error parsing line: 1 char: 
+syntax error
+Status: korrekt
+
+==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/y1.2:
+interface i: m(int):int end;
+class x implements i: method m(p:int,) end; end;
+
+Ausgabe:
+Error parsing line: 1 char: )
+syntax error
+Status: korrekt
+
+==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/y2.2:
+interface i: m(int):int end;
+class c implements i: method m(x:int) return x+x*x; end; end;
+
+Ausgabe:
+Error parsing line: 1 char: *
+syntax error
+Status: korrekt
+
+==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/y3.2:
+interface i: m(int):int end;
+class c implements: method m(x:int) return x-x-x; end; end;
+
+Ausgabe:
+Error parsing line: 1 char: -
+syntax error
+Status: korrekt
+
+==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/y4.2:
+interface i: m(int):int end;
+class c implements: method m(x:int) return not x=x; end; end;
+
+Ausgabe:
+Error parsing line: 1 char: =
+syntax error
+Status: korrekt
+
+==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/y5.2:
+interface i: m(int):int end;
+class c implements:
+  method m(x:int) if x then return x; else return x; else return x; end; end;
+end;
+
+Ausgabe:
+Error parsing line: 1 char: else
+syntax error
+Status: korrekt
+
+==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/y6.2:
+interface i: m(int):int end;
+class c implements: method m(x:i) return x.m(x,); end; end;
+
+Ausgabe:
+Error parsing line: 1 char: )
+syntax error
+Status: korrekt
+
+==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/y7.2:
+interface i: m(int):int end;
+class c implements: method m(x:int) return m(x); end; end;
+
+Ausgabe:
+Error parsing line: 1 char: (
+syntax error
+Status: korrekt
+
+==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/y8.2:
+interface i: m(int):int end;
+class c implements: method m(x:int) x.x:=x; end; end;
+
+Ausgabe:
+Error parsing line: 1 char: :=
+syntax error
+Status: korrekt
+
+==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/y9.2:
+interface i: m(int):int end;
+class c implements: method m(x:int) return; end; end;
+
+Ausgabe:
+Error parsing line: 1 char: ;
 syntax error
 Status: korrekt
 
@@ -4157,6 +4780,92 @@ class y implements x: end;
 
 Ausgabe:
 Identifier with name 'x' on line 1 is not visible in the current scope
+Status: korrekt
+
+==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/z1.3:
+interface i: m(int):int m(int):int  end;
+
+Ausgabe:
+Identifier 'm' on line 1 conflicts with identifier [m] on line 1
+Status: korrekt
+
+==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/z2.3:
+interface i: m1(int):int m2(int):int  end;
+class c implements :
+  method m1(x:int) end;
+  method m2() return x; end;
+end;
+
+Ausgabe:
+Identifier with name 'x' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
+Status: korrekt
+
+==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/z3.3:
+interface i: m(int):int end;
+class c implements i:
+  method m(x:int)
+    if x then var x:int:=0; end;
+  end;
+end;
+
+Ausgabe:
+Identifier 'x' on line 1 conflicts with identifier [x] on line 1
+Status: korrekt
+
+==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/z4.3:
+interface i: m(int):int end;
+class c implements :
+  method m(x:int) return new c1; end;
+end;
+
+Ausgabe:
+Identifier with name 'c1' on line 1 is not visible in the current scope
+Status: korrekt
+
+==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/z5.3:
+interface i: m(int):int end;
+class c implements :
+  method m(x:int) return new x; end;
+end;
+
+Ausgabe:
+Identifier with name 'x' on line 1 is not visible in the current scope
+Status: korrekt
+
+==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/z6.3:
+interface i: m(int):int end;
+class c implements :
+  method m(x:int) return i; end;
+end;
+
+Ausgabe:
+Identifier with name 'i' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
+Status: korrekt
+
+==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/z7.3:
+interface i: m(int):int end;
+class c implements m:
+  method m(x:int) end;
+end;
+
+Ausgabe:
+Identifier with name 'm' on line 1 is not visible in the current scope
+Status: korrekt
+
+==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/z8.3:
+class c implements :
+  method m(x:int) end;
+end;
+
+Ausgabe:
+Identifier with name 'm' on line 1 is not visible in the current scope
+Status: korrekt
+
+==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/z9.3:
+interface i: i(int):int end;
+
+Ausgabe:
+Identifier 'i' on line 1 conflicts with identifier [i] on line 1
 Status: korrekt
 
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_Andy0n_300.3:
@@ -5572,6 +6281,6 @@ Status: korrekt
 
 Statistics: 
 ===========
-           107 Tests total
-           106 Tests passed
+           138 Tests total
+           137 Tests passed
            1 Tests failed

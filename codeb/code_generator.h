@@ -86,3 +86,7 @@ void writeLoopJumpToStart(char *label);
 void writeLoopCheck(char *label, char *src);
 
 void processInjection(code_injection_t *injection);
+
+void generateNewObjekt(char *className, char *dst);
+char *getHeapPointer();
+char *generateClassSizeLabel(char *className);

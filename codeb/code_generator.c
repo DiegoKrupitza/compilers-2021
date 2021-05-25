@@ -218,8 +218,8 @@ void generateClassTable(node_t *node, meth_node_t *implmethds, classvar_node_t *
     //printf("Normal nodes\n");
     //printItems(node);
 
-    printf("\n\nClassVars");
-    printItemsClassVar(classVars);
+    //printf("\n\nClassVars");
+    //printItemsClassVar(classVars);
 
     //printf("\n\n");
     // reading all the abstrakt meths
@@ -269,11 +269,11 @@ void generateClassTableForASingleClass(char *className, node_t *abstractMethds, 
         nextNode = nextNode->next;
     }
 
-    // size of the class for object creation 
+    // size of the class for object creation
     // https://www.complang.tuwien.ac.at/ubvl/amd64/amd64h.html
     // .size name, expr
     // Legt die Größe des Symbols name in Bytes fest.
-    printf(".size class_size_%s_class, %ld\n", className, classSize + 1);
+    printf("class_size_%s_class = %ld\n", className, (classSize + 1) * 8);
 
     printf("\n\n");
 }
@@ -496,4 +496,21 @@ void writeLoopCheck(char *label, char *src)
 {
     fprintf(stdout, "\tcmpq\t$0, %%%s\n", src);
     fprintf(stdout, "\tjns\t%s_end\n", label);
+}
+
+char *getHeapPointer()
+{
+    return "r15";
+}
+
+void generateNewObjekt(char *className, char *dst)
+{
+    // shieben von label in addresse
+    fprintf(stdout, "\tleaq\t%s(%%rip), %%r15\n", className);
+
+    // r15 increasen
+    fprintf(stdout, "\taddq\t$class_size_%s_class,%%r15\n", className);
+
+    // writing in the return regsiter probided by bnode
+    writeMove("r15", dst);
 }
