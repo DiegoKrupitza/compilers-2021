@@ -210,13 +210,16 @@ void writeReturnWithValue(char *retRegister)
     writeReturn();
 }
 
-void generateClassTable(node_t *node, meth_node_t *implmethds)
+void generateClassTable(node_t *node, meth_node_t *implmethds, classvar_node_t *classVars)
 {
-    // printf("Implemented lsit \n");
-    // printItemsImpl(implmethds);
+    //printf("Implemented lsit \n");
+    //printItemsImpl(implmethds);
 
-    // printf("Normal nodes\n");
+    //printf("Normal nodes\n");
     //printItems(node);
+
+    printf("\n\nClassVars");
+    printItemsClassVar(classVars);
 
     //printf("\n\n");
     // reading all the abstrakt meths
@@ -236,13 +239,14 @@ void generateClassTable(node_t *node, meth_node_t *implmethds)
     node_t *nextNode = allClasses;
     while (nextNode != NULL)
     {
-        generateClassTableForASingleClass(nextNode->name, abstractMethds, implmethds);
+        long classSizeWithTable = countOfClassVarsForClass(classVars, nextNode->name);
+        generateClassTableForASingleClass(nextNode->name, abstractMethds, implmethds, classSizeWithTable);
 
         nextNode = nextNode->next;
     }
 }
 
-void generateClassTableForASingleClass(char *className, node_t *abstractMethds, meth_node_t *implmethds)
+void generateClassTableForASingleClass(char *className, node_t *abstractMethds, meth_node_t *implmethds, long classSize)
 {
     printf("\n"); // just to have a bit more spacing
     printf(".globl %s\n", className);
@@ -264,6 +268,12 @@ void generateClassTableForASingleClass(char *className, node_t *abstractMethds, 
 
         nextNode = nextNode->next;
     }
+
+    // size of the class for object creation 
+    // https://www.complang.tuwien.ac.at/ubvl/amd64/amd64h.html
+    // .size name, expr
+    // Legt die Größe des Symbols name in Bytes fest.
+    printf(".size class_size_%s_class, %ld\n", className, classSize + 1);
 
     printf("\n\n");
 }

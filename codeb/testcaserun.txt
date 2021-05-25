@@ -1,6 +1,6 @@
 Teste "make clean"
 rm -f codea codegen.c *.o oxout.* lex.yy.c y.tab.* y.output parser
-codeb: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 2.6.32, BuildID[sha1]=3018783f1ab59780d8e34ce0a62954283e782ca4, not stripped
+codeb: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 2.6.32, BuildID[sha1]=e663385f33c11d7e4846263a4e3b457ff6fbb58f, not stripped
 codeb is object or executable
 Teste "make"
 ox parser.y scanner.l
@@ -3615,7 +3615,7 @@ class Class1 implements Interface1:
 		return new Class1;
 	end;
 end;
-/usr/ftp/pub/ubvl/test/codeb/test: line 34: 17245 Segmentation fault      $PROGRAM < $i > $RESFILE
+/usr/ftp/pub/ubvl/test/codeb/test: line 34: 27227 Segmentation fault      $PROGRAM < $i > $RESFILE
 Übersetzung: [Errot] Status=139. Erwartet: 0
 
 Ausgabe:
@@ -3626,13 +3626,13 @@ In file included from /usr/ftp/pub/ubvl/test/codeb/testmain.c:13:0:
 /home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:21:24: warning: comparison of distinct pointer types lacks a cast
   Class1.construct(obj) == reg15 && heapptr - reg15 == 2 && constructed->vftc == &Class1);
                         ^~
-/tmp/ccgNwMwy.o: In function `call':
+/tmp/ccUkIyJL.o: In function `call':
 /home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:13: undefined reference to `Class1'
 /home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:20: undefined reference to `Class1'
 /home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:20: undefined reference to `Class1'
 /home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:20: undefined reference to `Class1'
 /home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:21: undefined reference to `Class1'
-/tmp/ccgNwMwy.o:/home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:21: more undefined references to `Class1' follow
+/tmp/ccUkIyJL.o:/home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:21: more undefined references to `Class1' follow
 collect2: error: ld returned 1 exit status
 [Error] Erzeugter Code konnte nicht assembliert und gelinkt werden.
 ==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-20.0:

@@ -9,6 +9,7 @@
 #include "tree.h"
 #include "implemented_meth_list.h"
 #include "code_injection.h"
+#include "class_var_list.h"
 
 %}
 
@@ -27,7 +28,7 @@ struct yyyT2 { char *name; int lineNr; };
 typedef struct yyyT2 *yyyP2; 
 
 
-struct yyyT3 { node_t* in; node_t* out; meth_node_t* inImplList; meth_node_t* outImplList; }; 
+struct yyyT3 { node_t* in; node_t* out; meth_node_t* inImplList; meth_node_t* outImplList; classvar_node_t* inClassVarList; classvar_node_t* outClassVarList; }; 
 typedef struct yyyT3 *yyyP3; 
 
 
@@ -55,7 +56,7 @@ struct yyyT9 { node_t* in; node_t* out; tree_t* tree; char* currentClassName; ch
 typedef struct yyyT9 *yyyP9; 
 
 
-struct yyyT10 { node_t* in; node_t* out; char* currentClassName; meth_node_t* inImplList; meth_node_t* outImplList; }; 
+struct yyyT10 { node_t* in; node_t* out; char* currentClassName; meth_node_t* inImplList; meth_node_t* outImplList; classvar_node_t* inClassVarList; classvar_node_t* outClassVarList; }; 
 typedef struct yyyT10 *yyyP10; 
 
 

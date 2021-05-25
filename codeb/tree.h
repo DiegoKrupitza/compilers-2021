@@ -23,7 +23,8 @@ typedef enum
     OP_IF_ID,
     OP_IF_ELSE,
     OP_LOOP,
-    OP_LOOP_ID
+    OP_LOOP_ID,
+    OP_NEW_OBJ
 } operators_t;
 
 typedef struct tree_t
@@ -63,6 +64,8 @@ tree_t *createNumericalLeaf(long value);
 
 tree_t *createIfLabelLeaf(char *name);
 tree_t *createLoopLabelLeaf(char *name);
+
+tree_t *createNewObjectLeaf(char *className);
 
 tree_t *createLocalVarIdentifierLeaf(char *name, int offset);
 tree_t *createClassVarIdentifierLead(char *name, int offset);

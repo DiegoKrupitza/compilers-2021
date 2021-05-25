@@ -32,6 +32,18 @@ tree_t *createNode(operators_t op, tree_t *left, tree_t *right)
     return node;
 }
 
+tree_t *createNewObjectLeaf(char *className)
+{
+    tree_t *node = (tree_t *)malloc(sizeof(tree_t));
+
+    node->op = OP_NEW_OBJ;
+    node->kids[0] = (tree_t *)NULL;
+    node->kids[1] = (tree_t *)NULL;
+    node->identifierName = className;
+
+    return node;
+}
+
 tree_t *createIfLabelLeaf(char *name)
 {
     tree_t *node = (tree_t *)malloc(sizeof(tree_t));

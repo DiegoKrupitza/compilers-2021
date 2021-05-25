@@ -1,6 +1,7 @@
 #include "list.h"
 #include "implemented_meth_list.h"
 #include "code_injection.h"
+#include "class_var_list.h"
 
 #define TRUE_VAL -1
 #define FALSE_VAL 0
@@ -43,8 +44,8 @@ void writeLessEqualSv(char *, long, char *);
 void writeReturn();
 void writeReturnWithValue(char *);
 
-void generateClassTable(node_t *node, meth_node_t *implmethds);
-void generateClassTableForASingleClass(char *className, node_t *abstractMethds, meth_node_t *implmethds);
+void generateClassTable(node_t *node, meth_node_t *implmethds, classvar_node_t *classVars);
+void generateClassTableForASingleClass(char *className, node_t *abstractMethds, meth_node_t *implmethds, long classSize);
 
 void generateMethodeLabel(char *classname, char *meth_name, long varCounter);
 

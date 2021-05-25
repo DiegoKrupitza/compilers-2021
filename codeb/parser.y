@@ -16,6 +16,8 @@
 
 #include "code_generator.h"
 
+#include "class_var_list.h"
+
 #include "implemented_meth_list.h"
 
 void yyerror(char const*);
@@ -24,6 +26,8 @@ extern int yylex();
 
 extern void burm_reduce(NODEPTR_TYPE, int);
 extern void burm_label(NODEPTR_TYPE);
+
+long newIdCounter = 0;
 
 char* lastIfLabelName = "label";
 long varCounter = 0;
@@ -56,7 +60,7 @@ char* prepareLabelString(char* classname, char* functionname, long counter)
 
 @attributes { long value; } NUM
 @attributes { char *name; int lineNr; } ID
-@attributes { node_t* in; node_t* out; meth_node_t* inImplList; meth_node_t* outImplList; } Programm ProgrammStart Class
+@attributes { node_t* in; node_t* out; meth_node_t* inImplList; meth_node_t* outImplList; classvar_node_t* inClassVarList; classvar_node_t* outClassVarList; } Programm ProgrammStart Class
 @attributes { node_t* in; node_t* out; } Interface AbstraktMethodsLoop AbstraktMethod Pars Par ParsLoop
 @attributes { node_t* in; } Type ParamTypesLoop TypesLoop ImplementsLoop
 @attributes { node_t* ids; } ParamsExpr ParamsExprLoop
@@ -66,7 +70,7 @@ char* prepareLabelString(char* classname, char* functionname, long counter)
 @attributes { node_t* in; node_t* out; char* currentClassName; char* currentFunctionName; long ifcounterIn; long ifcounterOut; code_injection_t* injection; } Stats
 @attributes { node_t* in; node_t* out; tree_t* tree; char* currentClassName; char* currentFunctionName; long ifcounterIn; long ifcounterOut; code_injection_t* outInjection; } Stat
 
-@attributes { node_t* in; node_t* out; char* currentClassName; meth_node_t* inImplList; meth_node_t* outImplList; } MemeberLoop Member
+@attributes { node_t* in; node_t* out; char* currentClassName; meth_node_t* inImplList; meth_node_t* outImplList; classvar_node_t* inClassVarList; classvar_node_t* outClassVarList; } MemeberLoop Member
 
 
 @attributes { node_t* ids; tree_t *tree; } Expr OptionaNotTerm OptionalPlusTerm OptionalMalTerm OptionalAndTerm Term 
@@ -87,7 +91,8 @@ Start                   :   Programm
                         @{
                             @i @Programm.in@ = newList();
                             @i @Programm.inImplList@ = newImplList();
-                            @gen generateClassTable(@Programm.out@,@Programm.outImplList@);
+                            @i @Programm.inClassVarList@ = newClarrVarList();
+                            @gen generateClassTable(@Programm.out@,@Programm.outImplList@, @Programm.outClassVarList@);
                         @}
                         ;
 
@@ -100,11 +105,17 @@ Programm                :   ProgrammStart Programm
                             @i @ProgrammStart.inImplList@ = @Programm.0.inImplList@ ;
                             @i @Programm.1.inImplList@ = @ProgrammStart.outImplList@ ;
                             @i @Programm.0.outImplList@ = @Programm.1.outImplList@ ;
+
+                            @i @ProgrammStart.inClassVarList@ = @Programm.0.inClassVarList@ ;
+                            @i @Programm.1.inClassVarList@ = @ProgrammStart.outClassVarList@ ;
+                            @i @Programm.0.outClassVarList@ = @Programm.1.outClassVarList@ ;
                         @}
                         |
                         @{
                             @i @Programm.out@ = @Programm.in@ ;
                             @i @Programm.outImplList@ = @Programm.inImplList@ ;
+
+                            @i @Programm.outClassVarList@ = @Programm.inClassVarList@ ;
                         @}
                         ;
 
@@ -113,6 +124,8 @@ ProgrammStart           :   Interface ';'
                                 @i @Interface.in@ = @ProgrammStart.in@ ;
                                 @i @ProgrammStart.out@ = @Interface.out@ ;
                                 @i @ProgrammStart.outImplList@ = @ProgrammStart.inImplList@ ;
+                                
+                                @i @ProgrammStart.outClassVarList@ = @ProgrammStart.inClassVarList@ ;
                             @}
                         |   Class ';'
                         @{
@@ -121,6 +134,9 @@ ProgrammStart           :   Interface ';'
 
                             @i @Class.inImplList@ = @ProgrammStart.inImplList@ ;
                             @i @ProgrammStart.outImplList@ = @Class.outImplList@ ;
+
+                            @i @Class.inClassVarList@ = @ProgrammStart.inClassVarList@ ;
+                            @i @ProgrammStart.outClassVarList@ = @Class.outClassVarList@ ;
                         @}
                         ;
 
@@ -193,6 +209,9 @@ Class                   :   CLASS ID
 
                             @i @MemeberLoop.inImplList@ = @Class.inImplList@ ;
                             @i @Class.outImplList@ = @MemeberLoop.outImplList@ ;
+
+                            @i @MemeberLoop.inClassVarList@ = @Class.inClassVarList@ ;
+                            @i @Class.outClassVarList@ = @MemeberLoop.outClassVarList@ ;
                         @}
                         |   CLASS ID
                             IMPLEMENTS ':'
@@ -206,6 +225,10 @@ Class                   :   CLASS ID
 
                             @i @MemeberLoop.inImplList@ = @Class.inImplList@ ;
                             @i @Class.outImplList@ = @MemeberLoop.outImplList@ ;
+
+
+                            @i @MemeberLoop.inClassVarList@ = @Class.inClassVarList@ ;
+                            @i @Class.outClassVarList@ = @MemeberLoop.outClassVarList@ ;
                         @}
                         |   CLASS ID
                             IMPLEMENTS ImplementsLoop ':'
@@ -215,6 +238,8 @@ Class                   :   CLASS ID
                             @i @ImplementsLoop.in@ = @Class.in@;
 
                             @i @Class.outImplList@ = @Class.outImplList@ ;
+                            
+                            @i @Class.outClassVarList@ = @Class.inClassVarList@ ;
                         @}
                         |   CLASS ID
                             IMPLEMENTS ':'
@@ -223,6 +248,8 @@ Class                   :   CLASS ID
                             @i @Class.out@ = addDev(@Class.in@,@ID.name@,CLASS_DING,@ID.lineNr@,"Add von Class out der Class id4");
 
                             @i @Class.outImplList@ = @Class.outImplList@ ;
+
+                            @i @Class.outClassVarList@ = @Class.inClassVarList@ ;
                         @}
                         ;
 
@@ -238,6 +265,10 @@ MemeberLoop             :   MemeberLoop Member ';'
                             @i @MemeberLoop.1.inImplList@ = @MemeberLoop.0.inImplList@;
                             @i @Member.inImplList@ = @MemeberLoop.1.outImplList@ ;
                             @i @MemeberLoop.0.outImplList@ = @Member.outImplList@ ;
+
+                            @i @MemeberLoop.1.inClassVarList@ = @MemeberLoop.0.inClassVarList@;
+                            @i @Member.inClassVarList@ = @MemeberLoop.1.outClassVarList@ ;
+                            @i @MemeberLoop.0.outClassVarList@ = @Member.outClassVarList@ ;
                         @}
                         |   Member ';'
                         @{
@@ -248,6 +279,9 @@ MemeberLoop             :   MemeberLoop Member ';'
 
                             @i @Member.inImplList@ = @MemeberLoop.inImplList@;
                             @i @MemeberLoop.outImplList@ = @Member.outImplList@ ;
+
+                            @i @Member.inClassVarList@ = @MemeberLoop.inClassVarList@;
+                            @i @MemeberLoop.outClassVarList@ = @Member.outClassVarList@ ;
 
                         @}
                         ;
@@ -269,12 +303,17 @@ Member                  :   VAR ID ':' Type
                             @i @Type.in@ = @Member.in@ ; 
 
                             @i @Member.outImplList@ = @Member.inImplList@ ;
+
+                            @i @Member.outClassVarList@ = addClassVar(@Member.inClassVarList@ , @Member.currentClassName@, @ID.name@);
                         @}
                         |   METHOD ID '(' ')' StatsMethode END
                         @{
                             @visCheck isVisible(@Member.in@,@ID.name@, ABSTRACT_METH, @ID.lineNr@);
                             @i @StatsMethode.in@ = @Member.in@ ;
                             @i @Member.out@ = @Member.in@;
+
+                            @i @Member.outClassVarList@ = @Member.inClassVarList@ ;
+
 
                             @i @Member.outImplList@ = addImpl(@Member.inImplList@, @Member.currentClassName@, @ID.name@);
                             
@@ -290,6 +329,8 @@ Member                  :   VAR ID ':' Type
                             @i @Pars.in@ = duplicate(@Member.in@);
                             @i @Member.out@ = duplicate(@Member.in@);
                             @i @StatsMethode.in@ = @Pars.out@ ;
+
+                            @i @Member.outClassVarList@ = @Member.inClassVarList@ ;
 
                             @i @Member.outImplList@ = addImpl(@Member.inImplList@, @Member.currentClassName@, @ID.name@);
 
@@ -557,7 +598,7 @@ Expr                    :   OptionaNotTerm
                         |   NEW ID
                         @{
                             @visCheck isVisible(@Expr.ids@,@ID.name@, CLASS_DING, @ID.lineNr@);
-                            @i @Expr.tree@ = NULL; /*TODO change later */
+                            @i @Expr.tree@ = createNewObjectLeaf(@ID.name@);
                         @}
                         ;
 
