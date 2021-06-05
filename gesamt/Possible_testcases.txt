@@ -1,0 +1,16 @@
+Possible testcases:
+* DONE: make local var and retur
+* DONE: make 2 local vars and return
+* DONE: var x = 3; var y = x; ret y;
+* DONE: var x = classVar; ret x;
+* DONE: var x = classVar + 1; ret x;
+* DONE: var x = param; ret x + 1;
+* DONE: write expresion into param
+* DONE: write a constant into param
+* DONE: write param into param
+* DONE: write classVar into param
+* DONE: write constant into classVar
+* DONE: write expression into classVar
+* DONE: write param into classVar
+* DONE: write localvar into classVar
+* DONE: write classVar into classVar
