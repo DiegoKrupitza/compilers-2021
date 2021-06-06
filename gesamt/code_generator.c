@@ -5,6 +5,7 @@
 #include "code_generator.h"
 
 long globalVarCount = 0;
+meth_node_t *globalImplMethList = NULL;
 
 char *getFirstRegister()
 {
@@ -214,6 +215,8 @@ void generateClassTable(node_t *node, meth_node_t *implmethds, classvar_node_t *
 {
     //printf("Implemented lsit \n");
     //printItemsImpl(implmethds);
+
+    globalImplMethList = implmethds;
 
     //printf("Normal nodes\n");
     //printItems(node);
@@ -517,4 +520,18 @@ void generateNewObjekt(char *className, char *dst)
 
     // r15 increasen
     fprintf(stdout, "\taddq\t$class_size_%s_class,%%r15\n", className);
+}
+
+void simpleFunctionCall(char *methName, char *termReg, char *dst)
+{
+
+    fprintf(stdout, "\t# start function call\n");
+
+    //StACK Pointer anpasssen
+    //TODO: safe register
+
+    long offset = getMethOffset(globalImplMethList, methName);
+    fprintf(stdout, "\tcall\t*%ld(%%%s)\n", offset * 8, termReg);
+    writeMove("rax", dst);
+    fprintf(stdout, "\t# end function call\n");
 }

@@ -85,3 +85,22 @@ int isMethImplemtedByClass(meth_node_t *list, char *className, char *methName)
 
     return 0;
 }
+
+long getMethOffset(meth_node_t *list, char *methName)
+{
+    long counter = 0;
+
+    meth_node_t *nextNode = list;
+
+    while (nextNode != NULL)
+    {
+        if (strcmp(nextNode->methName, methName) == 0)
+        {
+            return counter;
+        }
+        counter++;
+        nextNode = nextNode->next;
+    }
+
+    return -1;
+}

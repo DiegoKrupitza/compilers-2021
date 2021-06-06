@@ -85,8 +85,24 @@ tree_t *createComplexIdentifierLeaf(char *name, int type, int parameterIndex, in
         // wee habe a class var. means we need have a valid offset
         return createClassVarIdentifierLead(name, offset);
     }
+    else if (type == ABSTRACT_METH)
+    {
+        return createMethodCallIdLeaf(name);
+    }
 
     return NULL;
+}
+
+tree_t *createMethodCallIdLeaf(char *name)
+{
+    tree_t *node = (tree_t *)malloc(sizeof(tree_t));
+
+    node->op = OP_METH_ID;
+    node->kids[0] = (tree_t *)NULL;
+    node->kids[1] = (tree_t *)NULL;
+    node->identifierName = name;
+
+    return node;
 }
 
 tree_t *createLocalVarIdentifierLeaf(char *name, int offset)

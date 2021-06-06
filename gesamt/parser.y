@@ -675,7 +675,8 @@ Term                    :   '(' Expr ')'
                         @{
                             @visCheck isVisible(@Term.ids@,@ID.name@, ABSTRACT_METH, @ID.lineNr@);
 
-                            @i @Term.tree@ = NULL; /*TODO change later */
+                            @i @Term.0.tree@ = createNode(OP_SIMPLE_FUNCTION_CALL, @Term.1.tree@, createComplexIdentifierLeaf(@ID.name@, ABSTRACT_METH, -1, -1));
+                            @reg @Term.1.tree@->regStor = @Term.0.tree@->regStor /* ich kanns durchschleifen */ ;
                         @}
                         |   Term '.' ID '(' ParamsExpr ')'
                         @{

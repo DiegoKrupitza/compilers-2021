@@ -90,3 +90,5 @@ void processInjection(code_injection_t *injection);
 void generateNewObjekt(char *className, char *dst);
 char *getHeapPointer();
 char *generateClassSizeLabel(char *className);
+
+void simpleFunctionCall(char *methName, char *termReg, char *dst);

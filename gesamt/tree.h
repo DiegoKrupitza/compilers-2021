@@ -24,7 +24,9 @@ typedef enum
     OP_IF_ELSE,
     OP_LOOP,
     OP_LOOP_ID,
-    OP_NEW_OBJ
+    OP_NEW_OBJ,
+    OP_SIMPLE_FUNCTION_CALL,
+    OP_METH_ID
 } operators_t;
 
 typedef struct tree_t
@@ -72,6 +74,8 @@ tree_t *createClassVarIdentifierLead(char *name, int offset);
 tree_t *createParamIdentifierLeaf(char *name, int parameterIndex);
 tree_t *createComplexIdentifierLeaf(char *name, int type, int parameterIndex, int offset);
 tree_t *createNULLLeaf();
+
+tree_t *createMethodCallIdLeaf(char *name);
 
 tree_t *createThisLeaf();
 

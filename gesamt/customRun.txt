@@ -1,0 +1,48 @@
+interface test:
+    main():int
+    call():int
+end;
+class testclass implements test:
+    method main()
+        var brr: test := new testclass;
+        return brr.call();
+    end;
+    method call()
+        var hello: int := 12;
+        return hello;
+    end;
+end;
+
+/*
+.globl testclass #gen_class
+testclass:
+    .quad testclass_main
+    .quad testclass_call
+
+testclass_main: #gen_method
+    pushq %rbp
+    movq %rsp,%rbp
+    leaq testclass(%rip),%rsi #gen_new
+    movq %rsi,(%r15)
+    leaq (%r15),%rsi
+    addq $8,%r15
+    movq %rsi,%rax #gen_assign
+    pushq %rax
+    pushq %rdi
+    movq %rax,%rdi
+    movq (%rax),%r11
+    call *8(%r11)
+    movq %rax,%rsi
+    popq %rdi
+    popq %rax
+    movq %rsi,%rax #gen_return
+    leave
+    ret
+testclass_call: #gen_method
+    pushq %rbp
+    movq %rsp,%rbp
+    movq $12,%rax #gen_assign
+    leave #gen_return
+    ret
+
+*/

@@ -18,4 +18,6 @@ void printItemsImpl(meth_node_t *);
 
 int isMethImplemtedByClass(meth_node_t *list, char *className, char *methName);
 
+long getMethOffset(meth_node_t *list, char *methName);
+
 #endif
