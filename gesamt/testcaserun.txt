@@ -1,6 +1,6 @@
 Teste "make clean"
-rm -f codea codegen.c *.o oxout.* lex.yy.c y.tab.* y.output parser
-codeb: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 2.6.32, BuildID[sha1]=2c521de8d3aaf3c72a769aa301e7b866b9b3e038, not stripped
+rm -f gesamt codegen.c *.o oxout.* lex.yy.c y.tab.* y.output parser
+codeb: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 2.6.32, BuildID[sha1]=fdfd3fc54de28bf17a5fd3518b74e3cf6937a0b5, not stripped
 codeb is object or executable
 Teste "make"
 ox parser.y scanner.l
@@ -18,8 +18,8 @@ gcc -g -c -pedantic -Wall tree.c
 gcc -g -c -pedantic -Wall code_generator.c
 bfe < codegen.bfe | iburg > codegen.c
 gcc -g -c -pedantic -Wall codegen.c
-gcc -g list.o tree.o codegen.o class_var_list.o implemented_meth_list.o code_injection.o code_generator.o y.tab.o lex.yy.o -ll -o codeb
-==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/a0.0:
+gcc -g list.o tree.o codegen.o class_var_list.o implemented_meth_list.o code_injection.o code_generator.o y.tab.o lex.yy.o -ll -o gesamt
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/a0.0:
 interface i: f(int):int end;
 class c implements i:
  method f(x:int) return x; end;
@@ -49,7 +49,7 @@ RET(c.f(0,6) == 6 && c.f(0,-3)==-3);
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/a1.0:
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/a1.0:
 interface i: f(int):int end;
 interface i2: g(int):int end;
 class c implements i i2:
@@ -88,7 +88,7 @@ RET(c.g(0,6) == 6 && c.g(0,-3)==-3);
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/a2.0:
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/a2.0:
 interface i: f(int):int end;
 class c implements i:
  method f(x:int) return 4; end;
@@ -118,7 +118,7 @@ RET(c.f(0,6) == 4 && c.f(0,-3)==4);
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/a3.0:
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/a3.0:
 interface i: f(int):int end;
 class c implements i:
  method f(x:int) return 4; end;
@@ -148,7 +148,7 @@ RET(c.f(0,6) == 4 && c.f(0,-3)==4);
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/a4.0:
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/a4.0:
 interface i: f(int):int end;
 class c implements i:
  method f(x:int) return not x; end;
@@ -179,7 +179,7 @@ RET(c.f(0,6) == ~6L && c.f(0,-3)==~-3L);
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/a5.0:
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/a5.0:
 interface i: f(int):int end;
 class c implements i:
  method f(x:int) return 1+x+2; end;
@@ -212,7 +212,7 @@ RET(c.f(0,6) == 9 && c.f(0,-3)==0);
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/a6.0:
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/a6.0:
 interface i: f(int):int end;
 class c implements i:
  method f(x:int) return 2*x*3; end;
@@ -245,7 +245,7 @@ RET(c.f(0,6) == 36 && c.f(0,-3)==-18);
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/a7.0:
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/a7.0:
 interface i: f(int):int end;
 class c implements i:
  method f(x:int, y:int) return x and y; end;
@@ -277,7 +277,7 @@ RET(c.f(0,5,3) == 1 && c.f(0,-3L,-5L)==-7L);
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/a8.0:
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/a8.0:
 interface i: f(int):int end;
 class c implements i:
  method f(x:int, y:int) return y-x; end;
@@ -309,7 +309,7 @@ RET(c.f(0,5,3) == -2L && c.f(0,-3L,3L)==6L);
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/a9.0:
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/a9.0:
 interface i: f(int):int end;
 class c implements i:
  method f(x:int, y:int) return x<y; end;
@@ -344,7 +344,7 @@ RET(c.f(0,1,-1L) == 0 && c.f(0,-3L,3L)==-1L && c.f(0,1,1)==0);
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/aa.0:
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/aa.0:
 interface i: f(int):int end;
 class c implements i:
  method f(x:int, y:int) return x=y; end;
@@ -379,7 +379,7 @@ RET(c.f(0,1,-1L) == 0 && c.f(0,-3L,3L)==0 && c.f(0,1,1)==-1L);
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/ab.0:
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/ab.0:
 interface i: f(int):i end;
 class c implements i:
  method f() return this; end;
@@ -410,7 +410,7 @@ RET(c.f(&o) == &o);
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/ac.0:
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/ac.0:
 interface i: f(int):int end;
 class c implements i:
  var v:int;
@@ -442,7 +442,7 @@ RET(c.f(&o) == 9);
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/ad.0:
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/ad.0:
 interface i: f(int):i end;
 class c implements i:
  var v:int;
@@ -474,7 +474,497 @@ RET(c.f(&o) == NULL);
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-0.0:
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/b0.0:
+interface i: f(int):int end;
+class c implements i:
+ method f(x:int) var y:int :=x*2; return y+5; end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_f
+class_size_c_class = 8
+
+
+c_f:
+	enter	$8, $0
+	movq	%rsi, %rax
+	imulq	$2, %rax
+	movq	%rax, 0(%rsp)
+	movq	0(%rsp), %rax
+	addq	$5, %rax
+	leave
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; };
+extern struct vft { long (*f)(struct objectc *, long); } c;
+RET(c.f(0,6) == 17 && c.f(0,-3)==-1);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/b1.0:
+interface i: f(int):int end;
+class c implements i:
+ method f(x:int) x:=x*2; return x+5; end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_f
+class_size_c_class = 8
+
+
+c_f:
+	movq	%rsi, %rax
+	imulq	$2, %rax
+	movq	%rax, %rsi
+	movq	%rsi, %rax
+	addq	$5, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; };
+extern struct vft { long (*f)(struct objectc *, long); } c;
+RET(c.f(0,6) == 17 && c.f(0,-3)==-1);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/b2.0:
+interface i: f(int):int end;
+class c implements i:
+ var ov:int;
+ method f(x:i) ov:=x+1; return this; end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_f
+class_size_c_class = 16
+
+
+c_f:
+	movq	%rsi, %rax
+	addq	$1, %rax
+	movq	%rax, 8(%rdi)
+	movq	%rdi, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; long ov; } o;
+extern struct vft { struct objectc *(*f)(struct objectc *, long); } c;
+o.vftc = &c;
+RET(c.f(&o,6)->ov == 7 && c.f(&o,-3)->ov==-2);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/b3.0:
+interface i: even(int):int end;
+class c implements i:
+ method even(x:int) if (x and 1)=1 then return 0; else return 0-1; end; end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_even
+class_size_c_class = 8
+
+
+c_even:
+	movq	%rsi, %rax
+	and	$1, %rax
+	cmpq	$1, %rax	# checking if 1 equals rax
+	sete	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	cmpq	$0, %rax
+	jns	label_c_even_0_else
+	movq	$0, %rax
+	ret
+	jmp	label_c_even_0_end
+
+	label_c_even_0_else:
+	movq	$1, %r11
+	movq	$0, %rax
+	subq	%r11, %rax
+	ret
+
+	label_c_even_0_end:
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; };
+extern struct vft { long (*even)(struct objectc *, long); } c;
+RET(c.even(0,6) == -1 && c.even(0,-3)==0);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/b4.0:
+interface i: sgn(int):int end;
+class c implements i:
+ method sgn(x:int)
+   if x<0 then return 0-1; end;
+   if 0<x then return  1; end;
+   return 0;
+ end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_sgn
+class_size_c_class = 8
+
+
+c_sgn:
+	movq	%rsi, %rax
+	cmpq	$0, %rax	# checking if 0 less rax (inverted because right const not allwoed) 
+	setl	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	cmpq	$0, %rax
+	jns	label_c_sgn_0_end
+	movq	$1, %r11
+	movq	$0, %rax
+	subq	%r11, %rax
+	ret
+
+	label_c_sgn_0_end:
+	movq	%rsi, %r11
+	cmpq	$0, %r11	# checking if 0 less r11
+	setg	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	cmpq	$0, %rax
+	jns	label_c_sgn_1_end
+	movq	$1, %rax
+	ret
+
+	label_c_sgn_1_end:
+	movq	$0, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; };
+extern struct vft { long (*sgn)(struct objectc *, long); } c;
+RET(c.sgn(0,6) == 1 && c.sgn(0,-3)==-1 && c.sgn(0,0)==0);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/b5.0:
+interface i: fac(int):int end;
+class c implements i:
+ method fac(x:int)
+   var r:int := 1;
+   while 0<x do
+     r:=r*x;
+     x:=x-1;
+   end;
+   return r;
+ end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_fac
+class_size_c_class = 8
+
+
+c_fac:
+	enter	$8, $0
+	movq	$1, 0(%rsp)
+
+	label_c_fac_0:
+	movq	%rsi, %r11
+	cmpq	$0, %r11	# checking if 0 less r11
+	setg	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	cmpq	$0, %rax
+	jns	label_c_fac_0_end
+	movq	0(%rsp), %rax
+	movq	%rsi, %r11
+	imulq	%r11, %rax
+	movq	%rax, 0(%rsp)
+	movq	%rsi, %rax
+	subq	$1, %rax
+	movq	%rax, %rsi
+	jmp	label_c_fac_0
+
+	label_c_fac_0_end:
+	movq	0(%rsp), %rax
+	leave
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; };
+extern struct vft { long (*fac)(struct objectc *, long); } c;
+RET(c.fac(0,4) == 24 && c.fac(0,0)==1);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/b6.0:
+interface i: fib(int):int end;
+class c implements i:
+ method fib(n:int)
+   var a:int := 0;
+   var b:int := 1;
+   while 0<n do
+     var t:int := a+b;
+     a:=b;
+     b:=t;
+     n:=n-1;
+   end;
+   return a;
+ end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_fib
+class_size_c_class = 8
+
+
+c_fib:
+	enter	$24, $0
+	movq	$0, 0(%rsp)
+	movq	$1, 8(%rsp)
+
+	label_c_fib_0:
+	movq	%rsi, %r11
+	cmpq	$0, %r11	# checking if 0 less r11
+	setg	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	cmpq	$0, %rax
+	jns	label_c_fib_0_end
+	movq	0(%rsp), %rax
+	movq	8(%rsp), %r11
+	addq	%r11, %rax
+	movq	%rax, 16(%rsp)
+	movq	8(%rsp), %rax
+	movq	%rax, 0(%rsp)
+	movq	16(%rsp), %rax
+	movq	%rax, 8(%rsp)
+	movq	%rsi, %rax
+	subq	$1, %rax
+	movq	%rax, %rsi
+	jmp	label_c_fib_0
+
+	label_c_fib_0_end:
+	movq	0(%rsp), %rax
+	leave
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; };
+extern struct vft { long (*fib)(struct objectc *, long); } c;
+RET(c.fib(0,4) == 3);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/b7.0:
+interface i: gcd(int,int):int end;
+class c implements i:
+ method gcd(a:int,b:int)
+   while not(a=b) do
+     if a<b then b:=b-a; else a:=a-b; end;
+   end;
+   return a;
+ end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_gcd
+class_size_c_class = 8
+
+
+c_gcd:
+
+	label_c_gcd_0:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	cmpq	%rax, %r11	# checking if rax equals r11
+	sete	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	notq	%rax
+	cmpq	$0, %rax
+	jns	label_c_gcd_0_end
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	cmpq	%rax, %r11	# checking if rax less r11
+	setg	%al
+	and	$1, %rax
+	imulq	$-1, %rax
+	cmpq	$0, %rax
+	jns	label_c_gcd_1_else
+	movq	%rdx, %rax
+	movq	%rsi, %r11
+	subq	%r11, %rax
+	movq	%rax, %rdx
+	jmp	label_c_gcd_1_end
+
+	label_c_gcd_1_else:
+	movq	%rsi, %rax
+	movq	%rdx, %r11
+	subq	%r11, %rax
+	movq	%rax, %rsi
+
+	label_c_gcd_1_end:
+	jmp	label_c_gcd_0
+
+	label_c_gcd_0_end:
+	movq	%rsi, %rax
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; };
+extern struct vft { long (*gcd)(struct objectc *, long, long); } c;
+RET(c.gcd(0,21,15) == 3);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/b8.0:
+interface i: f():i end;
+class c implements i:
+ method f() return new c; end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl c
+c:   
+.quad c_f
+class_size_c_class = 8
+
+
+c_f:
+	leaq	c(%rip), %rax
+	movq	%rax, (%r15)
+	leaq	(%r15), %rax
+	addq	$class_size_c_class,%r15
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { struct vft *vftc; };
+extern struct vft { struct objectc *(*f)(struct objectc *); } c;
+RET(c.f(0)->vftc==&c);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/b9.0:
+interface i: f():i end;
+class d implements i: var v1:int; var v2:int; method f() return this; end; end;
+class c implements i:
+ var v3:i;
+ method f() v3:=new d; return new c; end;
+end;
+
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl d
+d:   
+.quad d_f
+class_size_d_class = 24
+
+
+
+.globl c
+c:   
+.quad c_f
+class_size_c_class = 16
+
+
+d_f:
+	movq	%rdi, %rax
+	ret
+c_f:
+	leaq	d(%rip), %rax
+	movq	%rax, (%r15)
+	leaq	(%r15), %rax
+	addq	$class_size_d_class,%r15
+	movq	%rax, 8(%rdi)
+	leaq	c(%rip), %rax
+	movq	%rax, (%r15)
+	leaq	(%r15), %rax
+	addq	$class_size_c_class,%r15
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectd { struct vft *vftd; long v1; long v2; };
+struct objectc { struct vft *vftc; struct objectd *v3; } o;
+extern struct vft { struct objectc *(*f)(struct objectc *); } c, d;
+RET(c.f(&o)->vftc==&c && o.v3->vftd==&d);
+
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
+
+==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-0.0:
 interface i: f(int):int end;
 class c implements i:
  method f(x:int) return x + 3; end;
@@ -505,7 +995,7 @@ RET(c.f(0,6) == 9 && c.f(0,-3)==0);
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-1.0:
+==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-1.0:
 interface i: f(int):int end;
 class c implements i:
  method f(x:int) return x - 3; end;
@@ -536,7 +1026,7 @@ RET(c.f(0,6) == 3 && c.f(0,-3)==-6);
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-10.0:
+==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-10.0:
 interface i: 
     f(int,int):int 
 end;
@@ -583,7 +1073,7 @@ RET(c.f(myObj,3,10) == 269);
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-11.0:
+==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-11.0:
 interface i: 
     f(int):int 
     g(int):int 
@@ -664,7 +1154,7 @@ RET(c.f(0,3) == 0);
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-12.0:
+==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-12.0:
 interface i: 
     g(int):int 
 end;
@@ -704,7 +1194,7 @@ RET(c.g(0,3) == 0);
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-13.0:
+==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-13.0:
 interface i: 
     f(int):int 
     g(int):int 
@@ -785,7 +1275,7 @@ RET(c.h(0,3,3) == 0);
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-14.0:
+==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-14.0:
 interface i: 
     j(int,int):int 
 end;
@@ -826,7 +1316,7 @@ RET(c.j(0,3,3) == 0);
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-15.0:
+==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-15.0:
 interface i: 
     f(int):int 
     g(int):int 
@@ -907,7 +1397,7 @@ RET(c.f(0,2) == -1 && c.g(0,4) == -1  && c.h(0,3,2) == -1  && c.j(0,2,3) == -1  
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-17.0:
+==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-17.0:
 interface i: 
     h(int,int):int 
 end;
@@ -962,7 +1452,7 @@ RET(
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-18.0:
+==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-18.0:
 interface i: 
     h(int,int):int 
 end;
@@ -1019,7 +1509,7 @@ RET(
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-19.0:
+==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-19.0:
 interface i: 
     h(int,int):int 
 end;
@@ -1077,7 +1567,7 @@ RET(
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-2.0:
+==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-2.0:
 interface i: f(int):int end;
 class c implements i:
  method f(x:int) return x * 3; end;
@@ -1108,7 +1598,7 @@ RET(c.f(0,2) == 6 && c.f(0,-1)==-3);
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-20.0:
+==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-20.0:
 interface i: 
     h(int,int):int 
 end;
@@ -1164,7 +1654,7 @@ RET(
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-21.0:
+==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-21.0:
 interface i: 
     h(int,int):int 
 end;
@@ -1221,7 +1711,7 @@ RET(
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-22.0:
+==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-22.0:
 interface i: 
     h(int,int):int 
 end;
@@ -1276,7 +1766,7 @@ RET(
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-23.0:
+==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-23.0:
 interface i: 
     h(int,int):int 
 end;
@@ -1335,7 +1825,7 @@ RET(
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-24.0:
+==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-24.0:
 interface i: 
     h(int,int):int 
 end;
@@ -1391,7 +1881,7 @@ RET(
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-25.0:
+==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-25.0:
 interface i: 
     h(int,int):int 
 end;
@@ -1451,7 +1941,7 @@ RET(
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-26.0:
+==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-26.0:
 interface i: 
     h(int,int):int 
 end;
@@ -1504,7 +1994,7 @@ RET(
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-27.0:
+==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-27.0:
 interface i: 
     h(int,int):int 
 end;
@@ -1559,7 +2049,7 @@ RET(
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-28.0:
+==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-28.0:
 interface i: 
     h(int,int):int 
 end;
@@ -1614,7 +2104,7 @@ RET(
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-29.0:
+==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-29.0:
 interface i: 
     h(int,int):int 
 end;
@@ -1668,7 +2158,7 @@ RET(
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-3.0:
+==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-3.0:
 interface i: f(int):int end;
 class c implements i:
  method f(x:int) return x < 3; end;
@@ -1702,7 +2192,7 @@ RET(c.f(0,2) == -1 && c.f(0,-1)==-1 && c.f(0,100) == 0);
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-30.0:
+==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-30.0:
 interface i: 
     h(int,int):int 
 end;
@@ -1762,7 +2252,7 @@ RET(
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-31.0:
+==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-31.0:
 interface i: 
     h(int,int):int 
 end;
@@ -1819,7 +2309,7 @@ RET(
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-32.0:
+==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-32.0:
 interface i: 
     h(int,int):int 
 end;
@@ -1878,7 +2368,7 @@ RET(
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-33.0:
+==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-33.0:
 interface i: 
     h(int,int):int 
 end;
@@ -1946,7 +2436,7 @@ RET(
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-34.0:
+==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-34.0:
 interface i: 
     h(int,int):int 
 end;
@@ -2011,7 +2501,7 @@ RET(
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-35.0:
+==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-35.0:
 interface i: 
     h(int,int):int 
 end;
@@ -2076,7 +2566,7 @@ RET(
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-36.0:
+==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-36.0:
 interface i: 
     h(int,int):int 
 end;
@@ -2138,7 +2628,7 @@ RET(
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-37.0:
+==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-37.0:
 interface i: 
     h(int,int):int 
 end;
@@ -2202,7 +2692,7 @@ RET(
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-38.0:
+==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-38.0:
 interface i: 
     h(int,int):int 
 end;
@@ -2263,7 +2753,7 @@ RET(
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-39.0:
+==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-39.0:
 interface i: 
     h(int,int):int 
 end;
@@ -2326,7 +2816,7 @@ RET(
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-4.0:
+==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-4.0:
 interface i: f(int):int end;
 class c implements i:
  method f(x:int) return 3 < x; end;
@@ -2360,7 +2850,7 @@ RET(c.f(0,2) == 0 && c.f(0,-1)== 0 && c.f(0,100) == -1);
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-40.0:
+==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-40.0:
 interface i: 
     h(int,int):int 
 end;
@@ -2426,7 +2916,7 @@ RET(
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-41.0:
+==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-41.0:
 interface i: 
     h(int,int):int 
 end;
@@ -2499,7 +2989,7 @@ RET(
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-42.0:
+==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-42.0:
 interface i: 
     h(int,int):int 
 end;
@@ -2584,7 +3074,7 @@ RET(
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-43.0:
+==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-43.0:
 interface i: 
     h(int,int):int 
 end;
@@ -2664,7 +3154,76 @@ RET(
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-5.0:
+==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-44.0:
+interface test:
+    main():int
+    call():int
+end;
+class testclass implements test:
+    method main()
+        var classRef: test := new testclass;
+        return classRef.call();
+    end;
+    method call()
+        var hello: int := 12;
+        return hello;
+    end;
+end;
+Übersetzung: Status korrekt
+
+Ausgabe:
+
+.globl testclass
+testclass:   
+.quad testclass_main
+.quad testclass_call
+class_size_testclass_class = 8
+
+
+testclass_main:
+	enter	$16, $0
+	leaq	testclass(%rip), %rax
+	movq	%rax, (%r15)
+	leaq	(%r15), %rax
+	addq	$class_size_testclass_class,%r15
+	movq	%rax, 0(%rsp)
+	movq	0(%rsp), %rax
+	# start function call
+	call	*8(%rax)
+	movq	%rax, %rax
+	# end function call
+	leave
+	ret
+testclass_call:
+	enter	$16, $0
+	movq	$12, 0(%rsp)
+	movq	0(%rsp), %rax
+	leave
+	ret
+
+Übersetze und linke das Testprogramm:
+
+Rufe folgendes Codefragment auf:
+struct objectc { 
+    struct vft *vftc; 
+};
+
+extern struct vft { 
+    long (*main)(struct objectc *);
+    long (*call)(struct objectc *);
+} testclass;
+
+struct objectc *myObj = (struct objectc *)malloc(sizeof(struct objectc));
+
+RET(
+    testclass.main(myObj) == 12 &&
+    testclass.call(myObj) == 12
+);
+/usr/ftp/pub/ubvl/test/gesamt/test: line 34: 17916 Segmentation fault      ./a.out
+[Error] Erzeugter Code verhaelt sich bezueglich Signalerzeugung anders als erwartet.
+Rueckgabewert = 139
+
+==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-5.0:
 interface i: 
     f(int,int):int 
 end;
@@ -2700,7 +3259,7 @@ RET(c.f(0,2,1) == 3 && c.f(0,-1,1)== 0 && c.f(0,100,23) == 123);
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-6.0:
+==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-6.0:
 interface i: 
     f(int,int):int 
 end;
@@ -2742,7 +3301,7 @@ RET(c.f(0,-1,10) == -1 && c.f(0,123,1)== 0 && c.f(0,-1,23) == -1);
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-7.0:
+==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-7.0:
 interface i: 
     f(int,int):int 
 end;
@@ -2779,7 +3338,7 @@ RET(c.f(0,-1,10) == 8 && c.f(0,123,1)== 247 && c.f(0,23,-1) == 45);
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-8.0:
+==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-8.0:
 interface i: 
     f(int,int):int 
 end;
@@ -2814,7 +3373,7 @@ RET(c.f(0,0,10) != 0);
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/kingD-9.0:
+==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-9.0:
 interface i: 
     f(int,int):int 
 end;
@@ -2853,1810 +3412,14 @@ RET(c.f(myObj,0,10) == 69);
 Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
 und das Ergebnis des Ausdrucks ist korrekt.
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-11.0:
-interface Interface1:
-	binaryOr(int, int): int
-	squareSum(int, int) : int
-	lessOrEqual(int, int) : int
-	determinant(int, int, int, int): int
-end;
-
-interface Interface2: 
-	offsetThisBy64(): int
-	getNull(): Interface1
-end;
-
-class Class1 implements Interface1 :
-	var var1 : int;
-	var var2 : int;
-	var var3 : Interface2;
-	
-	method binaryOr(a: int, b: int)
-		return not ((not a) and (not b));
-	end;
-	
-	method squareSum(a: int, b: int)
-		return (a*a)+(b*b);
-	end;
-	
-	method lessOrEqual(a: int, b: int)
-		return not ((not (a < b)) and (not (a = b)));
-	end;
-	
-	method determinant(a11: int, a12: int, a21: int, a22: int)
-		return (a11*a22)-(a12*a21);
-	end;
-end;
-
-class Class2 implements Interface2 :
-	method offsetThisBy64()
-		return this + 64;
-	end;
-	
-	method getNull()
-		return null Interface1;
-	end;
-end;
-
-Übersetzung: Status korrekt
-
-Ausgabe:
-
-.globl Class1
-Class1:   
-.quad Class1_binaryOr
-.quad Class1_squareSum
-.quad Class1_lessOrEqual
-.quad Class1_determinant
-.quad 0 #offsetThisBy64
-.quad 0 #getNull
-class_size_Class1_class = 32
-
-
-
-.globl Class2
-Class2:   
-.quad 0 #binaryOr
-.quad 0 #squareSum
-.quad 0 #lessOrEqual
-.quad 0 #determinant
-.quad Class2_offsetThisBy64
-.quad Class2_getNull
-class_size_Class2_class = 8
-
-
-Class1_binaryOr:
-	movq	%rsi, %rax
-	notq	%rax
-	movq	%rdx, %r11
-	notq	%r11
-	and	%r11, %rax
-	notq	%rax
-	ret
-Class1_squareSum:
-	movq	%rsi, %rax
-	movq	%rsi, %r11
-	imulq	%r11, %rax
-	movq	%rdx, %r11
-	movq	%rdx, %r10
-	imulq	%r10, %r11
-	addq	%r11, %rax
-	ret
-Class1_lessOrEqual:
-	movq	%rsi, %rax
-	movq	%rdx, %r11
-	cmpq	%rax, %r11	# checking if rax less r11
-	setg	%al
-	and	$1, %rax
-	imulq	$-1, %rax
-	notq	%rax
-	movq	%rsi, %r11
-	movq	%rdx, %r10
-	cmpq	%r11, %r10	# checking if r11 equals r10
-	sete	%r11b
-	and	$1, %r11
-	imulq	$-1, %r11
-	notq	%r11
-	and	%r11, %rax
-	notq	%rax
-	ret
-Class1_determinant:
-	movq	%rsi, %rax
-	movq	%r8, %r11
-	imulq	%r11, %rax
-	movq	%rdx, %r11
-	movq	%rcx, %r10
-	imulq	%r10, %r11
-	subq	%r11, %rax
-	ret
-Class2_offsetThisBy64:
-	movq	%rdi, %rax
-	addq	$64, %rax
-	ret
-Class2_getNull:
-	movq	$0, %rax
-	ret
-
-Übersetze und linke das Testprogramm:
-In file included from /usr/ftp/pub/ubvl/test/codeb/testmain.c:13:0:
-/home/ublu21/u11808206/test/codeb/thenotoriousj-11.call: In function ‘call’:
-/home/ublu21/u11808206/test/codeb/thenotoriousj-11.call:40:58: warning: passing argument 1 of ‘Class2.offsetThisBy64’ makes pointer from integer without a cast [-Wint-conversion]
-  Class2.offsetThisBy64(0) == 64 && Class2.offsetThisBy64(-3)==61 && Class2.offsetThisBy64(5)==69 &&
-                                                          ^
-/home/ublu21/u11808206/test/codeb/thenotoriousj-11.call:40:58: note: expected ‘struct objectc *’ but argument is of type ‘int’
-/home/ublu21/u11808206/test/codeb/thenotoriousj-11.call:40:91: warning: passing argument 1 of ‘Class2.offsetThisBy64’ makes pointer from integer without a cast [-Wint-conversion]
-  Class2.offsetThisBy64(0) == 64 && Class2.offsetThisBy64(-3)==61 && Class2.offsetThisBy64(5)==69 &&
-                                                                                           ^
-/home/ublu21/u11808206/test/codeb/thenotoriousj-11.call:40:91: note: expected ‘struct objectc *’ but argument is of type ‘int’
-/home/ublu21/u11808206/test/codeb/thenotoriousj-11.call:41:17: warning: passing argument 1 of ‘Class2.getNull’ makes pointer from integer without a cast [-Wint-conversion]
-  Class2.getNull(64) == 0 && Class2.getNull(-3)==0 && Class2.getNull(5)==0);
-                 ^~
-/home/ublu21/u11808206/test/codeb/thenotoriousj-11.call:41:17: note: expected ‘struct objectc *’ but argument is of type ‘int’
-/home/ublu21/u11808206/test/codeb/thenotoriousj-11.call:41:44: warning: passing argument 1 of ‘Class2.getNull’ makes pointer from integer without a cast [-Wint-conversion]
-  Class2.getNull(64) == 0 && Class2.getNull(-3)==0 && Class2.getNull(5)==0);
-                                            ^
-/home/ublu21/u11808206/test/codeb/thenotoriousj-11.call:41:44: note: expected ‘struct objectc *’ but argument is of type ‘int’
-/home/ublu21/u11808206/test/codeb/thenotoriousj-11.call:41:69: warning: passing argument 1 of ‘Class2.getNull’ makes pointer from integer without a cast [-Wint-conversion]
-  Class2.getNull(64) == 0 && Class2.getNull(-3)==0 && Class2.getNull(5)==0);
-                                                                     ^
-/home/ublu21/u11808206/test/codeb/thenotoriousj-11.call:41:69: note: expected ‘struct objectc *’ but argument is of type ‘int’
-
-Rufe folgendes Codefragment auf:
-struct objectc { 
-	struct vft *vftc;
-};
-
-struct objectClass1 { 
-	struct vft *vftc;
-	long v1;
-	long v2;
-	struct objectc* var3;
-};
-
-struct objectClass2 { 
-	struct vft *vftc;
-};
-
-extern struct vft { 
-	long (*binaryOr)(struct objectc *, long, long);
-	long (*squareSum)(struct objectc *, long, long);
-	long (*lessOrEqual)(struct objectc *, long, long);
-	long (*determinant)(struct objectc *, long, long, long, long);
-	long (*offsetThisBy64)(struct objectc *);
-	struct objectc* (*getNull)(struct objectc *);
-} Class1, Class2;
-
-long a = 0xABCD;
-long b = 0xDEAD;
-long res = a*a+b*b;
-
-RET(Class1.binaryOr(0, 0xABCD, 0xDEAD) == (0xABCD | 0xDEAD) && Class1.binaryOr(0, 0xABCD, 0xABCD) == 0xABCD && 
-	Class1.binaryOr(0, 0, 0) == 0 && Class1.binaryOr(0, 4, 2) == 6 &&
-	Class1.squareSum(0, 3, 4) == 25 && Class1.squareSum(0, a, a) == 2*a*a &&
-	Class1.squareSum(0, 0, 0) == 0 && Class1.squareSum(0, a, b) == res &&
-
-	Class1.lessOrEqual(0, 3, 4) == -1 && Class1.lessOrEqual(0, 4, 5) == -1 &&
-	Class1.lessOrEqual(0, 0, 0) == -1 && Class1.lessOrEqual(0, 2, -2) == 0 &&
-
-	Class1.determinant(0, 3, 4, 5, 6) == -2 && Class1.determinant(0, 12, 5, 1, 8) == 91 &&
-	Class1.determinant(0, 0, 0, 0, 0) == 0 && Class1.determinant(0, 2, -2, 6, -5) == 2 &&
-
-	Class2.offsetThisBy64(0) == 64 && Class2.offsetThisBy64(-3)==61 && Class2.offsetThisBy64(5)==69 &&
-	Class2.getNull(64) == 0 && Class2.getNull(-3)==0 && Class2.getNull(5)==0);
-Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
-und das Ergebnis des Ausdrucks ist korrekt.
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-12.0:
-interface Interface1:
-	add2(int, int) : int
-	calc1(int, int) : int
-	calc2(int, int) : int
-	calc3(int, int, int) : int
-end;
-
-class Class1 implements Interface1 :
-	method add2(in1: int, in2: int)
-		return in1+in2;
-	end;
-	method calc1(a: int, b: int)
-		return ((a * b) + (a + b)) + b + a + b + ((a * b) + (a + b));
-	end;
-	method calc2(a: int, b: int)
-		return ((a - b) * (a - b)) + b + a + b + (a - b);
-	end;
-	method calc3(a: int, b: int, c:int)
-		return a + b + c + (a + b + c);
-	end;
-end;
-Übersetzung: Status korrekt
-
-Ausgabe:
-
-.globl Class1
-Class1:   
-.quad Class1_add2
-.quad Class1_calc1
-.quad Class1_calc2
-.quad Class1_calc3
-class_size_Class1_class = 8
-
-
-Class1_add2:
-	movq	%rsi, %rax
-	movq	%rdx, %r11
-	addq	%r11, %rax
-	ret
-Class1_calc1:
-	movq	%rsi, %rax
-	movq	%rdx, %r11
-	imulq	%r11, %rax
-	movq	%rsi, %r11
-	movq	%rdx, %r10
-	addq	%r10, %r11
-	addq	%r11, %rax
-	movq	%rdx, %r11
-	movq	%rsi, %r10
-	movq	%rdx, %r9
-	movq	%rsi, %r8
-	movq	%rdx, %rcx
-	imulq	%rcx, %r8
-	movq	%rsi, %rcx
-	movq	%rdx, %rdx
-	addq	%rdx, %rcx
-	addq	%rcx, %r8
-	addq	%r8, %r9
-	addq	%r9, %r10
-	addq	%r10, %r11
-	addq	%r11, %rax
-	ret
-Class1_calc2:
-	movq	%rsi, %rax
-	movq	%rdx, %r11
-	subq	%r11, %rax
-	movq	%rsi, %r11
-	movq	%rdx, %r10
-	subq	%r10, %r11
-	imulq	%r11, %rax
-	movq	%rdx, %r11
-	movq	%rsi, %r10
-	movq	%rdx, %r9
-	movq	%rsi, %r8
-	movq	%rdx, %rcx
-	subq	%rcx, %r8
-	addq	%r8, %r9
-	addq	%r9, %r10
-	addq	%r10, %r11
-	addq	%r11, %rax
-	ret
-Class1_calc3:
-	movq	%rsi, %rax
-	movq	%rdx, %r11
-	movq	%rcx, %r10
-	movq	%rsi, %r9
-	movq	%rdx, %r8
-	movq	%rcx, %rcx
-	addq	%rcx, %r8
-	addq	%r8, %r9
-	addq	%r9, %r10
-	addq	%r10, %r11
-	addq	%r11, %rax
-	ret
-
-Übersetze und linke das Testprogramm:
-
-Rufe folgendes Codefragment auf:
-struct objectc { 
-	struct vft *vftc;
-};
-
-struct objectClass1 { 
-	struct vft *vftc;
-	long v1;
-	long v2;
-	struct objectc* var3;
-};
-
-struct objectClass2 { 
-	struct vft *vftc;
-};
-
-extern struct vft { 
-	long (*add2)(struct objectc *, long, long);
-	long (*calc1)(struct objectc *, long, long);
-	long (*calc2)(struct objectc *, long, long);
-	long (*calc3)(struct objectc *, long, long, long);
-} Class1;
-
-long a = 0xABCD;
-long b = 0xDEAD;
-long res2 = ((a * b) + (a + b)) + b + a + b + ((a * b) + (a + b));
-b = a;
-long res1 = ((a * b) + (a + b)) + b + a + b + ((a * b) + (a + b));
-b = 0xDEAD;
-
-RET(Class1.add2(0, 0xABCD, 0xDEAD) == (0xABCD + 0xDEAD) && Class1.add2(0, 0xABCD, 0xABCD) == 2*0xABCD && 
-	Class1.add2(0, 0, 0) == 0 && Class1.add2(0, 4, 2) == 6 &&
-	
-	Class1.calc1(0, 3, 4) == 49 && Class1.calc1(0, a, a) == res1 &&
-	Class1.calc1(0, 0, 0) == 0 && Class1.calc1(0, a, b) == res2 &&
-
-	Class1.calc2(0, 3, 4) == 11 && Class1.calc2(0, 4, 5) == 14 &&
-	Class1.calc2(0, 0, 0) == 0 && Class1.calc2(0, 2, -2) == 18 &&
-
-	Class1.calc3(0, 3, 4, 5) == 24 && Class1.calc3(0, 12, 5, 1) == 36 &&
-	Class1.calc3(0, 0, 0, 0) == 0 && Class1.calc3(0, 2, -2, 6) == 12);
-Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
-und das Ergebnis des Ausdrucks ist korrekt.
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-13.0:
-interface Interface1:
-	nestedVariables(int, int) : int 
-	nestedControl(int, int) : int
-end;
-
-class Class1 implements Interface1 :
-	method nestedVariables(a: int, b: int)
-		var sum : int := a + b;
-		if 0 < a then
-			var nested1 : int := sum + a;
-			sum := sum + nested1;
-		else 
-			var nested2 : int := sum - a;
-			sum := sum + nested2;
-		end;
-		
-		return sum;
-	end;
-	
-	/* a computer plays the guessing game in intervall [-1000, 1000]*/
-	method nestedControl(a: int, b: int)
-		var guess1 : int := 0-1000;
-		while guess1 < 1001 do
-			if guess1 = a then
-				var guess2 : int := 0-1000;
-				while guess2 < 1001 do
-					if guess2 = b then
-						return 1; /* FOUND IT, CALL ME HACKERMAN */
-					else
-						guess2 := guess2 + 1;
-					end;
-				end;
-			end;
-			
-			guess1 := guess1 + 1;
-		end;
-		
-		return 0; /* BETTER STICK TO UNO */
-	end;
-end;
-
-Übersetzung: Status korrekt
-
-Ausgabe:
-
-.globl Class1
-Class1:   
-.quad Class1_nestedVariables
-.quad Class1_nestedControl
-class_size_Class1_class = 8
-
-
-Class1_nestedVariables:
-	enter	$40, $0
-	movq	%rsi, %rax
-	movq	%rdx, %r11
-	addq	%r11, %rax
-	movq	%rax, 0(%rsp)
-	movq	%rsi, %r11
-	cmpq	$0, %r11	# checking if 0 less r11
-	setg	%al
-	and	$1, %rax
-	imulq	$-1, %rax
-	cmpq	$0, %rax
-	jns	label_Class1_nestedVariables_0_else
-	movq	0(%rsp), %rax
-	movq	%rsi, %r11
-	addq	%r11, %rax
-	movq	%rax, 8(%rsp)
-	movq	0(%rsp), %rax
-	movq	8(%rsp), %r11
-	addq	%r11, %rax
-	movq	%rax, 0(%rsp)
-	jmp	label_Class1_nestedVariables_0_end
-
-	label_Class1_nestedVariables_0_else:
-	movq	0(%rsp), %rax
-	movq	%rsi, %r11
-	subq	%r11, %rax
-	movq	%rax, 8(%rsp)
-	movq	0(%rsp), %rax
-	movq	8(%rsp), %r11
-	addq	%r11, %rax
-	movq	%rax, 0(%rsp)
-
-	label_Class1_nestedVariables_0_end:
-	movq	0(%rsp), %rax
-	leave
-	ret
-Class1_nestedControl:
-	enter	$40, $0
-	movq	$1000, %r11
-	movq	$0, %rax
-	subq	%r11, %rax
-	movq	%rax, 0(%rsp)
-
-	label_Class1_nestedControl_0:
-	movq	0(%rsp), %rax
-	cmpq	$1001, %rax	# checking if 1001 less rax (inverted because right const not allwoed) 
-	setl	%al
-	and	$1, %rax
-	imulq	$-1, %rax
-	cmpq	$0, %rax
-	jns	label_Class1_nestedControl_0_end
-	movq	0(%rsp), %rax
-	movq	%rsi, %r11
-	cmpq	%rax, %r11	# checking if rax equals r11
-	sete	%al
-	and	$1, %rax
-	imulq	$-1, %rax
-	cmpq	$0, %rax
-	jns	label_Class1_nestedControl_1_end
-	movq	$1000, %r11
-	movq	$0, %rax
-	subq	%r11, %rax
-	movq	%rax, 8(%rsp)
-
-	label_Class1_nestedControl_2:
-	movq	8(%rsp), %rax
-	cmpq	$1001, %rax	# checking if 1001 less rax (inverted because right const not allwoed) 
-	setl	%al
-	and	$1, %rax
-	imulq	$-1, %rax
-	cmpq	$0, %rax
-	jns	label_Class1_nestedControl_2_end
-	movq	8(%rsp), %rax
-	movq	%rdx, %r11
-	cmpq	%rax, %r11	# checking if rax equals r11
-	sete	%al
-	and	$1, %rax
-	imulq	$-1, %rax
-	cmpq	$0, %rax
-	jns	label_Class1_nestedControl_3_else
-	movq	$1, %rax
-	leave
-	ret
-	jmp	label_Class1_nestedControl_3_end
-
-	label_Class1_nestedControl_3_else:
-	movq	8(%rsp), %rax
-	addq	$1, %rax
-	movq	%rax, 8(%rsp)
-
-	label_Class1_nestedControl_3_end:
-	jmp	label_Class1_nestedControl_2
-
-	label_Class1_nestedControl_2_end:
-
-	label_Class1_nestedControl_1_end:
-	movq	0(%rsp), %rax
-	addq	$1, %rax
-	movq	%rax, 0(%rsp)
-	jmp	label_Class1_nestedControl_0
-
-	label_Class1_nestedControl_0_end:
-	movq	$0, %rax
-	leave
-	ret
-
-Übersetze und linke das Testprogramm:
-In file included from /usr/ftp/pub/ubvl/test/codeb/testmain.c:13:0:
-/home/ublu21/u11808206/test/codeb/thenotoriousj-13.call: In function ‘call’:
-/home/ublu21/u11808206/test/codeb/thenotoriousj-13.call:6:33: warning: ‘struct objectc’ declared inside parameter list will not be visible outside of this definition or declaration
-  long (*nestedVariables)(struct objectc *, long, long);
-                                 ^~~~~~~
-/home/ublu21/u11808206/test/codeb/thenotoriousj-13.call:7:31: warning: ‘struct objectc’ declared inside parameter list will not be visible outside of this definition or declaration
-  long (*nestedControl)(struct objectc *, long, long);
-                               ^~~~~~~
-
-Rufe folgendes Codefragment auf:
-struct objectClass1 { 
-	struct vft *vftc;
-};
-
-extern struct vft { 
-	long (*nestedVariables)(struct objectc *, long, long);
-	long (*nestedControl)(struct objectc *, long, long);
-} Class1;
-
-RET(Class1.nestedVariables(0, -5, 6) == 7 && Class1.nestedVariables(0, 25, 13) == 101 && 
-	Class1.nestedVariables(0, 0, 0) == 0 && Class1.nestedVariables(0, 4, -8) == -4 &&
-	
-	Class1.nestedControl(0, 3, 4) == 1 && Class1.nestedControl(0, -1000, 1000) == 1 &&
-	Class1.nestedControl(0, 1000, -1000) == 1 && Class1.nestedControl(0, 1000, 1002) == 0);
-Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
-und das Ergebnis des Ausdrucks ist korrekt.
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-14.0:
-interface Interface1:
-	bitcount(int) : int
-end;
-
-interface Interface2: 
-	init() : int
-	factorial(int) : int
-end;
-
-class Class1 implements Interface1 :
-
-	/* Counting set bits, Kernighan's way */
-	method bitcount(i : int)
-		var c : int := 0;
-		while not (i = 0) do
-			i := i and (i - 1);
-			c := c + 1;
-		end;
-		
-		return c;
-	end;
-end;
-
-/*Highly efficient version of factorial, for use in commercial code contact me*/
-class Cacher implements Interface2 :
-	var lastN : int;
-	var lastResult : int;
-	
-	method init()
-		lastN := 0;
-		lastResult := 0;
-		return 0;
-	end;
-	
-	method factorial(n: int)
-		var temp : int := 2 - 1;
-		
-		if n = lastN then
-			return lastResult;
-		else 
-			lastN := n;
-		end;
-		
-		while 1 < n do
-			temp := temp * n;
-			n := n - 1;
-		end;
-		
-		lastResult := temp;
-		
-		return temp;
-	end;
-end;
-
-Übersetzung: Status korrekt
-
-Ausgabe:
-
-.globl Class1
-Class1:   
-.quad Class1_bitcount
-.quad 0 #init
-.quad 0 #factorial
-class_size_Class1_class = 8
-
-
-
-.globl Cacher
-Cacher:   
-.quad 0 #bitcount
-.quad Cacher_init
-.quad Cacher_factorial
-class_size_Cacher_class = 24
-
-
-Class1_bitcount:
-	enter	$16, $0
-	movq	$0, 0(%rsp)
-
-	label_Class1_bitcount_0:
-	movq	%rsi, %rax
-	cmpq	$0, %rax	# checking if 0 equals rax
-	sete	%al
-	and	$1, %rax
-	imulq	$-1, %rax
-	notq	%rax
-	cmpq	$0, %rax
-	jns	label_Class1_bitcount_0_end
-	movq	%rsi, %rax
-	movq	%rsi, %r11
-	subq	$1, %r11
-	and	%r11, %rax
-	movq	%rax, %rsi
-	movq	0(%rsp), %rax
-	addq	$1, %rax
-	movq	%rax, 0(%rsp)
-	jmp	label_Class1_bitcount_0
-
-	label_Class1_bitcount_0_end:
-	movq	0(%rsp), %rax
-	leave
-	ret
-Cacher_init:
-	enter	$16, $0
-	movq	$0, 8(%rdi)
-	movq	$0, 16(%rdi)
-	movq	$0, %rax
-	leave
-	ret
-Cacher_factorial:
-	enter	$16, $0
-	movq	$1, %r11
-	movq	$2, %rax
-	subq	%r11, %rax
-	movq	%rax, 0(%rsp)
-	movq	%rsi, %rax
-	movq	8(%rdi), %r11
-	cmpq	%rax, %r11	# checking if rax equals r11
-	sete	%al
-	and	$1, %rax
-	imulq	$-1, %rax
-	cmpq	$0, %rax
-	jns	label_Cacher_factorial_0_else
-	movq	16(%rdi), %rax
-	leave
-	ret
-	jmp	label_Cacher_factorial_0_end
-
-	label_Cacher_factorial_0_else:
-	movq	%rsi, 8(%rdi)
-
-	label_Cacher_factorial_0_end:
-
-	label_Cacher_factorial_2:
-	movq	%rsi, %r11
-	cmpq	$1, %r11	# checking if 1 less r11
-	setg	%al
-	and	$1, %rax
-	imulq	$-1, %rax
-	cmpq	$0, %rax
-	jns	label_Cacher_factorial_2_end
-	movq	0(%rsp), %rax
-	movq	%rsi, %r11
-	imulq	%r11, %rax
-	movq	%rax, 0(%rsp)
-	movq	%rsi, %rax
-	subq	$1, %rax
-	movq	%rax, %rsi
-	jmp	label_Cacher_factorial_2
-
-	label_Cacher_factorial_2_end:
-	movq	0(%rsp), %rax
-	movq	%rax, 16(%rdi)
-	movq	0(%rsp), %rax
-	leave
-	ret
-
-Übersetze und linke das Testprogramm:
-In file included from /usr/ftp/pub/ubvl/test/codeb/testmain.c:13:0:
-/home/ublu21/u11808206/test/codeb/thenotoriousj-14.call: In function ‘call’:
-/home/ublu21/u11808206/test/codeb/thenotoriousj-14.call:23:14: warning: passing argument 1 of ‘Cacher.init’ from incompatible pointer type [-Wincompatible-pointer-types]
-  Cacher.init(cacher) == 0 &&
-              ^~~~~~
-/home/ublu21/u11808206/test/codeb/thenotoriousj-14.call:23:14: note: expected ‘struct objectc *’ but argument is of type ‘struct objectClass1 *’
-/home/ublu21/u11808206/test/codeb/thenotoriousj-14.call:24:19: warning: passing argument 1 of ‘Cacher.factorial’ from incompatible pointer type [-Wincompatible-pointer-types]
-  Cacher.factorial(cacher, -10) == 1 && Cacher.factorial(cacher, 10) == 3628800 &&
-                   ^~~~~~
-/home/ublu21/u11808206/test/codeb/thenotoriousj-14.call:24:19: note: expected ‘struct objectc *’ but argument is of type ‘struct objectClass1 *’
-/home/ublu21/u11808206/test/codeb/thenotoriousj-14.call:24:57: warning: passing argument 1 of ‘Cacher.factorial’ from incompatible pointer type [-Wincompatible-pointer-types]
-  Cacher.factorial(cacher, -10) == 1 && Cacher.factorial(cacher, 10) == 3628800 &&
-                                                         ^~~~~~
-/home/ublu21/u11808206/test/codeb/thenotoriousj-14.call:24:57: note: expected ‘struct objectc *’ but argument is of type ‘struct objectClass1 *’
-/home/ublu21/u11808206/test/codeb/thenotoriousj-14.call:25:19: warning: passing argument 1 of ‘Cacher.factorial’ from incompatible pointer type [-Wincompatible-pointer-types]
-  Cacher.factorial(cacher, 5) == 120 && Cacher.factorial(cacher, 5) == 120);
-                   ^~~~~~
-/home/ublu21/u11808206/test/codeb/thenotoriousj-14.call:25:19: note: expected ‘struct objectc *’ but argument is of type ‘struct objectClass1 *’
-/home/ublu21/u11808206/test/codeb/thenotoriousj-14.call:25:57: warning: passing argument 1 of ‘Cacher.factorial’ from incompatible pointer type [-Wincompatible-pointer-types]
-  Cacher.factorial(cacher, 5) == 120 && Cacher.factorial(cacher, 5) == 120);
-                                                         ^~~~~~
-/home/ublu21/u11808206/test/codeb/thenotoriousj-14.call:25:57: note: expected ‘struct objectc *’ but argument is of type ‘struct objectClass1 *’
-
-Rufe folgendes Codefragment auf:
-struct objectc { 
-	struct vft *vftc;
-};
-
-struct objectClass1 { 
-	struct vft *vftc;
-	long lastN;
-	long lastResult;
-};
-
-extern struct vft { 
-	long (*bitcount)(struct objectc *, long);
-	long (*init)(struct objectc *);
-	long (*factorial)(struct objectc *, long);
-} Class1, Cacher;
-
-struct objectClass1 *cacher = (struct objectClass1 *)malloc(sizeof(struct objectClass1));
-cacher -> vftc = &Cacher;
-
-RET(Class1.bitcount(0, 0b101010) == 3 && Class1.bitcount(0, 0xFF) == 8 && 
-	Class1.bitcount(0, 0) == 0 && Class1.bitcount(0, 0xABCD) == 10 &&
-	
-	Cacher.init(cacher) == 0 && 
-	Cacher.factorial(cacher, -10) == 1 && Cacher.factorial(cacher, 10) == 3628800 &&
-	Cacher.factorial(cacher, 5) == 120 && Cacher.factorial(cacher, 5) == 120);
-Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
-und das Ergebnis des Ausdrucks ist korrekt.
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-15.0:
-interface Interface1:
-	calc(int, int) : int
-end;
-
-class Class1 implements /* nothing */ :
-	var var1 : int;
-	var var2 : int;
-	
-	method calc(a: int, b: int)
-		var c2 : int := (a*a) + (b*b);
-		var c4 : int  := c2 * c2;
-		var c5 : int:= c4 - 1;
-		
-		return c5 - a;
-	end;
-end;
-Übersetzung: Status korrekt
-
-Ausgabe:
-
-.globl Class1
-Class1:   
-.quad Class1_calc
-class_size_Class1_class = 24
-
-
-Class1_calc:
-	enter	$24, $0
-	movq	%rsi, %rax
-	movq	%rsi, %r11
-	imulq	%r11, %rax
-	movq	%rdx, %r11
-	movq	%rdx, %r10
-	imulq	%r10, %r11
-	addq	%r11, %rax
-	movq	%rax, 0(%rsp)
-	movq	0(%rsp), %rax
-	movq	0(%rsp), %r11
-	imulq	%r11, %rax
-	movq	%rax, 8(%rsp)
-	movq	8(%rsp), %rax
-	subq	$1, %rax
-	movq	%rax, 16(%rsp)
-	movq	16(%rsp), %rax
-	movq	%rsi, %r11
-	subq	%r11, %rax
-	leave
-	ret
-
-Übersetze und linke das Testprogramm:
-In file included from /usr/ftp/pub/ubvl/test/codeb/testmain.c:13:0:
-/home/ublu21/u11808206/test/codeb/thenotoriousj-15.call: In function ‘call’:
-/home/ublu21/u11808206/test/codeb/thenotoriousj-15.call:18:17: warning: passing argument 1 of ‘Class1.calc’ from incompatible pointer type [-Wincompatible-pointer-types]
- RET(Class1.calc(classobj, -27, 64) == 23280651 && Class1.calc(classobj, 255, -95) == 5483402244 &&
-                 ^~~~~~~~
-/home/ublu21/u11808206/test/codeb/thenotoriousj-15.call:18:17: note: expected ‘struct objectc *’ but argument is of type ‘struct objectClass1 *’
-/home/ublu21/u11808206/test/codeb/thenotoriousj-15.call:18:63: warning: passing argument 1 of ‘Class1.calc’ from incompatible pointer type [-Wincompatible-pointer-types]
- RET(Class1.calc(classobj, -27, 64) == 23280651 && Class1.calc(classobj, 255, -95) == 5483402244 &&
-                                                               ^~~~~~~~
-/home/ublu21/u11808206/test/codeb/thenotoriousj-15.call:18:63: note: expected ‘struct objectc *’ but argument is of type ‘struct objectClass1 *’
-/home/ublu21/u11808206/test/codeb/thenotoriousj-15.call:19:14: warning: passing argument 1 of ‘Class1.calc’ from incompatible pointer type [-Wincompatible-pointer-types]
-  Class1.calc(classobj, 0, 0) == -1 && Class1.calc(classobj, -65, -69) == 80748260);
-              ^~~~~~~~
-/home/ublu21/u11808206/test/codeb/thenotoriousj-15.call:19:14: note: expected ‘struct objectc *’ but argument is of type ‘struct objectClass1 *’
-/home/ublu21/u11808206/test/codeb/thenotoriousj-15.call:19:51: warning: passing argument 1 of ‘Class1.calc’ from incompatible pointer type [-Wincompatible-pointer-types]
-  Class1.calc(classobj, 0, 0) == -1 && Class1.calc(classobj, -65, -69) == 80748260);
-                                                   ^~~~~~~~
-/home/ublu21/u11808206/test/codeb/thenotoriousj-15.call:19:51: note: expected ‘struct objectc *’ but argument is of type ‘struct objectClass1 *’
-
-Rufe folgendes Codefragment auf:
-struct objectc { 
-	struct vft *vftc;
-};
-
-struct objectClass1 { 
-	struct vft *vftc;
-	long var1;
-	long var2;
-};
-
-extern struct vft { 
-	long (*calc)(struct objectc *, long, long);
-} Class1;
-
-struct objectClass1 *classobj = (struct objectClass1 *)malloc(sizeof(struct objectClass1));
-classobj -> vftc = &Class1;
-
-RET(Class1.calc(classobj, -27, 64) == 23280651 && Class1.calc(classobj, 255, -95) == 5483402244 && 
-	Class1.calc(classobj, 0, 0) == -1 && Class1.calc(classobj, -65, -69) == 80748260);
-Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
-und das Ergebnis des Ausdrucks ist korrekt.
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-16.0:
-interface Interface1:
-	init():int
-	calc(int) : int
-end;
-
-class Class1 implements Interface1 :
-	var var1 : int;
-	var var2 : int;
-	var var3 : int;
-	var var4 : int;
-	
-	method init()
-		var1 := 1;
-		var2 := 12;
-		var3 := 123;
-		var4 := var1 + var2 + var3;
-		return var1 + var2 + var3;
-	end;
-	
-	method calc(in: int)
-		var sum : int := var1;
-		sum := sum + var2 + in;
-		return sum;
-	end;
-end;
-
-Übersetzung: Status korrekt
-
-Ausgabe:
-
-.globl Class1
-Class1:   
-.quad Class1_init
-.quad Class1_calc
-class_size_Class1_class = 40
-
-
-Class1_init:
-	enter	$8, $0
-	movq	$1, 8(%rdi)
-	movq	$12, 16(%rdi)
-	movq	$123, 24(%rdi)
-	movq	8(%rdi), %rax
-	movq	16(%rdi), %r11
-	movq	24(%rdi), %r10
-	addq	%r10, %r11
-	addq	%r11, %rax
-	movq	%rax, 32(%rdi)
-	movq	8(%rdi), %rax
-	movq	16(%rdi), %r11
-	movq	24(%rdi), %r10
-	addq	%r10, %r11
-	addq	%r11, %rax
-	leave
-	ret
-Class1_calc:
-	enter	$8, $0
-	movq	8(%rdi), %rax
-	movq	%rax, 0(%rsp)
-	movq	0(%rsp), %rax
-	movq	16(%rdi), %r11
-	movq	%rsi, %r10
-	addq	%r10, %r11
-	addq	%r11, %rax
-	movq	%rax, 0(%rsp)
-	movq	0(%rsp), %rax
-	leave
-	ret
-
-Übersetze und linke das Testprogramm:
-In file included from /usr/ftp/pub/ubvl/test/codeb/testmain.c:13:0:
-/home/ublu21/u11808206/test/codeb/thenotoriousj-16.call: In function ‘call’:
-/home/ublu21/u11808206/test/codeb/thenotoriousj-16.call:21:17: warning: passing argument 1 of ‘Class1.init’ from incompatible pointer type [-Wincompatible-pointer-types]
- RET(Class1.init(classobj) == 136 &&
-                 ^~~~~~~~
-/home/ublu21/u11808206/test/codeb/thenotoriousj-16.call:21:17: note: expected ‘struct objectc *’ but argument is of type ‘struct objectClass1 *’
-/home/ublu21/u11808206/test/codeb/thenotoriousj-16.call:23:14: warning: passing argument 1 of ‘Class1.calc’ from incompatible pointer type [-Wincompatible-pointer-types]
-  Class1.calc(classobj, -27) == -14 && Class1.calc(classobj, 255) == 268);
-              ^~~~~~~~
-/home/ublu21/u11808206/test/codeb/thenotoriousj-16.call:23:14: note: expected ‘struct objectc *’ but argument is of type ‘struct objectClass1 *’
-/home/ublu21/u11808206/test/codeb/thenotoriousj-16.call:23:51: warning: passing argument 1 of ‘Class1.calc’ from incompatible pointer type [-Wincompatible-pointer-types]
-  Class1.calc(classobj, -27) == -14 && Class1.calc(classobj, 255) == 268);
-                                                   ^~~~~~~~
-/home/ublu21/u11808206/test/codeb/thenotoriousj-16.call:23:51: note: expected ‘struct objectc *’ but argument is of type ‘struct objectClass1 *’
-
-Rufe folgendes Codefragment auf:
-struct objectc { 
-	struct vft *vftc;
-};
-
-struct objectClass1 { 
-	struct vft *vftc;
-	long var1;
-	long var2;
-	long var3;
-	long var4;
-};
-
-extern struct vft { 
-	long (*init)(struct objectc *);
-	long (*calc)(struct objectc *, long);
-} Class1;
-
-struct objectClass1 *classobj = (struct objectClass1 *)malloc(sizeof(struct objectClass1));
-classobj -> vftc = &Class1;
-
-RET(Class1.init(classobj) == 136 &&
-
-	Class1.calc(classobj, -27) == -14 && Class1.calc(classobj, 255) == 268);
-Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
-und das Ergebnis des Ausdrucks ist korrekt.
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-17.0:
-interface ICalc:
-	max1(int, int) : int
-	max2(int, int) : int
-	max3(int, int) : int
-	gcd(int, int) : int
-end;
-
-class Class1 implements ICalc :
-
-	method max1(a: int, b: int)
-		if a < b then
-			return b;
-		else
-			return a;
-		end;
-	end;
-	
-	method max2(a: int, b: int)
-		var max : int := 0;
-		if a < b then
-			max := b;
-		else 
-			max := a;
-		end;
-		
-		return max;
-	end;
-	
-	method max3(a: int, b: int)
-		var max : int := a;
-		if a < b then
-			max := b;
-		end;
-		
-		return max;
-	end;
-
-	method gcd(a: int, b: int)
-		if a = 0 then
-			return a;
-		end;
-			
-		while not (b = 0) do
-			if b < a then
-				a := a - b;
-			else
-				b := b - a;
-			end;
-		end;
-		
-		return a;
-	end;
-end;
-Übersetzung: Status korrekt
-
-Ausgabe:
-
-.globl Class1
-Class1:   
-.quad Class1_max1
-.quad Class1_max2
-.quad Class1_max3
-.quad Class1_gcd
-class_size_Class1_class = 8
-
-
-Class1_max1:
-	enter	$16, $0
-	movq	%rsi, %rax
-	movq	%rdx, %r11
-	cmpq	%rax, %r11	# checking if rax less r11
-	setg	%al
-	and	$1, %rax
-	imulq	$-1, %rax
-	cmpq	$0, %rax
-	jns	label_Class1_max1_0_else
-	movq	%rdx, %rax
-	leave
-	ret
-	jmp	label_Class1_max1_0_end
-
-	label_Class1_max1_0_else:
-	movq	%rsi, %rax
-	leave
-	ret
-
-	label_Class1_max1_0_end:
-Class1_max2:
-	enter	$16, $0
-	movq	$0, 0(%rsp)
-	movq	%rsi, %rax
-	movq	%rdx, %r11
-	cmpq	%rax, %r11	# checking if rax less r11
-	setg	%al
-	and	$1, %rax
-	imulq	$-1, %rax
-	cmpq	$0, %rax
-	jns	label_Class1_max2_0_else
-	movq	%rdx, 0(%rsp)
-	jmp	label_Class1_max2_0_end
-
-	label_Class1_max2_0_else:
-	movq	%rsi, 0(%rsp)
-
-	label_Class1_max2_0_end:
-	movq	0(%rsp), %rax
-	leave
-	ret
-Class1_max3:
-	enter	$16, $0
-	movq	%rsi, 0(%rsp)
-	movq	%rsi, %rax
-	movq	%rdx, %r11
-	cmpq	%rax, %r11	# checking if rax less r11
-	setg	%al
-	and	$1, %rax
-	imulq	$-1, %rax
-	cmpq	$0, %rax
-	jns	label_Class1_max3_0_end
-	movq	%rdx, 0(%rsp)
-
-	label_Class1_max3_0_end:
-	movq	0(%rsp), %rax
-	leave
-	ret
-Class1_gcd:
-	enter	$16, $0
-	movq	%rsi, %rax
-	cmpq	$0, %rax	# checking if 0 equals rax
-	sete	%al
-	and	$1, %rax
-	imulq	$-1, %rax
-	cmpq	$0, %rax
-	jns	label_Class1_gcd_0_end
-	movq	%rsi, %rax
-	leave
-	ret
-
-	label_Class1_gcd_0_end:
-
-	label_Class1_gcd_1:
-	movq	%rdx, %rax
-	cmpq	$0, %rax	# checking if 0 equals rax
-	sete	%al
-	and	$1, %rax
-	imulq	$-1, %rax
-	notq	%rax
-	cmpq	$0, %rax
-	jns	label_Class1_gcd_1_end
-	movq	%rdx, %rax
-	movq	%rsi, %r11
-	cmpq	%rax, %r11	# checking if rax less r11
-	setg	%al
-	and	$1, %rax
-	imulq	$-1, %rax
-	cmpq	$0, %rax
-	jns	label_Class1_gcd_2_else
-	movq	%rsi, %rax
-	movq	%rdx, %r11
-	subq	%r11, %rax
-	movq	%rax, %rsi
-	jmp	label_Class1_gcd_2_end
-
-	label_Class1_gcd_2_else:
-	movq	%rdx, %rax
-	movq	%rsi, %r11
-	subq	%r11, %rax
-	movq	%rax, %rdx
-
-	label_Class1_gcd_2_end:
-	jmp	label_Class1_gcd_1
-
-	label_Class1_gcd_1_end:
-	movq	%rsi, %rax
-	leave
-	ret
-
-Übersetze und linke das Testprogramm:
-
-Rufe folgendes Codefragment auf:
-struct objectc { 
-	struct vft *vftc;
-};
-
-extern struct vft { 
-	long (*max1)(struct objectc *, long, long);
-	long (*max2)(struct objectc *, long, long);
-	long (*max3)(struct objectc *, long, long);
-	long (*gcd)(struct objectc *, long, long);
-} Class1;
-
-RET(Class1.max1(0, 0, 0) == 0 && Class1.max1(0, 64, -28) == 64 && Class1.max1(0, 0xABCD, 0xDEAD) == 0xDEAD &&
-	Class1.max2(0, 0, 0) == 0 && Class1.max2(0, 64, -28) == 64 && Class1.max2(0, 0xABCD, 0xDEAD) == 0xDEAD &&
-	Class1.max3(0, 0, 0) == 0 && Class1.max3(0, 64, -28) == 64 && Class1.max3(0, 0xABCD, 0xDEAD) == 0xDEAD &&
-
-	Class1.gcd(0, 1221, 15) == 3 && Class1.gcd(0, 9451565168, 1651321192) == 8);
-Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
-und das Ergebnis des Ausdrucks ist korrekt.
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-18.0:
-interface Interface1:
-	fib(int) : int
-end;
-
-class Class1 implements Interface1:
-	method fib(i: int)
-		var x0 : int := 0;
-		var x1 : int := 1;
-		
-		while 0 < i do
-			var tmp : int := x0;
-			x0 := x1;
-			x1 := x1 + tmp;
-			
-			i := i - 1;
-		end;
-		
-		return x1;
-	end;
-end;
-Übersetzung: Status korrekt
-
-Ausgabe:
-
-.globl Class1
-Class1:   
-.quad Class1_fib
-class_size_Class1_class = 8
-
-
-Class1_fib:
-	enter	$24, $0
-	movq	$0, 0(%rsp)
-	movq	$1, 8(%rsp)
-
-	label_Class1_fib_0:
-	movq	%rsi, %r11
-	cmpq	$0, %r11	# checking if 0 less r11
-	setg	%al
-	and	$1, %rax
-	imulq	$-1, %rax
-	cmpq	$0, %rax
-	jns	label_Class1_fib_0_end
-	movq	0(%rsp), %rax
-	movq	%rax, 16(%rsp)
-	movq	8(%rsp), %rax
-	movq	%rax, 0(%rsp)
-	movq	8(%rsp), %rax
-	movq	16(%rsp), %r11
-	addq	%r11, %rax
-	movq	%rax, 8(%rsp)
-	movq	%rsi, %rax
-	subq	$1, %rax
-	movq	%rax, %rsi
-	jmp	label_Class1_fib_0
-
-	label_Class1_fib_0_end:
-	movq	8(%rsp), %rax
-	leave
-	ret
-
-Übersetze und linke das Testprogramm:
-
-Rufe folgendes Codefragment auf:
-struct objectc { 
-	struct vft *vftc;
-};
-
-extern struct vft { 
-	long (*fib)(struct objectc *, long);
-} Class1;
-
-RET(Class1.fib(0, 0) == 1 && Class1.fib(0, 1) == 1 && Class1.fib(0, 2) == 2 &&
-	Class1.fib(0, 3) == 3 && Class1.fib(0, 4) == 5 && Class1.fib(0, 5) == 8 &&
-	Class1.fib(0, 6) == 13 && Class1.fib(0, 20) == 10946 && Class1.fib(0, 40) == 165580141);
-Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
-und das Ergebnis des Ausdrucks ist korrekt.
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-19.0:
-interface Interface1:
-	set(int) : int
-	get() : int
-	construct() : Interface1
-end;
-
-class Class1 implements Interface1:
-	var num : int;
-	
-	method set(a : int)
-		num := a;
-		return 0;
-	end;
-	
-	method get()
-		return num;
-	end;
-	
-	method construct()
-		return new Class1;
-	end;
-end;
-Übersetzung: Status korrekt
-
-Ausgabe:
-
-.globl Class1
-Class1:   
-.quad Class1_set
-.quad Class1_get
-.quad Class1_construct
-class_size_Class1_class = 16
-
-
-Class1_set:
-	movq	%rsi, 8(%rdi)
-	movq	$0, %rax
-	ret
-Class1_get:
-	movq	8(%rdi), %rax
-	ret
-Class1_construct:
-	leaq	Class1(%rip), %rax
-	movq	%rax, (%r15)
-	leaq	(%r15), %rax
-	addq	$class_size_Class1_class,%r15
-	ret
-
-Übersetze und linke das Testprogramm:
-In file included from /usr/ftp/pub/ubvl/test/codeb/testmain.c:13:0:
-/home/ublu21/u11808206/test/codeb/thenotoriousj-19.call: In function ‘call’:
-/home/ublu21/u11808206/test/codeb/thenotoriousj-19.call:21:24: warning: comparison of distinct pointer types lacks a cast
-  Class1.construct(obj) == reg15 && heapptr - reg15 == 2 && constructed->vftc == &Class1);
-                        ^~
-
-Rufe folgendes Codefragment auf:
-struct objectc { 
-	struct vft *vftc;
-	long num;
-};
-
-extern struct vft { 
-	long (*set)(struct objectc *, long);
-	long (*get)(struct objectc *);
-	struct objectc* (*construct)(struct objectc *);
-} Class1;
-
-struct objectc *obj = malloc(sizeof(struct objectc));
-obj->vftc = &Class1;
-obj->num = 3;
-
-/* heapptr comes from the framework, could be unstable if prof changes it*/
-long *reg15 = heapptr;
-struct objectc *constructed = (struct objectc *) heapptr;
-
-RET(Class1.get(obj) == 3 && Class1.set(obj, 1) == 0 && Class1.get(obj) == 1 &&
-	Class1.construct(obj) == reg15 && heapptr - reg15 == 2 && constructed->vftc == &Class1);
-Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
-und das Ergebnis des Ausdrucks ist korrekt.
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-20.0:
-interface Interface1:
-	add1(int) : int
-	add2(int) : int
-	add3(int) : int
-	add4(int) : int
-	mul(int) : int
-	equal(int) : int
-	sub1(int) : int
-	sub2(int) : int
-	less1(int) : int
-	less2(int) : int
-	constant() : int
-end;
-
-interface Interface2:
-	getVar() : int
-	getObjVar() : int
-end;
-
-class Class2 implements Interface2:
-	var obj : int;
-	
-	method getVar()
-		var x : int := 0DEADH * 0BEEFH;
-		return x;
-	end;
-	method getObjVar()
-		obj := 0DEADH * 0BEEFH;
-		return obj;
-	end;
-end;
-
-class Class1 implements Interface1 :
-	method add1(in1: int)
-		return ((1+2147483647)-1)+in1;
-	end;
-	method add2(in1: int)
-		return in1+2147483647+1;
-	end;
-	method add3(in1: int)
-		return ((0-2147483647)-1)+in1;
-	end;
-	method add4(in1: int)
-		return (((0-2147483647)-1)-1)+in1;
-	end;
-	method mul(a: int)
-		return a*0DEADH * 0BEEFH;
-	end;
-	
-	method equal(a: int)
-		return a = (0DEADH * 0BEEFH);
-	end;
-	
-	method sub1(in1: int)
-		return in1 - (0DEADH * 0BEEFH);
-	end;
-	method sub2(in1: int)
-		return (0DEADH * 0BEEFH) - in1;
-	end;
-	
-	method less1(in1: int)
-		return in1 < (0DEADH * 0BEEFH);
-	end;
-	method less2(in1: int)
-		return (0DEADH * 0BEEFH) < in1;
-	end;
-	
-	method constant()
-		return 0DEADH * 0BEEFH;
-	end;
-end;
-Übersetzung: Status korrekt
-
-Ausgabe:
-
-.globl Class2
-Class2:   
-.quad 0 #add1
-.quad 0 #add2
-.quad 0 #add3
-.quad 0 #add4
-.quad 0 #mul
-.quad 0 #equal
-.quad 0 #sub1
-.quad 0 #sub2
-.quad 0 #less1
-.quad 0 #less2
-.quad 0 #constant
-.quad Class2_getVar
-.quad Class2_getObjVar
-class_size_Class2_class = 16
-
-
-
-.globl Class1
-Class1:   
-.quad Class1_add1
-.quad Class1_add2
-.quad Class1_add3
-.quad Class1_add4
-.quad Class1_mul
-.quad Class1_equal
-.quad Class1_sub1
-.quad Class1_sub2
-.quad Class1_less1
-.quad Class1_less2
-.quad Class1_constant
-.quad 0 #getVar
-.quad 0 #getObjVar
-class_size_Class1_class = 8
-
-
-Class2_getVar:
-	enter	$8, $0
-	movq	$57005, %rax
-	imulq	$48879, %rax
-	movq	%rax, 0(%rsp)
-	movq	0(%rsp), %rax
-	leave
-	ret
-Class2_getObjVar:
-	enter	$8, $0
-	movq	$57005, %rax
-	imulq	$48879, %rax
-	movq	%rax, 8(%rdi)
-	movq	8(%rdi), %rax
-	leave
-	ret
-Class1_add1:
-	enter	$8, $0
-	movq	$1, %rax
-	addq	$2147483647, %rax
-	subq	$1, %rax
-	movq	%rsi, %r11
-	addq	%r11, %rax
-	leave
-	ret
-Class1_add2:
-	enter	$8, $0
-	movq	%rsi, %rax
-	movq	$2147483647, %r11
-	addq	$1, %r11
-	addq	%r11, %rax
-	leave
-	ret
-Class1_add3:
-	enter	$8, $0
-	movq	$2147483647, %r11
-	movq	$0, %rax
-	subq	%r11, %rax
-	subq	$1, %rax
-	movq	%rsi, %r11
-	addq	%r11, %rax
-	leave
-	ret
-Class1_add4:
-	enter	$8, $0
-	movq	$2147483647, %r11
-	movq	$0, %rax
-	subq	%r11, %rax
-	subq	$1, %rax
-	subq	$1, %rax
-	movq	%rsi, %r11
-	addq	%r11, %rax
-	leave
-	ret
-Class1_mul:
-	enter	$8, $0
-	movq	%rsi, %rax
-	movq	$57005, %r11
-	imulq	$48879, %r11
-	imulq	%r11, %rax
-	leave
-	ret
-Class1_equal:
-	enter	$8, $0
-	movq	%rsi, %rax
-	movq	$57005, %r11
-	imulq	$48879, %r11
-	cmpq	%rax, %r11	# checking if rax equals r11
-	sete	%al
-	and	$1, %rax
-	imulq	$-1, %rax
-	leave
-	ret
-Class1_sub1:
-	enter	$8, $0
-	movq	%rsi, %rax
-	movq	$57005, %r11
-	imulq	$48879, %r11
-	subq	%r11, %rax
-	leave
-	ret
-Class1_sub2:
-	enter	$8, $0
-	movq	$57005, %rax
-	imulq	$48879, %rax
-	movq	%rsi, %r11
-	subq	%r11, %rax
-	leave
-	ret
-Class1_less1:
-	enter	$8, $0
-	movq	%rsi, %rax
-	movq	$57005, %r11
-	imulq	$48879, %r11
-	cmpq	%rax, %r11	# checking if rax less r11
-	setg	%al
-	and	$1, %rax
-	imulq	$-1, %rax
-	leave
-	ret
-Class1_less2:
-	enter	$8, $0
-	movq	$57005, %rax
-	imulq	$48879, %rax
-	movq	%rsi, %r11
-	cmpq	%rax, %r11	# checking if rax less r11
-	setg	%al
-	and	$1, %rax
-	imulq	$-1, %rax
-	leave
-	ret
-Class1_constant:
-	enter	$8, $0
-	movq	$57005, %rax
-	imulq	$48879, %rax
-	leave
-	ret
-
-Übersetze und linke das Testprogramm:
-In file included from /usr/ftp/pub/ubvl/test/codeb/testmain.c:13:0:
-/home/ublu21/u11808206/test/codeb/thenotoriousj-20.call: In function ‘call’:
-/home/ublu21/u11808206/test/codeb/thenotoriousj-20.call:65:19: warning: passing argument 1 of ‘Class2.getObjVar’ from incompatible pointer type [-Wincompatible-pointer-types]
-  Class2.getObjVar(obj2) == dead*beef
-                   ^~~~
-/home/ublu21/u11808206/test/codeb/thenotoriousj-20.call:65:19: note: expected ‘struct objectc *’ but argument is of type ‘struct object2 *’
-
-Rufe folgendes Codefragment auf:
-struct objectc { 
-	struct vft *vftc;
-};
-
-struct object2 { 
-	struct vft *vftc;
-	long objVar;
-};
-
-extern struct vft { 
-	long (*add1)(struct objectc *, long);
-	long (*add2)(struct objectc *, long);
-	long (*add3)(struct objectc *, long);
-	long (*add4)(struct objectc *, long);
-	long (*mul)(struct objectc *, long);
-	long (*equal)(struct objectc *, long);
-	long (*sub1)(struct objectc *, long);
-	long (*sub2)(struct objectc *, long);
-	long (*less1)(struct objectc *, long);
-	long (*less2)(struct objectc *, long);
-	long (*constant)(struct objectc *);
-	long (*getVar)(struct objectc *);
-	long (*getObjVar)(struct objectc *);
-} Class1, Class2;
-
-struct object2 *obj2 = malloc(sizeof(struct object2));
-
-long maxVal = 2147483648;
-long dead = 0xDEAD;
-long beef = 0xBEEF;
-
-RET(Class1.add1(0, 0xABCD) == maxVal-1 + 0xABCD &&
-	Class1.add1(0, 0) == maxVal-1 &&
-
-	Class1.add2(0, 0xABCD) == maxVal + 0xABCD &&
-	Class1.add2(0, 0) == maxVal &&
-	
-	Class1.add3(0, 0xABCD) == -maxVal + 0xABCD &&
-	Class1.add3(0, 0) == -maxVal &&
-	
-	Class1.add4(0, 0xABCD) == -maxVal-1 + 0xABCD &&
-	Class1.add4(0, 0) == -maxVal-1 &&
-	
-	Class1.mul(0, 0xABCD) == dead*beef*0xABCD && Class1.mul(0, 2) == 2*dead*beef && 
-	Class1.mul(0, 1) == dead*beef &&
-	
-	Class1.equal(0, -5) == 0 && Class1.equal(0, dead*beef) == -1 && 
-	Class1.equal(0, dead*beef*2) == 0 &&
-	
-	Class1.sub1(0, -5) == -5 - dead*beef && Class1.sub1(0, dead*beef) == 0 && 
-	Class1.sub1(0, dead*beef*2) == dead*beef &&
-
-	Class1.sub2(0, -5) == dead*beef + 5 && Class1.sub2(0, dead*beef) == 0 && 
-	Class1.sub2(0, dead*beef*2) == -(dead*beef) &&
-	
-	Class1.less1(0, -5) == -1 && Class1.less1(0, dead*beef) == 0 && 
-	Class1.less1(0, dead*beef*2) == 0 &&
-
-	Class1.less2(0, -5) == 0 && Class1.less2(0, dead*beef) == 0 && 
-	Class1.less2(0, dead*beef*2) == -1 &&
-	
-	Class1.constant(0) == dead*beef &&
-	
-	Class2.getVar(0) == dead*beef && 
-	Class2.getObjVar(obj2) == dead*beef
-	);
-Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
-und das Ergebnis des Ausdrucks ist korrekt.
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-3.0:
-interface Interface1: 
-	empty():Interface1
-	single():int
-	add2(int, int) : int
-	fact(int, int) : int
-end;
-
-Übersetzung: Status korrekt
-
-Ausgabe:
-
-Übersetze und linke das Testprogramm:
-
-Rufe folgendes Codefragment auf:
-
-Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
-und das Ergebnis des Ausdrucks ist korrekt.
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-4.0:
-interface Interface1:
-	init():int
-	add2(int, int, int) : int
-	add3(int, int) : int
-end;
-
-interface Interface2: 
-	empty():int
-	single():int
-	getThis() : int
-	ident(int) : int
-end;
-
-class Class1 implements /* nothing */ :
-	var var1 : int;
-	var var2 : int;
-	var var3 : Interface2;
-	
-	method init()
-		return 0;
-	end;
-end;
-
-class Class2 implements Interface1 Interface2 :
-	var var1 : int;
-	var var2 : int;
-	method init()
-		return 0;
-	end;
-	method add2(in1: int, in2: int)
-		return in1+in2;
-	end;
-	method add3(in1: int, in2: int, in3: int)
-		return in1 + in2 + in3;
-	end;
-	method empty()
-		/* Stats */
-	end;
-	method getThis()
-		return this;
-	end;
-	method ident(n : int)
-		return n;
-	end;
-end;
-
-Übersetzung: Status korrekt
-
-Ausgabe:
-
-.globl Class1
-Class1:   
-.quad Class1_init
-.quad 0 #add2
-.quad 0 #add3
-.quad 0 #empty
-.quad 0 #single
-.quad 0 #getThis
-.quad 0 #ident
-class_size_Class1_class = 32
-
-
-
-.globl Class2
-Class2:   
-.quad Class2_init
-.quad Class2_add2
-.quad Class2_add3
-.quad Class2_empty
-.quad 0 #single
-.quad Class2_getThis
-.quad Class2_ident
-class_size_Class2_class = 24
-
-
-Class1_init:
-	movq	$0, %rax
-	ret
-Class2_init:
-	movq	$0, %rax
-	ret
-Class2_add2:
-	movq	%rsi, %rax
-	movq	%rdx, %r11
-	addq	%r11, %rax
-	ret
-Class2_add3:
-	movq	%rsi, %rax
-	movq	%rdx, %r11
-	movq	%rcx, %r10
-	addq	%r10, %r11
-	addq	%r11, %rax
-	ret
-Class2_empty:
-Class2_getThis:
-	movq	%rdi, %rax
-	ret
-Class2_ident:
-	movq	%rsi, %rax
-	ret
-
-Übersetze und linke das Testprogramm:
-In file included from /usr/ftp/pub/ubvl/test/codeb/testmain.c:13:0:
-/home/ublu21/u11808206/test/codeb/thenotoriousj-4.call: In function ‘call’:
-/home/ublu21/u11808206/test/codeb/thenotoriousj-4.call:28:40: warning: passing argument 1 of ‘Class1.init’ makes pointer from integer without a cast [-Wint-conversion]
- RET(Class1.init(0) == 0 && Class1.init(-3)==0 && Class1.init(5)==0 &&
-                                        ^
-/home/ublu21/u11808206/test/codeb/thenotoriousj-4.call:28:40: note: expected ‘struct objectc *’ but argument is of type ‘int’
-/home/ublu21/u11808206/test/codeb/thenotoriousj-4.call:28:62: warning: passing argument 1 of ‘Class1.init’ makes pointer from integer without a cast [-Wint-conversion]
- RET(Class1.init(0) == 0 && Class1.init(-3)==0 && Class1.init(5)==0 &&
-                                                              ^
-/home/ublu21/u11808206/test/codeb/thenotoriousj-4.call:28:62: note: expected ‘struct objectc *’ but argument is of type ‘int’
-/home/ublu21/u11808206/test/codeb/thenotoriousj-4.call:29:38: warning: passing argument 1 of ‘Class2.init’ makes pointer from integer without a cast [-Wint-conversion]
-   Class2.init(0) == 0 && Class2.init(-3)==0 && Class2.init(5)==0 &&
-                                      ^
-/home/ublu21/u11808206/test/codeb/thenotoriousj-4.call:29:38: note: expected ‘struct objectc *’ but argument is of type ‘int’
-/home/ublu21/u11808206/test/codeb/thenotoriousj-4.call:29:60: warning: passing argument 1 of ‘Class2.init’ makes pointer from integer without a cast [-Wint-conversion]
-   Class2.init(0) == 0 && Class2.init(-3)==0 && Class2.init(5)==0 &&
-                                                            ^
-/home/ublu21/u11808206/test/codeb/thenotoriousj-4.call:29:60: note: expected ‘struct objectc *’ but argument is of type ‘int’
-/home/ublu21/u11808206/test/codeb/thenotoriousj-4.call:30:44: warning: passing argument 1 of ‘Class2.getThis’ makes pointer from integer without a cast [-Wint-conversion]
-   Class2.getThis(0) == 0 && Class2.getThis(-3)==-3 && Class2.getThis(5)==5 &&
-                                            ^
-/home/ublu21/u11808206/test/codeb/thenotoriousj-4.call:30:44: note: expected ‘struct objectc *’ but argument is of type ‘int’
-/home/ublu21/u11808206/test/codeb/thenotoriousj-4.call:30:70: warning: passing argument 1 of ‘Class2.getThis’ makes pointer from integer without a cast [-Wint-conversion]
-   Class2.getThis(0) == 0 && Class2.getThis(-3)==-3 && Class2.getThis(5)==5 &&
-                                                                      ^
-/home/ublu21/u11808206/test/codeb/thenotoriousj-4.call:30:70: note: expected ‘struct objectc *’ but argument is of type ‘int’
-
-Rufe folgendes Codefragment auf:
-struct objectc {
-        struct vft *vftc;
-};
-
-struct objectClass1 {
-        struct vft *vftc;
-        long v1;
-        long v2;
-        struct objectc* var3;
-};
-
-struct objectClass2 {
-        struct vft *vftc;
-        long v1;
-        long v2;
-};
-
-extern struct vft {
-        long (*init)(struct objectc *);
-        long (*add2)(struct objectc *, long, long);
-        long (*add3)(struct objectc *, long, long, long);
-        long (*empty)(struct objectc *);
-        long (*single)(struct objectc *);
-        long (*getThis)(struct objectc *);
-        long (*ident)(struct objectc *, long);
-} Class1, Class2;
-
-RET(Class1.init(0) == 0 && Class1.init(-3)==0 && Class1.init(5)==0 &&
-		Class2.init(0) == 0 && Class2.init(-3)==0 && Class2.init(5)==0 &&
-		Class2.getThis(0) == 0 && Class2.getThis(-3)==-3 && Class2.getThis(5)==5 &&
-		Class2.ident(0,4) == 4 && Class2.ident(0,-1)==-1 && Class2.ident(0,5)==5 &&
-		Class2.add2(0,0,0) == 0 && Class2.add2(0,-3,3)==0 && Class2.add2(0,5,-5)==0 && Class2.add2(0,5,15)==20 &&
-		Class2.add3(0,0,0,0) == 0 && Class2.add3(0,-3,-3,6)==0 && Class2.add3(0,5,-5,1)==1 && Class2.add3(0,5,15,-10)==10);
-
-Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
-und das Ergebnis des Ausdrucks ist korrekt.
-
-==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/x0.1:
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/x0.1:
 #
 
 Ausgabe:
 ERROR on line 1 Can not lex the symbol: #
 Status: korrekt
 
-==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/x1.1:
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/x1.1:
 interface x: y():int end;
 class z implements x:
   method y() return 1 /* */  */
@@ -4665,7 +3428,7 @@ Ausgabe:
 ERROR on line 1 Can not lex the symbol: /
 Status: korrekt
 
-==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/y0.2:
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/y0.2:
 class x implements: end
 
 Ausgabe:
@@ -4673,7 +3436,7 @@ Error parsing line: 1 char:
 syntax error
 Status: korrekt
 
-==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/y1.2:
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/y1.2:
 interface i: m(int):int end;
 class x implements i: method m(p:int,) end; end;
 
@@ -4682,7 +3445,7 @@ Error parsing line: 1 char: )
 syntax error
 Status: korrekt
 
-==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/y2.2:
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/y2.2:
 interface i: m(int):int end;
 class c implements i: method m(x:int) return x+x*x; end; end;
 
@@ -4691,7 +3454,7 @@ Error parsing line: 1 char: *
 syntax error
 Status: korrekt
 
-==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/y3.2:
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/y3.2:
 interface i: m(int):int end;
 class c implements: method m(x:int) return x-x-x; end; end;
 
@@ -4700,7 +3463,7 @@ Error parsing line: 1 char: -
 syntax error
 Status: korrekt
 
-==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/y4.2:
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/y4.2:
 interface i: m(int):int end;
 class c implements: method m(x:int) return not x=x; end; end;
 
@@ -4709,7 +3472,7 @@ Error parsing line: 1 char: =
 syntax error
 Status: korrekt
 
-==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/y5.2:
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/y5.2:
 interface i: m(int):int end;
 class c implements:
   method m(x:int) if x then return x; else return x; else return x; end; end;
@@ -4720,7 +3483,7 @@ Error parsing line: 1 char: else
 syntax error
 Status: korrekt
 
-==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/y6.2:
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/y6.2:
 interface i: m(int):int end;
 class c implements: method m(x:i) return x.m(x,); end; end;
 
@@ -4729,7 +3492,7 @@ Error parsing line: 1 char: )
 syntax error
 Status: korrekt
 
-==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/y7.2:
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/y7.2:
 interface i: m(int):int end;
 class c implements: method m(x:int) return m(x); end; end;
 
@@ -4738,7 +3501,7 @@ Error parsing line: 1 char: (
 syntax error
 Status: korrekt
 
-==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/y8.2:
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/y8.2:
 interface i: m(int):int end;
 class c implements: method m(x:int) x.x:=x; end; end;
 
@@ -4747,7 +3510,7 @@ Error parsing line: 1 char: :=
 syntax error
 Status: korrekt
 
-==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/y9.2:
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/y9.2:
 interface i: m(int):int end;
 class c implements: method m(x:int) return; end; end;
 
@@ -4756,21 +3519,21 @@ Error parsing line: 1 char: ;
 syntax error
 Status: korrekt
 
-==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/z0.3:
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/z0.3:
 class y implements x: end;
 
 Ausgabe:
 Identifier with name 'x' on line 1 is not visible in the current scope
 Status: korrekt
 
-==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/z1.3:
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/z1.3:
 interface i: m(int):int m(int):int  end;
 
 Ausgabe:
 Identifier 'm' on line 1 conflicts with identifier [m] on line 1
 Status: korrekt
 
-==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/z2.3:
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/z2.3:
 interface i: m1(int):int m2(int):int  end;
 class c implements :
   method m1(x:int) end;
@@ -4781,7 +3544,7 @@ Ausgabe:
 Identifier with name 'x' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
 Status: korrekt
 
-==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/z3.3:
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/z3.3:
 interface i: m(int):int end;
 class c implements i:
   method m(x:int)
@@ -4793,7 +3556,7 @@ Ausgabe:
 Identifier 'x' on line 1 conflicts with identifier [x] on line 1
 Status: korrekt
 
-==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/z4.3:
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/z4.3:
 interface i: m(int):int end;
 class c implements :
   method m(x:int) return new c1; end;
@@ -4803,7 +3566,7 @@ Ausgabe:
 Identifier with name 'c1' on line 1 is not visible in the current scope
 Status: korrekt
 
-==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/z5.3:
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/z5.3:
 interface i: m(int):int end;
 class c implements :
   method m(x:int) return new x; end;
@@ -4813,7 +3576,7 @@ Ausgabe:
 Identifier with name 'x' on line 1 is not visible in the current scope
 Status: korrekt
 
-==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/z6.3:
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/z6.3:
 interface i: m(int):int end;
 class c implements :
   method m(x:int) return i; end;
@@ -4823,7 +3586,7 @@ Ausgabe:
 Identifier with name 'i' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
 Status: korrekt
 
-==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/z7.3:
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/z7.3:
 interface i: m(int):int end;
 class c implements m:
   method m(x:int) end;
@@ -4833,7 +3596,7 @@ Ausgabe:
 Identifier with name 'm' on line 1 is not visible in the current scope
 Status: korrekt
 
-==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/z8.3:
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/z8.3:
 class c implements :
   method m(x:int) end;
 end;
@@ -4842,1426 +3605,15 @@ Ausgabe:
 Identifier with name 'm' on line 1 is not visible in the current scope
 Status: korrekt
 
-==========> Eingabe von /usr/ftp/pub/ubvl/test/codeb/z9.3:
+==========> Eingabe von /usr/ftp/pub/ubvl/test/gesamt/z9.3:
 interface i: i(int):int end;
 
 Ausgabe:
 Identifier 'i' on line 1 conflicts with identifier [i] on line 1
 Status: korrekt
 
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_Andy0n_300.3:
-interface myInterface:
-    testMethod(): int
-end;
-
-class ObjectvariableClass implements myInterface:
-    method testMethod()
-        return global; /* FAIL */
-    end;
-end;
-Ausgabe:
-Identifier with name 'global' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_Andy0n_301.3:
-interface myInterface:
-    testMethod(): int
-end;
-
-class ObjectvariableClass implements myInterface:
-    var global:int;
-
-    method testMethod()
-        var global:int := 5; /* FAIL */
-        return global;
-    end;
-end;
-Ausgabe:
-Identifier 'global' on line 1 conflicts with identifier [global] on line 1
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_Andy0n_302.3:
-interface myInterface:
-    testMethod(): int
-end;
-
-class ObjectvariableClass implements myInterface:
-    method failMethod()
-        return 5; /* FAIL */
-    end;
-end;
-Ausgabe:
-Identifier with name 'failMethod' on line 1 is not visible in the current scope
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_Andy0n_303.3:
-interface myInterface:
-    testMethod(): int
-end;
-
-class ObjectvariableClass implements myInterface fail: /* FAIL */
-    method testMethod()
-        return 5; 
-    end;
-end;
-Ausgabe:
-Identifier with name 'fail' on line 1 is not visible in the current scope
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_Andy0n_304.3:
-interface myInterface:
-    testMethod(): int
-end;
-
-class ObjectvariableClass implements myInterface:
-    method testMethod()
-        null ObjectvariableClass; /* FAIL */
-        return 5; 
-    end;
-end;
-Ausgabe:
-Identifier with name 'ObjectvariableClass' on line 1 is not visible in the current scope
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_Andy0n_305.3:
-interface myInterface:
-    testMethod(): int
-end;
-
-class ObjectvariableClass implements myInterface:
-    method testMethod()
-        myInterface := 5; /* FAIL */
-        return 5; 
-    end;
-end;
-Ausgabe:
-Identifier with name 'myInterface' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_Andy0n_306.3:
-interface myInterface:
-    testMethod(): int
-end;
-
-class MyClass implements myInterface:
-    var global:int;
-
-    method testMethod()
-        global := new global;
-        return global;
-    end;
-end;
-Ausgabe:
-Identifier with name 'global' on line 1 is not visible in the current scope
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_Andy0n_307.3:
-interface x: 
-s():int 
-z(int):int 
-end; 
-interface u: 
-end;
-
-interface d: 
-y():int 
-end;
-
-class b implements:
-
-end;
-
-class c implements d:
-    var a:int;
-    method y()
-        var a : d := 5; /* FAIL */
-    end;
-end;
-Ausgabe:
-Identifier 'a' on line 1 conflicts with identifier [a] on line 1
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_Andy0n_308.3:
-interface LinkedList:
-    add(Object): int
-    get(int): Object
-    size(): int
-end;
-
-class MyLinkedList implements LinkedList:
-    var next:LinkedList;
-    var head:Object;    /* FAIL */
-
-    method add(o:Object)
-        if head = null LinkedList then /* Absolut keine Ahnung ob das mit null so funken wird, aber ist momentan korrekt */
-            head := o;
-            return 0;
-        else 
-            if head.getId() = o.getId() then
-                return 1;
-            else
-                if next = null LinkedList then
-                    next := new MyLinkedList;
-                end;
-            end;
-        end;
-
-        return next.add(o);
-    end;
-
-    method get(i:int)
-        if i = 0 then
-            return head;
-        else
-            if next = null LinkedList then
-                return null Object;
-            end;
-        end;
-
-        return next.get(i-1);
-    end;
-
-    method size()
-        if head = null Object then
-            return 0;
-        end;
-        
-        if next = null Object then
-            return 1;
-        end;
-
-        return 1 + next.size();
-    end;
-end;
-Ausgabe:
-Identifier with name 'Object' on line 1 is not visible in the current scope
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_Andy0n_309.3:
-interface Object:
-    getId(): int 
-end;
-
-interface LinkedList:
-    add(Object): int
-    get(int): Object
-    size(): int
-end;
-
-class MyLinkedList implements LinkedList:
-    var next:LinkedList;
-    var head:Object;
-
-    method add(o:Object)
-        if head = null LinkedList then /* Absolut keine Ahnung ob das mit null so funken wird, aber ist momentan korrekt */
-            head := o;
-            return 0;
-        else 
-            if head.getId() = o.getId() then
-                return 1;
-            else
-                if next = null LinkedList then
-                    next := new MyLinkedList;
-                end;
-            end;
-        end;
-
-        return next.add(p); /* FAIL */
-    end;
-
-    method get(i:int)
-        if i = 0 then
-            return head;
-        else
-            if next = null LinkedList then
-                return null Object;
-            end;
-        end;
-
-        return next.get(i-1);
-    end;
-
-    method size()
-        if head = null Object then
-            return 0;
-        end;
-        
-        if next = null Object then
-            return 1;
-        end;
-
-        return 1 + next.size();
-    end;
-end;
-Ausgabe:
-Identifier with name 'p' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_Andy0n_310.3:
-interface a:
-    b(int,a):a
-end;
-
-class c implements a:
-    method b(e:int, f:a)
-        return d; /* FAIL */
-    end;
-
-    var d:a;
-end;
-Ausgabe:
-Identifier with name 'd' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_Andy0n_311.3:
-interface a:end;
-interface a:end; /* FAIL */
-Ausgabe:
-Identifier 'a' on line 1 conflicts with identifier [a] on line 1
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_Andy0n_312.3:
-class a implements:end;
-class a implements:end; /* FAIL */
-Ausgabe:
-Identifier 'a' on line 1 conflicts with identifier [a] on line 1
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_Andy0n_314.3:
-interface myInterface:
-    myMethod(int,myInterface):myInterface
-end;
-
-class myClass implements myInterface:
-    method myMethod(par1:int, par2:myInterface)
-        if 0 = 1 then
-            var fail : int := 0;
-        else
-            return this.myMethod(fail, par2); /* FAIL */
-        end;
-    end;
-end;
-Ausgabe:
-Identifier with name 'fail' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_Andy0n_315.3:
-interface a:
-    b():int
-end;
-
-class one implements a:
-    var v1:int;
-    method b()
-        v1 := 27;
-    end;
-end;
-
-class two implements a:
-    method b()
-        var x:a := new one;
-        return x.v1();
-    end;
-end;
-Ausgabe:
-Identifier with name 'v1' on line 1 is not visible in the current scope
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_Andy0n_316.3:
-interface a:
-    b(int, int):a
-    d(int, int):a
-end;
-
-class c implements a:
-    var d:a;
-
-    method b(e:int, f:int)
-        return 5 * (e + f);
-    end;
-end;
-Ausgabe:
-Identifier 'd' on line 1 conflicts with identifier [d] on line 1
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_Andy0n_317.3:
-interface a:
-    b():int
-end;
-
-class one implements a:
-    var v1:int;
-    method b()
-        v1 := 27;
-    end;
-end;
-
-class two implements a:
-    method b()
-        var x:a := new one;
-        return v1;
-    end;
-end;
-Ausgabe:
-Identifier with name 'v1' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_Andy0n_318.3:
-interface a:
-    test():a
-    test():a
-end;
-Ausgabe:
-Identifier 'test' on line 1 conflicts with identifier [test] on line 1
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_Dappzydee_1.3:
-interface myInterface:
-    testMethod(): int
-end;
-
-class ObjectvariableClass implements myInterface:
-    method testMethod()
-         return testMethod; /* FAIL */
-    end;
-end;
-
-Ausgabe:
-Identifier with name 'testMethod' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_Dappzydee_2.3:
-interface myInterface:
-    testMethod(): int
-end;
-
-class ObjectvariableClass implements myInterface:
-    method testMethod()
-        var tmp : int := 0;
-        tmp = testMethod; /* FAIL */
-    end;
-end;
-
-Ausgabe:
-Identifier with name 'testMethod' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_crazyjack_1.3:
-interface a1:
-end;
-interface a2:
-    a3(int, int):int
-    a6(a2, a2):int
-    a5(a1, a2):int
-end;
-interface a32:
-    a27(a1, a2):int
-end;
-class hello implements a32 a2:
-    var bobbi: a1;
-    var number1: int;
-    var bobbi2: int;
-    method a27()
-        if bobbi < bobbi2
-        then
-            bobbi := 123;
-        end;
-    end;
-    var katzi: int;
-end;
-interface b2:
-    a55(a2, a2):int
-end;
-class hello2 implements a2 a1:
-    var bobbi: a1;
-    var bobbi2: int;
-    method a27(number33: int)
-        if bobbi < bobbi2
-        then
-            bobbi := 123;
-        end;
-        var number1: int := 23;
-        not null INVALID;
-    end;
-    var katzi: int;
-    var number1: int;
-end;
-Ausgabe:
-Identifier with name 'INVALID' on line 1 is not visible in the current scope
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_crazyjack_10.3:
-interface i:
-    a():int
-end;
-class b implements:
-    var hallo: int;
-    method a()
-        new x; /* FAIL */
-    end;
-end;
-Ausgabe:
-Identifier with name 'x' on line 1 is not visible in the current scope
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_crazyjack_11.3:
-interface i:
-    a():int
-end;
-class b implements:
-    var hallo: int;
-    method a()
-        new x; /* FAIL */
-    end;
-end;
-class x implements:
-    var hallo: int;
-    method a()
-    end;
-end;
-Ausgabe:
-Identifier with name 'x' on line 1 is not visible in the current scope
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_crazyjack_3.3:
-interface a:
-    b(int, int):int
-end;
-class hello implements a:
-    method b()
-        this.a(); /* FAIL */
-    end;
-end;
-Ausgabe:
-Identifier with name 'a' on line 1 is not visible in the current scope
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_crazyjack_5.3:
-interface a1:
-    b(int, int):int
-end;
-class hello implements:
-    method b()
-        this.b2(); /* fail */
-    end;
-end;
-interface a2:
-    b2(int, int):int
-end;
-Ausgabe:
-Identifier with name 'b2' on line 1 is not visible in the current scope
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_crazyjack_6.3:
-interface i:
-    a():int
-end;
-class x implements:
-    method a()
-        a23; /* FAIL */
-    end;
-end;
-Ausgabe:
-Identifier with name 'a23' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_crazyjack_8.3:
-interface i:
-    a():int
-end;
-class x implements:
-    method a()
-        hallo := 3; /* FAIL */
-    end;
-end;
-Ausgabe:
-Identifier with name 'hallo' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_gutti-6.3:
-class Foo implements Bar: /*Bar ist noch nicht sichtbar*/
-    var x: Bar;
-    method nochNichtSichtbar(x:int,bar:Bar)
-        not 42;
-    end;
-end;
-
-interface Bar:
-    nochNichtSichtbar(int,Bar):Bar
-end;
-
-
-Ausgabe:
-Identifier 'x' on line 1 conflicts with identifier [x] on line 1
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_gutti-7.3:
-interface Fail:
-    methode(int,Fail): int
-    funktion(Fail,Fail,Fail): int
-end;
-
-class Failed implements Fail:
-    method methode(x: int, y: Fail) 
-        x+y;
-        while this do
-            x := null Fail;
-        end;
-    end;
-
-    method hilfsFail()
-    end;
-
-    method funktion(x: Fail, y: Fail, z: Fail)
-        x*y*z;
-        return y*x*z;
-    end;
-
-end;
-Ausgabe:
-Identifier with name 'hilfsFail' on line 1 is not visible in the current scope
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_gutti-8.3:
-interface Test:
-    function(int,int,Test):Test
-end;
-
-class Failing implements Test:
-    method function(x:int, y:int, z:Test)
-        if x = y then
-            z.function(x,y,z);
-            return new Failing;
-        else
-            return failVariable;
-        end;
-    end;
-
-    var failVariable: Test;
-end;
-
-
-Ausgabe:
-Identifier with name 'failVariable' on line 1 is not visible(ObjectVar,Var,Param) in the current scope
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_stimitom1.3:
-interface Interf0 :
-end;
-
-interface Interf1:
-    initialize(): int
-    testNonsensicalStuff(int): Interf0
-end;
-
-class Somename implements Interf0 :
-end;
-
-class OtherName implements Interf1 :
-    var count : int;
-    method initialize()
-        count := 15;
-    end;
-    method testNonsensicalStuff(par : int)   
-        if not this then
-            while (par < 25) do
-                count := count * 5;
-                if null Interf0 then
-                    count := count * 5;
-                else 
-                    return new Interf1;
-                    /* should throw an error here */
-                end;
-            end;
-        end;
-    end;
-end;
-Ausgabe:
-Identifier with name 'Interf1' on line 1 is not visible in the current scope
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_thenotoriousj-1.3:
-interface Interface1:
-	init():int
-	add3(int, int, int) : int
-end;
-
-interface Interface1: 
-	empty():int
-	single():int
-	add2(int, int) : int
-	fact(int, int) : int
-end;
-
-Ausgabe:
-Identifier 'Interface1' on line 1 conflicts with identifier [Interface1] on line 1
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_thenotoriousj-10.3:
-interface Interface1:
-	init():int
-	add3(int, int, int) : int
-end;
-
-class Class1 implements /* nothing */ :
-	var var1 : int;
-	var var2 : int;
-	var var3 : Interface1;
-end;
-
-interface Interface2: 
-	empty():int
-	single():int
-	add2(int, int) : int
-	add3(int, int) : int
-end;
-
-class Class2 implements Interface1 Interface2 :
-	var var1 : int;
-	var var2 : int;
-	method init()
-		var zero : int := 0H;
-		var1 := (zero);
-		var2 := zero;
-		return 0;
-	end;
-	method add2(in1: int, in2: int)
-		return in1+in2;
-	end;
-	method add3(in1: int, in2: int, in3: int)
-		return in1 + this.add2(in2, in3);
-	end;
-	method empty()
-		/* Stats */
-	end;
-	method single()
-		return this;
-	end;
-	method fact(n : int)
-		if n < 0 then
-			return 0;
-		end;
-		
-		var fac : int := 1;
-		var i : int := n;
-		
-		while (0 < i) do
-			fac := fac * i;
-		end;
-		
-		return fac;
-		
-	end;
-end;
-
-Ausgabe:
-Identifier 'add3' on line 1 conflicts with identifier [add3] on line 1
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_thenotoriousj-2.3:
-class Interface1 implements :
-end;
-
-interface Interface1: 
-	empty():int
-	single():int
-	add2(int, int) : int
-	fact(int, int) : int
-end;
-
-Ausgabe:
-Identifier 'Interface1' on line 1 conflicts with identifier [Interface1] on line 1
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_thenotoriousj-5.3:
-interface Interface1:
-	init():int
-	add3(int, int, int) : int
-end;
-
-interface Interface2: 
-	empty():int
-	single():int
-	add2(int, int) : int
-end;
-
-class Class1 implements /* nothing */ :
-	var var1 : int;
-	var var2 : int;
-end;
-
-class Class1 implements Interface1 Interface2 :
-	var var1 : int;
-	var var2 : int;
-	method init()
-		var zero : int := 0H;
-		var1 := (zero);
-		var2 := zero;
-		return 0;
-	end;
-	method add2(in1: int, in2: int)
-		return in1+in2;
-	end;
-	method add3(in1: int, in2: int)
-		return in1 + this.add2(in2, in3);
-	end;
-	method empty()
-		/* Stats */
-	end;
-	method single()
-		return this;
-	end;
-	method fact(n : int)
-		if n < 0 then
-			return 0;
-		end;
-		
-		var fac : int := 1;
-		var i : int := n;
-		
-		while (0 < i) do
-			fac := fac * i;
-		end;
-		
-		return fac;
-		
-	end;
-end;
-
-Ausgabe:
-Identifier 'Class1' on line 1 conflicts with identifier [Class1] on line 1
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_thenotoriousj-6.3:
-interface Interface1:
-	init():int
-	add3(int, int, int) : int
-end;
-
-interface Interface2: 
-	empty():int
-	single():int
-	add2(int, int) : int
-end;
-
-class Class1 implements /* nothing */ :
-	var var1 : int;
-	var var2 : int;
-end;
-
-class Class2 implements Interface1 Interface2 :
-	var var1 : int;
-	var var2 : int;
-	method init()
-		var zero : int := 0H;
-		var1 := (zero);
-		var2 := zero;
-		return 0;
-	end;
-	method add2(in1: int, in1: int)
-		return in1+in2;
-	end;
-	method add3(in1: int, in2: int)
-		return in1 + this.add2(in2, in3);
-	end;
-	method empty()
-		/* Stats */
-	end;
-	method single()
-		return this;
-	end;
-	method fact(n : int)
-		if n < 0 then
-			return 0;
-		end;
-		
-		var fac : int := 1;
-		var i : int := n;
-		
-		while (0 < i) do
-			fac := fac * i;
-		end;
-		
-		return fac;
-		
-	end;
-end;
-
-Ausgabe:
-Identifier 'in1' on line 1 conflicts with identifier [in1] on line 1
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_thenotoriousj-7.3:
-interface Interface1:
-	init():int
-	add3(int, int, int) : int
-end;
-
-interface Interface2: 
-	empty():int
-	single():int
-	add2(int, int) : int
-end;
-
-class Class1 implements /* nothing */ :
-	var var1 : int;
-	var var2 : int;
-end;
-
-class Class2 implements Interface1 Interface2 :
-	var fac : int;
-	var var2 : int;
-	method init()
-		var zero : int := 0H;
-		var1 := (zero);
-		var2 := zero;
-		return 0;
-	end;
-	method add2(in1: int, in2: int)
-		return in1+in2;
-	end;
-	method add3(in1: int, in2: int)
-		return in1 + this.add2(in2, in3);
-	end;
-	method empty()
-		/* Stats */
-	end;
-	method single()
-		return this;
-	end;
-	method fact(n : int)
-		if n < 0 then
-			return 0;
-		end;
-		
-		var fac : int := 1;
-		var i : int := n;
-		
-		while (0 < i) do
-			fac := fac * i;
-		end;
-		
-		return fac;
-		
-	end;
-end;
-
-Ausgabe:
-Identifier 'fac' on line 1 conflicts with identifier [fac] on line 1
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_thenotoriousj-8.3:
-interface Interface1:
-	init():int
-	add3(int, int, int) : int
-end;
-
-interface Interface2: 
-	empty():int
-	single():int
-	add2(int, int) : int
-end;
-
-class Class1 implements /* nothing */ :
-	var var1 : int;
-	var var2 : int;
-end;
-
-class Class2 implements Interface1 Interface2 :
-	var var1 : int;
-	var var2 : int;
-	method init()
-		var zero : int := 0H;
-		var1 := (zero);
-		var2 := zero;
-		return 0;
-	end;
-	method add2(in1: int, in2: int)
-		return in1+in2;
-	end;
-	method add3(in1: int, in2: int)
-		return in1 + this.add2(in2, in3);
-	end;
-	method empty()
-		/* Stats */
-	end;
-	method single()
-		return this;
-	end;
-	method fact(n : int)
-		if n < 0 then
-			return 0;
-		end;
-		
-		var fac : int := 1;
-		var i : int := n;
-		
-		while (0 < i) do
-			var i : int := 0;
-			fac := fac * i;
-		end;
-		
-		return fac;
-		
-	end;
-end;
-
-Ausgabe:
-Identifier 'i' on line 1 conflicts with identifier [i] on line 1
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/ag_test_case_thenotoriousj-9.3:
-interface Interface1:
-	init():int
-	add3(int, int, int) : int
-end;
-
-class Class1 implements /* nothing */ :
-	var var1 : int;
-	var var2 : int;
-	var var3 : Interface2;
-end;
-
-interface Interface2: 
-	empty():int
-	single():int
-	add2(int, int) : int
-end;
-
-class Class2 implements Interface1 Interface2 :
-	var var1 : int;
-	var var2 : int;
-	method init()
-		var zero : int := 0H;
-		var1 := (zero);
-		var2 := zero;
-		return 0;
-	end;
-	method add2(in1: int, in2: int)
-		return in1+in2;
-	end;
-	method add3(in1: int, in2: int)
-		return in1 + this.add2(in2, in3);
-	end;
-	method empty()
-		/* Stats */
-	end;
-	method single()
-		return this;
-	end;
-	method fact(n : int)
-		if n < 0 then
-			return 0;
-		end;
-		
-		var fac : int := 1;
-		var i : int := n;
-		
-		while (0 < i) do
-			fac := fac * i;
-		end;
-		
-		return fac;
-		
-	end;
-end;
-
-Ausgabe:
-Identifier with name 'Interface2' on line 1 is not visible in the current scope
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-1.3:
-interface Interface1:
-	init():int
-	add3(int, int, int) : int
-end;
-
-interface Interface1: 
-	empty():int
-	single():int
-	add2(int, int) : int
-	fact(int, int) : int
-end;
-
-Ausgabe:
-Identifier 'Interface1' on line 1 conflicts with identifier [Interface1] on line 1
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-10.3:
-interface Interface1:
-	init():int
-	add3(int, int, int) : int
-end;
-
-class Class1 implements /* nothing */ :
-	var var1 : int;
-	var var2 : int;
-	var var3 : Interface1;
-end;
-
-interface Interface2: 
-	empty():int
-	single():int
-	add2(int, int) : int
-	add3(int, int) : int
-end;
-
-class Class2 implements Interface1 Interface2 :
-	var var1 : int;
-	var var2 : int;
-	method init()
-		var zero : int := 0H;
-		var1 := (zero);
-		var2 := zero;
-		return 0;
-	end;
-	method add2(in1: int, in2: int)
-		return in1+in2;
-	end;
-	method add3(in1: int, in2: int, in3: int)
-		return in1 + this.add2(in2, in3);
-	end;
-	method empty()
-		/* Stats */
-	end;
-	method single()
-		return this;
-	end;
-	method fact(n : int)
-		if n < 0 then
-			return 0;
-		end;
-		
-		var fac : int := 1;
-		var i : int := n;
-		
-		while (0 < i) do
-			fac := fac * i;
-		end;
-		
-		return fac;
-		
-	end;
-end;
-
-Ausgabe:
-Identifier 'add3' on line 1 conflicts with identifier [add3] on line 1
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-2.3:
-class Interface1 implements :
-end;
-
-interface Interface1: 
-	empty():int
-	single():int
-	add2(int, int) : int
-	fact(int, int) : int
-end;
-
-Ausgabe:
-Identifier 'Interface1' on line 1 conflicts with identifier [Interface1] on line 1
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-5.3:
-interface Interface1:
-	init():int
-	add3(int, int, int) : int
-end;
-
-interface Interface2: 
-	empty():int
-	single():int
-	add2(int, int) : int
-end;
-
-class Class1 implements /* nothing */ :
-	var var1 : int;
-	var var2 : int;
-end;
-
-class Class1 implements Interface1 Interface2 :
-	var var1 : int;
-	var var2 : int;
-	method init()
-		var zero : int := 0H;
-		var1 := (zero);
-		var2 := zero;
-		return 0;
-	end;
-	method add2(in1: int, in2: int)
-		return in1+in2;
-	end;
-	method add3(in1: int, in2: int)
-		return in1 + this.add2(in2, in3);
-	end;
-	method empty()
-		/* Stats */
-	end;
-	method single()
-		return this;
-	end;
-	method fact(n : int)
-		if n < 0 then
-			return 0;
-		end;
-		
-		var fac : int := 1;
-		var i : int := n;
-		
-		while (0 < i) do
-			fac := fac * i;
-		end;
-		
-		return fac;
-		
-	end;
-end;
-
-Ausgabe:
-Identifier 'Class1' on line 1 conflicts with identifier [Class1] on line 1
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-6.3:
-interface Interface1:
-	init():int
-	add3(int, int, int) : int
-end;
-
-interface Interface2: 
-	empty():int
-	single():int
-	add2(int, int) : int
-end;
-
-class Class1 implements /* nothing */ :
-	var var1 : int;
-	var var2 : int;
-end;
-
-class Class2 implements Interface1 Interface2 :
-	var var1 : int;
-	var var2 : int;
-	method init()
-		var zero : int := 0H;
-		var1 := (zero);
-		var2 := zero;
-		return 0;
-	end;
-	method add2(in1: int, in1: int)
-		return in1+in2;
-	end;
-	method add3(in1: int, in2: int)
-		return in1 + this.add2(in2, in3);
-	end;
-	method empty()
-		/* Stats */
-	end;
-	method single()
-		return this;
-	end;
-	method fact(n : int)
-		if n < 0 then
-			return 0;
-		end;
-		
-		var fac : int := 1;
-		var i : int := n;
-		
-		while (0 < i) do
-			fac := fac * i;
-		end;
-		
-		return fac;
-		
-	end;
-end;
-
-Ausgabe:
-Identifier 'in1' on line 1 conflicts with identifier [in1] on line 1
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-7.3:
-interface Interface1:
-	init():int
-	add3(int, int, int) : int
-end;
-
-interface Interface2: 
-	empty():int
-	single():int
-	add2(int, int) : int
-end;
-
-class Class1 implements /* nothing */ :
-	var var1 : int;
-	var var2 : int;
-end;
-
-class Class2 implements Interface1 Interface2 :
-	var fac : int;
-	var var2 : int;
-	method init()
-		var zero : int := 0H;
-		var1 := (zero);
-		var2 := zero;
-		return 0;
-	end;
-	method add2(in1: int, in2: int)
-		return in1+in2;
-	end;
-	method add3(in1: int, in2: int)
-		return in1 + this.add2(in2, in3);
-	end;
-	method empty()
-		/* Stats */
-	end;
-	method single()
-		return this;
-	end;
-	method fact(n : int)
-		if n < 0 then
-			return 0;
-		end;
-		
-		var fac : int := 1;
-		var i : int := n;
-		
-		while (0 < i) do
-			fac := fac * i;
-		end;
-		
-		return fac;
-		
-	end;
-end;
-
-Ausgabe:
-Identifier 'fac' on line 1 conflicts with identifier [fac] on line 1
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-8.3:
-interface Interface1:
-	init():int
-	add3(int, int, int) : int
-end;
-
-interface Interface2: 
-	empty():int
-	single():int
-	add2(int, int) : int
-end;
-
-class Class1 implements /* nothing */ :
-	var var1 : int;
-	var var2 : int;
-end;
-
-class Class2 implements Interface1 Interface2 :
-	var var1 : int;
-	var var2 : int;
-	method init()
-		var zero : int := 0H;
-		var1 := (zero);
-		var2 := zero;
-		return 0;
-	end;
-	method add2(in1: int, in2: int)
-		return in1+in2;
-	end;
-	method add3(in1: int, in2: int)
-		return in1 + this.add2(in2, in3);
-	end;
-	method empty()
-		/* Stats */
-	end;
-	method single()
-		return this;
-	end;
-	method fact(n : int)
-		if n < 0 then
-			return 0;
-		end;
-		
-		var fac : int := 1;
-		var i : int := n;
-		
-		while (0 < i) do
-			var i : int := 0;
-			fac := fac * i;
-		end;
-		
-		return fac;
-		
-	end;
-end;
-
-Ausgabe:
-Identifier 'i' on line 1 conflicts with identifier [i] on line 1
-Status: korrekt
-
-==========> Eingabe von /home/ublu21/u11808206/test/codeb/thenotoriousj-9.3:
-interface Interface1:
-	init():int
-	add3(int, int, int) : int
-end;
-
-class Class1 implements /* nothing */ :
-	var var1 : int;
-	var var2 : int;
-	var var3 : Interface2;
-end;
-
-interface Interface2: 
-	empty():int
-	single():int
-	add2(int, int) : int
-end;
-
-class Class2 implements Interface1 Interface2 :
-	var var1 : int;
-	var var2 : int;
-	method init()
-		var zero : int := 0H;
-		var1 := (zero);
-		var2 := zero;
-		return 0;
-	end;
-	method add2(in1: int, in2: int)
-		return in1+in2;
-	end;
-	method add3(in1: int, in2: int)
-		return in1 + this.add2(in2, in3);
-	end;
-	method empty()
-		/* Stats */
-	end;
-	method single()
-		return this;
-	end;
-	method fact(n : int)
-		if n < 0 then
-			return 0;
-		end;
-		
-		var fac : int := 1;
-		var i : int := n;
-		
-		while (0 < i) do
-			fac := fac * i;
-		end;
-		
-		return fac;
-		
-	end;
-end;
-
-Ausgabe:
-Identifier with name 'Interface2' on line 1 is not visible in the current scope
-Status: korrekt
-
 Statistics: 
 ===========
-           138 Tests total
-           138 Tests passed
-           0 Tests failed
+           90 Tests total
+           89 Tests passed
+           1 Tests failed
