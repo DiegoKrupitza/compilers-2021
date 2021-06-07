@@ -39,6 +39,23 @@ char *getNextRegister(char *lastRegister)
     exit(3);
 }
 
+int getRegisterIndex(char *lastRegister)
+{
+
+    char *registers[] = {"rax", "r11", "r10", "r9", "r8", "rcx", "rdx", "rsi", "rdi"};
+
+    for (int i = 0; i < 8; i++)
+    {
+        if (strcmp(registers[i], lastRegister) == 0)
+        {
+            return i;
+        }
+    }
+
+    fprintf(stderr, "No register found: '%s'\n", lastRegister);
+    exit(3);
+}
+
 char *getParameterRegister(int index)
 {
     char *registers[] = {"rdi", "rsi", "rdx", "rcx", "r8", "r9"};
@@ -530,8 +547,27 @@ void simpleFunctionCall(char *methName, char *termReg, char *dst)
     //StACK Pointer anpasssen
     //TODO: safe register
 
+    // caller saved register
+    // rax,rcx,rdx,rsi,rdi,r8,r9,r10,r11
+
+    // https://stackoverflow.com/questions/25464209/copy-array-from-certain-position-to-another-array-in-c
+    char *registers[] = {"rax", "r11", "r10", "r9", "r8", "rcx", "rdx", "rsi", "rdi"};
+    int regPosition = getRegisterIndex(dst);
+    for (int i = 0; i < regPosition; i++)
+    {
+        // the regs we need to save
+        fprintf(stdout, "\tpushq\t%%%s\n", registers[i]);
+    }
+
     long offset = getMethOffset(globalImplMethList, methName);
     fprintf(stdout, "\tcall\t*%ld(%%%s)\n", offset * 8, termReg);
     writeMove("rax", dst);
+
+    for (int i = regPosition - 1; i >= 0; i--)
+    {
+        // the regs we need to save
+        fprintf(stdout, "\tpopq\t%%%s\n", registers[i]);
+    }
+
     fprintf(stdout, "\t# end function call\n");
 }

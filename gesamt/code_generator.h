@@ -92,3 +92,5 @@ char *getHeapPointer();
 char *generateClassSizeLabel(char *className);
 
 void simpleFunctionCall(char *methName, char *termReg, char *dst);
+
+int getRegisterIndex(char *lastRegister);

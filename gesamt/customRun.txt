@@ -5,7 +5,9 @@ end;
 class testclass implements test:
     method main()
         var brr: test := new testclass;
-        return brr.call();
+        var x: int := 5 + brr.call();
+        var brr2: test := new testclass;
+        return x;
     end;
     method call()
         var hello: int := 12;
