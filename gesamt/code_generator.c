@@ -560,6 +560,7 @@ void simpleFunctionCall(char *methName, char *termReg, char *dst)
     }
 
     long offset = getMethOffset(globalImplMethList, methName);
+    fprintf(stdout, "\tmovq\t(%%%s), %%%s\n", termReg, termReg);
     fprintf(stdout, "\tcall\t*%ld(%%%s)\n", offset * 8, termReg);
     writeMove("rax", dst);
 

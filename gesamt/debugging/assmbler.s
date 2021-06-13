@@ -15,6 +15,7 @@ testclass_main:
 	movq	%rax, 0(%rsp)
 	movq	0(%rsp), %rax
 	# start function call
+	movq	(%rax), %rax
 	call	*8(%rax)
 	movq	%rax, %rax
 	# end function call

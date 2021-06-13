@@ -3189,6 +3189,7 @@ testclass_main:
 	movq	%rax, 0(%rsp)
 	movq	0(%rsp), %rax
 	# start function call
+	movq	(%rax), %rax
 	call	*8(%rax)
 	movq	%rax, %rax
 	# end function call
@@ -3215,13 +3216,16 @@ extern struct vft {
 
 struct objectc *myObj = (struct objectc *)malloc(sizeof(struct objectc));
 
+/* heapptr comes from the framework, could be unstable if prof changes it*/
+long *reg15 = heapptr;
+struct objectc *constructed = (struct objectc *) heapptr;
+
 RET(
     testclass.main(myObj) == 12 &&
     testclass.call(myObj) == 12
 );
-/usr/ftp/pub/ubvl/test/gesamt/test: line 34: 17916 Segmentation fault      ./a.out
-[Error] Erzeugter Code verhaelt sich bezueglich Signalerzeugung anders als erwartet.
-Rueckgabewert = 139
+Erzeugter Code verhaelt sich bezueglich Signal-Erzeugung wie erwartet
+und das Ergebnis des Ausdrucks ist korrekt.
 
 ==========> Eingabe von /home/ublu21/u11808206/test/gesamt/kingD-5.0:
 interface i: 
@@ -3615,5 +3619,5 @@ Status: korrekt
 Statistics: 
 ===========
            90 Tests total
-           89 Tests passed
-           1 Tests failed
+           90 Tests passed
+           0 Tests failed
