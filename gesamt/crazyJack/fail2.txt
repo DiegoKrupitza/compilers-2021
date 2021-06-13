@@ -1,0 +1,58 @@
+.globl c #gen_class
+c:
+	.quad 0 #main
+	.quad c_func
+	.quad c_sum
+
+c_sum: #gen_method
+	pushq %rbp
+	movq %rsp,%rbp
+	movq $3,%rax #gen_return
+	leave
+	ret
+c_func: #gen_method
+	pushq %rbp
+	movq %rsp,%rbp
+	leaq c(%rip),%rsi #gen_new
+	movq %rsi,(%r15)
+	leaq (%r15),%rsi
+	addq $8,%r15
+	movq %rsi,%rax #gen_assign
+	#gen call
+	pushq %rax
+	pushq %rdi
+	movq %rax,%rdi
+	movq (%rax),%r11
+	call *16(%r11)
+	movq %rax,%rsi
+	popq %rdi
+	popq %rax
+	movq %rsi,%rax #gen_return
+	leave
+	ret
+.globl testclass #gen_class
+testclass:
+	.quad testclass_main
+	.quad 0 #func
+	.quad 0 #sum
+
+testclass_main: #gen_method
+	pushq %rbp
+	movq %rsp,%rbp
+	leaq c(%rip),%rax #gen_new
+	movq %rax,(%r15)
+	leaq (%r15),%rax
+	addq $8,%r15
+	movq %rax,8(%rdi) #gen_assign
+	#gen call
+	pushq %rsi
+	pushq %rdi
+	movq 8(%rdi),%rdi
+	movq 8(%rdi),%r11
+	movq (%r11),%r11
+	call *8(%r11)
+	movq %rax,%rax
+	popq %rdi
+	popq %rsi
+	leave #gen_return
+	ret

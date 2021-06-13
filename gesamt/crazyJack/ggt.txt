@@ -1,0 +1,21 @@
+interface br:
+    ggt(int,int):int
+end;
+class bobbi implements br:
+    method ggt(a: int, b : int)
+        if (a = 0)
+        then 
+        return b;
+        else 
+            while not (b = 0) do
+                if (b < a)
+                then
+                    a:= a - b;
+                else
+                    b:= b - a;
+                end;
+            end;   
+            return a;
+        end;
+    end;
+end;

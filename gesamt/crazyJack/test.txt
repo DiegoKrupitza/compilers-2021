@@ -1,0 +1,20 @@
+interface test:
+    main():int
+    call():int
+    call2():int
+end;
+class testclass implements test:
+    method main()
+        var classRef: test := new testclass;
+        var ergebnis1: int := classRef.call();
+        return ergebnis1;
+    end;
+    method call()
+        var hello: int := 12;
+        return hello + this.call2();
+    end;
+    method call2()
+        var hello: int := 69;
+        return hello;
+    end;
+end;
