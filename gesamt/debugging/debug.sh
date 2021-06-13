@@ -2,8 +2,8 @@
 beispiel=gesamt
 PROGRAM=../$beispiel
 
-inputfile="/home/ublu21/u11808206/test/gesamt/kingD-44.0"
-CALLFILE="/home/ublu21/u11808206/test/gesamt/kingD-44.call"
+inputfile="/home/ublu21/u11808206/test/gesamt/kingD-47.0"
+CALLFILE="/home/ublu21/u11808206/test/gesamt/kingD-47.call"
 
 RESFILE="assmbler.s"
 $PROGRAM < $inputfile >$RESFILE
