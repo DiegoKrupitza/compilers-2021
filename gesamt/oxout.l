@@ -40,7 +40,7 @@ struct yyyT5 { node_t* in; };
 typedef struct yyyT5 *yyyP5; 
 
 
-struct yyyT6 { node_t* ids; }; 
+struct yyyT6 { node_t* ids; tree_t *tree; long paramsRegIdIn; long paramsRegIdOut; }; 
 typedef struct yyyT6 *yyyP6; 
 
 

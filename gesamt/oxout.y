@@ -112,7 +112,7 @@ struct yyyT5 { node_t* in; };
 typedef struct yyyT5 *yyyP5; 
 
 
-struct yyyT6 { node_t* ids; }; 
+struct yyyT6 { node_t* ids; tree_t *tree; long paramsRegIdIn; long paramsRegIdOut; }; 
 typedef struct yyyT6 *yyyP6; 
 
 
@@ -517,8 +517,7 @@ yyyRSU(42,1,8,9);
 yyyGenIntNode();
  (((yyyP9)yyySTsn)->outInjection) = NULL;
 
-                             (((yyyP9)yyySTsn)->tree) = NULL; /*TODO change later check if this is really ok! */
-                        yyyAdjustINRC(yyyRCIL+549,yyyRCIL+564);}}
+                            yyyAdjustINRC(yyyRCIL+549,yyyRCIL+564);}}
                         ;
 
 Expr                    :   OptionaNotTerm
@@ -649,29 +648,34 @@ yyyAdjustINRC(yyyRCIL+702,yyyRCIL+708);}}
                         {if(yyyYok){
 yyyRSU(65,6,2,11);
 yyyGenIntNode();
- (((yyyP11)yyySTsn)->tree) = NULL; /*TODO change later */
-                        yyyAdjustINRC(yyyRCIL+708,yyyRCIL+717);}}
+ (((yyyP6)(((char *)((yyySTN->cL)[4]))+yyyGNSz))->paramsRegIdIn) = 1;
+
+                        yyyAdjustINRC(yyyRCIL+708,yyyRCIL+720);}}
                         ;
 
 ParamsExpr              :   Expr
                         {if(yyyYok){
-yyyRSU(66,1,1,6);
+yyyRSU(66,1,4,6);
 yyyGenIntNode();
-yyyAdjustINRC(yyyRCIL+717,yyyRCIL+720);}}|   ParamsExprLoop Expr
+yyyAdjustINRC(yyyRCIL+720,yyyRCIL+729);}}
+                        |   ParamsExprLoop Expr
                         {if(yyyYok){
-yyyRSU(67,2,1,6);
+yyyRSU(67,2,4,6);
 yyyGenIntNode();
-yyyAdjustINRC(yyyRCIL+720,yyyRCIL+726);}};
+yyyAdjustINRC(yyyRCIL+729,yyyRCIL+744);}}
+                        ;
 
 ParamsExprLoop          :   Expr ','
                         {if(yyyYok){
-yyyRSU(68,2,1,6);
+yyyRSU(68,2,4,6);
 yyyGenIntNode();
-yyyAdjustINRC(yyyRCIL+726,yyyRCIL+729);}}|   ParamsExprLoop Expr ',' 
+yyyAdjustINRC(yyyRCIL+744,yyyRCIL+753);}}
+                        |   ParamsExprLoop Expr ',' 
                         {if(yyyYok){
-yyyRSU(69,3,1,6);
+yyyRSU(69,3,4,6);
 yyyGenIntNode();
-yyyAdjustINRC(yyyRCIL+729,yyyRCIL+735);}};
+yyyAdjustINRC(yyyRCIL+753,yyyRCIL+768);}}
+                        ;
 
 
 %%
@@ -779,7 +783,7 @@ yyyR,7,0, 1,0,1, 3,0,1, 3,2,1, 3,3,1, 3,4,1,
 yyyR,1,1, yyyR,2,4, yyyR,6,1, yyyR,7,3, 1,0,1, 3,0,1, 
 3,2,1, 3,3,1, 3,4,1, 3,6,0, yyyR,1,1, yyyR,2,2, 
 yyyR,6,1, yyyR,7,0, 3,0,1, 5,0,1, yyyR,1,1, yyyR,2,2, 
-yyyR,6,1, yyyR,7,0, 2,0,1, yyyR,1,1, yyyR,2,0, yyyR,6,1, 
+yyyR,6,1, yyyR,7,0, 2,0,1, yyyR,1,1, yyyR,2,1, yyyR,6,1, 
 yyyR,7,0, 0,0,1, yyyR,1,1, 0,0,1, yyyR,1,2, 0,0,1, 
 1,0,1, yyyR,1,2, 0,0,1, 1,0,1, yyyR,1,2, 0,0,1, 
 1,0,1, yyyR,1,2, 0,0,1, 2,0,1, yyyR,1,2, 0,0,1, 
@@ -788,8 +792,10 @@ yyyR,7,0, 0,0,1, yyyR,1,1, 0,0,1, yyyR,1,2, 0,0,1,
 yyyR,1,1, 1,0,1, yyyR,1,2, 1,0,1, 2,0,1, yyyR,1,1, 
 1,0,1, yyyR,1,2, 1,0,1, 2,0,1, yyyR,1,1, 1,0,1, 
 yyyR,1,1, 1,0,1, yyyR,1,0, yyyR,1,0, yyyR,1,0, yyyR,1,1, 
-yyyR,1,1, 0,0,1, yyyR,1,0, 0,0,1, 4,0,1, 0,0,1, 
-0,0,1, 1,0,1, 0,0,1, 0,0,1, 1,0,1, 
+yyyR,1,1, 0,0,1, yyyR,1,3, 0,0,1, 4,0,1, 4,2,0, 
+yyyR,1,2, yyyR,3,1, 0,0,1, yyyR,1,4, yyyR,3,1, 0,0,1, 
+0,2,1, 1,0,1, yyyR,1,1, yyyR,3,1, 0,0,1, yyyR,1,4, 
+yyyR,3,1, 0,0,1, 0,2,1, 1,0,1, 
 };
 
 short yyyIIIEL[] = {0,
@@ -823,8 +829,8 @@ long yyyIIEL[] = {
 441,443,445,445,447,449,449,451,453,455,455,457,
 459,459,461,463,465,465,467,469,469,471,471,473,
 474,476,476,478,478,480,482,484,486,488,488,490,
-490,490,492,494,494,496,496,497,497,498,500,501,
-502,504,505,507,507,508,509,511,
+490,490,492,494,494,496,496,500,500,504,506,510,
+514,516,520,522,522,526,530,532,
 };
 
 long yyyIEL[] = {
@@ -876,22 +882,25 @@ long yyyIEL[] = {
 418,418,418,420,426,426,426,426,
 426,428,428,428,430,430,430,432,
 436,436,436,436,436,438,438,438,
-438,438,440,440,440,442,446,446,
-446,448,448,450,454,454,454,456,
-456,458,462,462,462,464,464,466,
-470,470,470,472,472,474,478,478,
-478,480,480,482,486,486,486,488,
-488,490,490,490,492,492,494,494,
-494,496,498,498,498,500,504,504,
-504,506,506,508,510,510,510,512,
-516,516,516,518,518,520,522,522,
-522,524,528,528,528,530,530,532,
-534,534,534,536,538,538,538,540,
-540,540,542,542,542,542,542,542,
-542,544,544,546,546,548,548,548,
-550,552,552,556,556,556,556,556,
-556,556,558,558,558,562,562,562,
-562,564,564,564,568,568,568,568,
+438,440,442,442,442,444,448,448,
+448,450,450,452,456,456,456,458,
+458,460,464,464,464,466,466,468,
+472,472,472,474,474,476,480,480,
+480,482,482,484,488,488,488,490,
+490,492,492,492,494,494,496,496,
+496,498,500,500,500,502,506,506,
+506,508,508,510,512,512,512,514,
+518,518,518,520,520,522,524,524,
+524,526,530,530,530,532,532,534,
+536,536,536,538,540,540,540,542,
+542,542,544,544,544,544,544,544,
+544,546,546,548,548,550,550,550,
+552,554,554,558,558,558,560,562,
+562,562,564,564,566,568,568,572,
+572,572,574,578,578,582,582,582,
+584,584,588,588,590,592,592,594,
+594,594,596,600,600,604,604,604,
+606,606,610,610,612,
 };
 
 yyyFT yyyEntL[] = {
@@ -922,15 +931,18 @@ yyyFT yyyEntL[] = {
 0,7,0,2,4,4,0,2,0,7,0,2,0,7,0,2,
 0,6,0,1,0,2,4,0,6,0,0,6,0,1,0,2,
 0,1,0,2,0,1,0,2,3,0,0,6,0,2,0,2,
-0,1,1,0,0,6,1,0,0,1,2,0,1,0,0,1,
-0,1,2,0,1,0,0,1,0,1,2,0,1,0,0,1,
-0,1,3,0,1,0,0,1,0,1,3,0,1,0,0,1,
-0,1,3,0,1,0,0,1,0,1,0,1,1,0,0,1,
-2,0,0,1,3,0,2,0,0,1,0,1,2,0,0,1,
-3,0,2,0,0,1,0,1,2,0,0,1,3,0,2,0,
-0,1,0,1,2,0,0,1,2,0,0,1,0,1,0,1,
-0,1,1,0,0,1,0,1,5,0,1,0,1,0,2,0,
-1,0,1,0,2,0,1,0,
+0,1,1,0,0,6,0,2,1,0,0,1,2,0,1,0,
+0,1,0,1,2,0,1,0,0,1,0,1,2,0,1,0,
+0,1,0,1,3,0,1,0,0,1,0,1,3,0,1,0,
+0,1,0,1,3,0,1,0,0,1,0,1,0,1,1,0,
+0,1,2,0,0,1,3,0,2,0,0,1,0,1,2,0,
+0,1,3,0,2,0,0,1,0,1,2,0,0,1,3,0,
+2,0,0,1,0,1,2,0,0,1,2,0,0,1,0,1,
+0,1,0,1,1,0,0,1,0,1,5,0,1,0,0,1,
+0,1,0,1,0,1,1,0,0,1,0,3,0,1,2,0,
+1,0,0,1,1,2,0,1,0,3,0,1,0,1,1,0,
+0,3,0,1,2,0,1,0,0,1,1,2,0,1,0,3,
+0,1,0,1,
 };
 
 #define yyyPermitUserAlloc  0 
@@ -2232,6 +2244,9 @@ case 42:  /***yacc rule 42***/
  (((yyyP9)(((char *)yyyRSTopN)+yyyGNSz))->out) = (((yyyP9)(((char *)yyyRefN)+yyyGNSz))->in) ;
 
                                 break;
+    case 2:
+ (((yyyP9)(((char *)yyyRSTopN)+yyyGNSz))->tree) = (((yyyP11)(((char *)((yyyRefN->cL)[0]))+yyyGNSz))->tree); /*TODO change later check if this is really ok! */
+                                break;
     case 6:
  (((yyyP9)(((char *)yyyRSTopN)+yyyGNSz))->ifcounterOut) = (((yyyP9)(((char *)yyyRefN)+yyyGNSz))->ifcounterIn);
 
@@ -2683,6 +2698,13 @@ case 65:  /***yacc rule 65***/
   switch (yyyws) {
   case 0:  /**/
     switch (yyywa) {
+    case 1:
+ (((yyyP11)(((char *)yyyRSTopN)+yyyGNSz))->tree) = createComplexFuncNode(OP_COMPLEX_FUNC,
+                                (((yyyP6)(((char *)((yyyRefN->cL)[4]))+yyyGNSz))->tree),
+                                createNode(OP_COMPLEX_FUN_LEFT, (((yyyP11)(((char *)((yyyRefN->cL)[0]))+yyyGNSz))->tree), createComplexIdentifierLeaf((((yyyP2)(((char *)((yyyRefN->cL)[2]))+yyyGNSz))->name), ABSTRACT_METH, -1, -1)),
+                                (((yyyP6)(((char *)((yyyRefN->cL)[4]))+yyyGNSz))->paramsRegIdOut)
+                            );
+                                break;
     }
   break;
   case 1:  /**/
@@ -2709,6 +2731,12 @@ case 66:  /***yacc rule 66***/
   switch (yyyws) {
   case 0:  /**/
     switch (yyywa) {
+    case 1:
+ (((yyyP6)(((char *)yyyRSTopN)+yyyGNSz))->tree) = createParamNode(OP_COMPLEX_FUN_PARAM,(((yyyP11)(((char *)((yyyRefN->cL)[0]))+yyyGNSz))->tree),createEmptyLeaf(),getParameterRegister((((yyyP6)(((char *)yyyRefN)+yyyGNSz))->paramsRegIdIn)),"");
+                                break;
+    case 3:
+ (((yyyP6)(((char *)yyyRSTopN)+yyyGNSz))->paramsRegIdOut) = (((yyyP6)(((char *)yyyRefN)+yyyGNSz))->paramsRegIdIn);
+                            break;
     }
   break;
   case 1:  /**/
@@ -2724,6 +2752,14 @@ case 67:  /***yacc rule 67***/
   switch (yyyws) {
   case 0:  /**/
     switch (yyywa) {
+    case 1:
+ (((yyyP6)(((char *)yyyRSTopN)+yyyGNSz))->tree) = createParamNode(OP_COMPLEX_FUN_PARAM, (((yyyP6)(((char *)((yyyRefN->cL)[0]))+yyyGNSz))->tree), (((yyyP11)(((char *)((yyyRefN->cL)[1]))+yyyGNSz))->tree), getParameterRegister((((yyyP6)(((char *)yyyRefN)+yyyGNSz))->paramsRegIdIn)), getParameterRegister((((yyyP6)(((char *)((yyyRefN->cL)[0]))+yyyGNSz))->paramsRegIdOut) +1)); 
+                            
+                                break;
+    case 3:
+ (((yyyP6)(((char *)yyyRSTopN)+yyyGNSz))->paramsRegIdOut) = (((yyyP6)(((char *)((yyyRefN->cL)[0]))+yyyGNSz))->paramsRegIdOut) +1;
+
+                                break;
     }
   break;
   case 1:  /**/
@@ -2731,6 +2767,9 @@ case 67:  /***yacc rule 67***/
     case 0:
 (((yyyP6)(((char *)yyyRSTopN)+yyyGNSz))->ids) = (((yyyP6)(((char *)yyyRefN)+yyyGNSz))->ids);
     break;
+    case 2:
+ (((yyyP6)(((char *)yyyRSTopN)+yyyGNSz))->paramsRegIdIn) = (((yyyP6)(((char *)yyyRefN)+yyyGNSz))->paramsRegIdIn);
+                                break;
     }
   break;
   case 2:  /**/
@@ -2746,6 +2785,12 @@ case 68:  /***yacc rule 68***/
   switch (yyyws) {
   case 0:  /**/
     switch (yyywa) {
+    case 1:
+ (((yyyP6)(((char *)yyyRSTopN)+yyyGNSz))->tree) = (((yyyP11)(((char *)((yyyRefN->cL)[0]))+yyyGNSz))->tree);
+                                break;
+    case 3:
+ (((yyyP6)(((char *)yyyRSTopN)+yyyGNSz))->paramsRegIdOut) = (((yyyP6)(((char *)yyyRefN)+yyyGNSz))->paramsRegIdIn);
+                            break;
     }
   break;
   case 1:  /**/
@@ -2761,6 +2806,16 @@ case 69:  /***yacc rule 69***/
   switch (yyyws) {
   case 0:  /**/
     switch (yyywa) {
+    case 1:
+ (((yyyP6)(((char *)yyyRSTopN)+yyyGNSz))->tree) = createParamNode(OP_COMPLEX_FUN_PARAM, (((yyyP6)(((char *)((yyyRefN->cL)[0]))+yyyGNSz))->tree), (((yyyP11)(((char *)((yyyRefN->cL)[1]))+yyyGNSz))->tree), getParameterRegister((((yyyP6)(((char *)yyyRefN)+yyyGNSz))->paramsRegIdIn)), getParameterRegister((((yyyP6)(((char *)((yyyRefN->cL)[0]))+yyyGNSz))->paramsRegIdOut) + 1));  
+                            
+                                break;
+    case 3:
+ (((yyyP6)(((char *)yyyRSTopN)+yyyGNSz))->paramsRegIdOut) = (((yyyP6)(((char *)((yyyRefN->cL)[0]))+yyyGNSz))->paramsRegIdOut) + 1;
+
+
+                            
+                                break;
     }
   break;
   case 1:  /**/
@@ -2768,6 +2823,9 @@ case 69:  /***yacc rule 69***/
     case 0:
 (((yyyP6)(((char *)yyyRSTopN)+yyyGNSz))->ids) = (((yyyP6)(((char *)yyyRefN)+yyyGNSz))->ids);
     break;
+    case 2:
+ (((yyyP6)(((char *)yyyRSTopN)+yyyGNSz))->paramsRegIdIn) = (((yyyP6)(((char *)yyyRefN)+yyyGNSz))->paramsRegIdIn);
+                                break;
     }
   break;
   case 2:  /**/
@@ -5449,9 +5507,12 @@ yyyRL = 0;
 		case 1:
 			switch(yyyPass)	{
 				case 0:
-yyyRL = 0;
+yyyRL = 0;yyySetCond(0)
+
 				case 1:
 
+if (yyyCond(0) != yyyPass) { (((yyyP9)(((char *)yyyTSTn)+yyyGNSz))->tree)->regStor = getFirstRegister(); (((yyyP11)(((char *)((yyyTSTn->cL)[0]))+yyyGNSz))->tree)->regStor = (((yyyP9)(((char *)yyyTSTn)+yyyGNSz))->tree)->regStor;
+                        }
 				break;
 					}
 		break;
@@ -6858,9 +6919,17 @@ if (yyyCond(0) != yyyPass) { isVisible((((yyyP11)(((char *)yyyTSTn)+yyyGNSz))->i
 		case 1:
 			switch(yyyPass)	{
 				case 0:
-yyyRL = 0;
+yyyRL = 0;yyySetCond(0)
+yyySetCond(1)
+
 				case 1:
 
+if (yyyCond(0) != yyyPass) { (((yyyP11)(((char *)((yyyTSTn->cL)[0]))+yyyGNSz))->tree)->regStor = (((yyyP11)(((char *)yyyTSTn)+yyyGNSz))->tree)->regStor /* ich kanns durchschleifen */ ;
+                            }
+if (yyyCond(1) != yyyPass) { (((yyyP6)(((char *)((yyyTSTn->cL)[4]))+yyyGNSz))->tree)->regStor = getNextRegister((((yyyP11)(((char *)((yyyTSTn->cL)[0]))+yyyGNSz))->tree)->regStor);
+                            
+                            
+                            }
 				break;
 					}
 		break;
@@ -6917,9 +6986,14 @@ yyyRL = 0;
 		case 1:
 			switch(yyyPass)	{
 				case 0:
-yyyRL = 0;
+yyyRL = 0;yyySetCond(0)
+
 				case 1:
 
+if (yyyCond(0) != yyyPass) { (((yyyP11)(((char *)((yyyTSTn->cL)[0]))+yyyGNSz))->tree)->regStor = (((yyyP6)(((char *)yyyTSTn)+yyyGNSz))->tree)->regStor;
+
+                        
+                            }
 				break;
 					}
 		break;
@@ -6976,9 +7050,12 @@ yyyRL = 0;
 		case 1:
 			switch(yyyPass)	{
 				case 0:
-yyyRL = 0;
+yyyRL = 0;yyySetCond(0)
+
 				case 1:
 
+if (yyyCond(0) != yyyPass) { (((yyyP6)(((char *)((yyyTSTn->cL)[0]))+yyyGNSz))->tree)->regStor = (((yyyP6)(((char *)yyyTSTn)+yyyGNSz))->tree)->regStor; (((yyyP11)(((char *)((yyyTSTn->cL)[1]))+yyyGNSz))->tree)->regStor = getNextRegister((((yyyP6)(((char *)yyyTSTn)+yyyGNSz))->tree)->regStor);
+                        }
 				break;
 					}
 		break;
@@ -7035,9 +7112,13 @@ yyyRL = 0;
 		case 1:
 			switch(yyyPass)	{
 				case 0:
-yyyRL = 0;
+yyyRL = 0;yyySetCond(0)
+
 				case 1:
 
+if (yyyCond(0) != yyyPass) { (((yyyP11)(((char *)((yyyTSTn->cL)[0]))+yyyGNSz))->tree)->regStor = (((yyyP6)(((char *)yyyTSTn)+yyyGNSz))->tree)->regStor;
+
+                            }
 				break;
 					}
 		break;
@@ -7094,9 +7175,12 @@ yyyRL = 0;
 		case 1:
 			switch(yyyPass)	{
 				case 0:
-yyyRL = 0;
+yyyRL = 0;yyySetCond(0)
+
 				case 1:
 
+if (yyyCond(0) != yyyPass) { (((yyyP6)(((char *)((yyyTSTn->cL)[0]))+yyyGNSz))->tree)->regStor = (((yyyP6)(((char *)yyyTSTn)+yyyGNSz))->tree)->regStor; (((yyyP11)(((char *)((yyyTSTn->cL)[1]))+yyyGNSz))->tree)->regStor = getNextRegister((((yyyP6)(((char *)yyyTSTn)+yyyGNSz))->tree)->regStor);
+                        }
 				break;
 					}
 		break;
@@ -7612,18 +7696,18 @@ int yyyProds[][2] = {
 
 int yyySortsInd[] = {
   0,
-  0,  1,  3,  9, 11, 12, 13, 17, 24, 32,
- 39,
- 41,
+  0,  1,  3,  9, 11, 12, 16, 20, 27, 35,
+ 42,
+ 44,
 };
 
 
 int yyySorts[] = {
   793,  381,  177,  987, 1088,  825,  888,  829,  892,  987,
- 1088,  987,  882,  987,  542,  545,  850,  987, 1088,  542,
-  545, 1032,  557,  854,  987, 1088,  121,  542,  545, 1032,
-  557,  919,  987, 1088,  542,  825,  888,  829,  892,  882,
-  121,
+ 1088,  987,  882,  121, 1001,  525,  987,  542,  545,  850,
+  987, 1088,  542,  545, 1032,  557,  854,  987, 1088,  121,
+  542,  545, 1032,  557,  919,  987, 1088,  542,  825,  888,
+  829,  892,  882,  121,
 };
 
 
@@ -7734,7 +7818,7 @@ char *yyyStringTab[] = {
 0,0,0,0,0,
 0,0,0,0,0,
 0,0,0,0,0,
-"endLabel",0,0,0,0,
+"paramsRegIdOut","endLabel",0,0,0,
 0,0,0,0,0,
 0,0,0,0,0,
 "':'",0,"currentClassName",0,0,
@@ -7747,7 +7831,7 @@ char *yyyStringTab[] = {
 0,0,0,0,0,
 0,0,"writeIfEndLabel",0,0,
 0,0,0,0,0,
-0,"createThisLeaf","createNULLLeaf",0,"createIfLabelLeaf",
+0,"createThisLeaf","createNULLLeaf","createEmptyLeaf","createIfLabelLeaf",
 0,"createLoopLabelLeaf","createNewObjectLeaf","createNumericalLeaf",0,
 0,0,0,0,"createComplexIdentifierLeaf",
 0,0,0,0,0,
@@ -7759,9 +7843,9 @@ char *yyyStringTab[] = {
 "IF",0,0,0,0,
 0,0,0,0,0,
 "visCheck",0,0,0,0,
-0,"FUNCTION",0,0,0,
+0,"FUNCTION","PARAM",0,0,
 0,0,0,0,0,
-0,0,0,0,0,
+0,0,"FUNC",0,0,
 0,0,0,0,0,
 0,0,0,0,0,
 0,0,0,0,0,
@@ -7793,13 +7877,13 @@ char *yyyStringTab[] = {
 0,0,0,0,0,
 0,"Member",0,0,0,
 "ELSE",0,0,0,0,
-"DING",0,0,0,"varCounter",
+"DING","FUN",0,0,"varCounter",
 "inImplList",0,0,"createNode","inClassVarList",
-"StatsMethode",0,0,0,0,
-0,0,0,"RETURN",0,
+"StatsMethode",0,0,"createParamNode",0,
+0,0,0,"RETURN","createComplexFuncNode",
 0,0,0,0,0,
 0,"getNextRegister","getFirstRegister",0,0,
-"ifcounter",0,"ParsLoop","Type","injection",
+"ifcounter","getParameterRegister","ParsLoop","Type","injection",
 0,"AbstraktMethodsLoop","VARIABLE","ParamTypesLoop","ParamsExprLoop",
 0,0,0,0,0,
 0,0,0,0,0,
@@ -7829,7 +7913,7 @@ char *yyyStringTab[] = {
 0,"JUMP","in",0,0,
 0,0,0,0,0,
 0,0,"Term",0,0,
-0,0,0,"Programm",0,
+0,"paramsRegIdIn",0,"Programm",0,
 0,0,0,0,"op",
 "IMPLEMENTS",0,0,0,0,
 0,0,0,0,0,
@@ -7837,7 +7921,7 @@ char *yyyStringTab[] = {
 0,0,0,0,0,
 0,0,"ifcounterIn",0,0,
 0,0,0,0,0,
-0,0,0,0,0,
+0,0,0,"COMPLEX",0,
 "regStor",0,0,0,"TypesLoop",
 0,0,0,0,0,
 0,0,0,0,0,
@@ -7874,7 +7958,7 @@ char *yyyStringTab[] = {
 0,0,0,0,0,
 0,0,0,0,0,
 0,0,0,0,0,
-0,0,0,0,0,
+"LEFT",0,0,0,0,
 0,
 };
 
