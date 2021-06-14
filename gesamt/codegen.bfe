@@ -8,7 +8,7 @@
 %}
 
 %start stat
-%term OP_RETURN=0 OP_ADD=1 OP_MUL=2 OP_AND=3 OP_LESS=4 OP_EQUAL=5 OP_NOT=6 OP_MINUS=7 OP_NUMBER=8 OP_ID=9 OP_PARAM_ID=10 OP_CLASS_VAR_ID=11 OP_THIS=12 OP_NULL=13 OP_ASSIGN=14 OP_IF=15 OP_IF_ID=16 OP_IF_ELSE=17 OP_LOOP=18 OP_LOOP_ID=19 OP_NEW_OBJ=20 OP_SIMPLE_FUNCTION_CALL=21 OP_METH_ID=22
+%term OP_RETURN=0 OP_ADD=1 OP_MUL=2 OP_AND=3 OP_LESS=4 OP_EQUAL=5 OP_NOT=6 OP_MINUS=7 OP_NUMBER=8 OP_ID=9 OP_PARAM_ID=10 OP_CLASS_VAR_ID=11 OP_THIS=12 OP_NULL=13 OP_ASSIGN=14 OP_IF=15 OP_IF_ID=16 OP_IF_ELSE=17 OP_LOOP=18 OP_LOOP_ID=19 OP_NEW_OBJ=20 OP_SIMPLE_FUNCTION_CALL=21 OP_METH_ID=22 OP_COMPLEX_FUNC=23 OP_COMPLEX_FUN_LEFT=24 OP_COMPLEX_FUN_PARAM=25 OP_EMPTY=26
 
 %%
 
@@ -17,6 +17,8 @@ stat:   assign                                                          # 0 #
 stat:   expr                                                            # 0 #
 stat:   if                                                              # 0 #
 stat:   loop                                                            # 0 #
+
+param:  expr                                                            # 0 #
 
 ret:    OP_RETURN(expr)                                                 # 1 #   writeReturnWithValue(bnode->regStor);
 
@@ -85,5 +87,11 @@ if: OP_IF_ELSE(OP_IF_ID, expr)                                          # 1 #   
 loop: OP_LOOP(OP_LOOP_ID, expr)                                         # 1 #   writeLoopCheck(bnode->kids[0]->identifierName,bnode->kids[1]->regStor);
 
 expr: OP_SIMPLE_FUNCTION_CALL(expr, OP_METH_ID)                         # 1 #   simpleFunctionCall(bnode->kids[1]->identifierName, bnode->kids[0]->regStor, bnode->regStor);
+
+expr: OP_COMPLEX_FUNC(param, expr)                                      # 0 #   printf("To pushback %d, cry\n",bnode->funcParamsCount);
+
+expr: OP_COMPLEX_FUN_LEFT(expr, OP_METH_ID)                             # 1 #   printf("%s,%s,%s\n",bnode->kids[1]->identifierName, bnode->kids[0]->regStor, bnode->regStor);
+expr: OP_COMPLEX_FUN_PARAM(expr,expr)                                   # 1 #   writeMove(bnode->kids[0]->regStor,bnode->funcParamRegisterLeft); writeMove(bnode->kids[1]->regStor,bnode->funcParamRegisterRight);
+expr: OP_COMPLEX_FUN_PARAM(expr,OP_EMPTY)                               # 1 #   writeMove(bnode->kids[0]->regStor,bnode->funcParamRegisterLeft);
 
 %%

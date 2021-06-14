@@ -32,6 +32,45 @@ tree_t *createNode(operators_t op, tree_t *left, tree_t *right)
     return node;
 }
 
+tree_t *createParamNode(operators_t op, tree_t *left, tree_t *right, char *funcParamRegisterLeft, char *funcParamRegisterRight)
+{
+    tree_t *node = (tree_t *)malloc(sizeof(tree_t));
+
+    node->op = op;
+    node->kids[0] = left;
+    node->kids[1] = right;
+    node->identifierName = (char *)NULL;
+    node->funcParamRegisterLeft = funcParamRegisterLeft;
+    node->funcParamRegisterRight = funcParamRegisterRight;
+
+    return node;
+}
+
+tree_t *createComplexFuncNode(operators_t op, tree_t *left, tree_t *right, int funcParamsCount)
+{
+
+    tree_t *node = (tree_t *)malloc(sizeof(tree_t));
+
+    node->op = op;
+    node->kids[0] = left;
+    node->kids[1] = right;
+    node->identifierName = (char *)NULL;
+    node->funcParamsCount = funcParamsCount;
+
+    return node;
+}
+
+tree_t *createEmptyLeaf()
+{
+    tree_t *node = (tree_t *)malloc(sizeof(tree_t));
+
+    node->op = OP_EMPTY;
+    node->kids[0] = (tree_t *)NULL;
+    node->kids[1] = (tree_t *)NULL;
+
+    return node;
+}
+
 tree_t *createNewObjectLeaf(char *className)
 {
     tree_t *node = (tree_t *)malloc(sizeof(tree_t));

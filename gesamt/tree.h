@@ -26,7 +26,11 @@ typedef enum
     OP_LOOP_ID,
     OP_NEW_OBJ,
     OP_SIMPLE_FUNCTION_CALL,
-    OP_METH_ID
+    OP_METH_ID,
+    OP_COMPLEX_FUNC,
+    OP_COMPLEX_FUN_LEFT,
+    OP_COMPLEX_FUN_PARAM,
+    OP_EMPTY
 } operators_t;
 
 typedef struct tree_t
@@ -44,6 +48,10 @@ typedef struct tree_t
 
     int parameterIndex;
     char *regStor;
+
+    char *funcParamRegisterLeft;
+    char *funcParamRegisterRight;
+    int funcParamsCount;
 } tree_t;
 
 typedef tree_t *NODEPTR_TYPE;
@@ -62,10 +70,17 @@ typedef tree_t *NODEPTR_TYPE;
 #define CLASS_VAR 5
 
 tree_t *createNode(operators_t op, tree_t *left, tree_t *right);
+
+tree_t *createParamNode(operators_t op, tree_t *left, tree_t *right, char *funcParamRegisterLeft, char *funcParamRegisterRight);
+
+tree_t *createComplexFuncNode(operators_t op, tree_t *left, tree_t *right, int funcParamsCount);
+
 tree_t *createNumericalLeaf(long value);
 
 tree_t *createIfLabelLeaf(char *name);
 tree_t *createLoopLabelLeaf(char *name);
+
+tree_t *createEmptyLeaf();
 
 tree_t *createNewObjectLeaf(char *className);
 

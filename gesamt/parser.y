@@ -63,7 +63,7 @@ char* prepareLabelString(char* classname, char* functionname, long counter)
 @attributes { node_t* in; node_t* out; meth_node_t* inImplList; meth_node_t* outImplList; classvar_node_t* inClassVarList; classvar_node_t* outClassVarList; } Programm ProgrammStart Class
 @attributes { node_t* in; node_t* out; } Interface AbstraktMethodsLoop AbstraktMethod Pars Par ParsLoop
 @attributes { node_t* in; } Type ParamTypesLoop TypesLoop ImplementsLoop
-@attributes { node_t* ids; } ParamsExpr ParamsExprLoop
+@attributes { node_t* ids; tree_t *tree; long paramsRegIdIn; long paramsRegIdOut; } ParamsExpr ParamsExprLoop
 
 
 @attributes { node_t* in; char* currentClassName; char* currentFunctionName; long ifcounter; } StatsMethode
@@ -556,7 +556,8 @@ Stat                    :   RETURN Expr
 
                             @i @Stat.ifcounterOut@ = @Stat.ifcounterIn@;
 
-                            @i @Stat.tree@ = NULL; /*TODO change later check if this is really ok! */
+                            @i @Stat.tree@ = @Expr.tree@; /*TODO change later check if this is really ok! */
+                            @reg @Stat.tree@->regStor = getFirstRegister(); @Expr.tree@->regStor = @Stat.tree@->regStor;
                         @}
                         ;
 
@@ -682,16 +683,58 @@ Term                    :   '(' Expr ')'
                         @{
                             @visCheck isVisible(@Term.ids@,@ID.name@, ABSTRACT_METH, @ID.lineNr@);
 
-                            @i @Term.tree@ = NULL; /*TODO change later */
+                            @i @Term.0.tree@ = createComplexFuncNode(OP_COMPLEX_FUNC,
+                                @ParamsExpr.tree@,
+                                createNode(OP_COMPLEX_FUN_LEFT, @Term.1.tree@, createComplexIdentifierLeaf(@ID.name@, ABSTRACT_METH, -1, -1)),
+                                @ParamsExpr.paramsRegIdOut@
+                            );
+                            @reg @Term.1.tree@->regStor = @Term.0.tree@->regStor /* ich kanns durchschleifen */ ;
+                            @reg @ParamsExpr.tree@->regStor = getNextRegister(@Term.1.tree@->regStor);
+                            
+                            
+                            @i @ParamsExpr.paramsRegIdIn@ = 1;
+
                         @}
                         ;
 
 ParamsExpr              :   Expr
+                        @{
+                            @i @ParamsExpr.tree@ = createParamNode(OP_COMPLEX_FUN_PARAM,@Expr.tree@,createEmptyLeaf(),getParameterRegister(@ParamsExpr.paramsRegIdIn@),"");
+                            @reg @Expr.tree@->regStor = @ParamsExpr.tree@->regStor;
+
+                        
+                            @i @ParamsExpr.paramsRegIdOut@ = @ParamsExpr.paramsRegIdIn@;
+                        @}
                         |   ParamsExprLoop Expr
+                        @{
+                            @i @ParamsExprLoop.paramsRegIdIn@ = @ParamsExpr.paramsRegIdIn@;
+                            @i @ParamsExpr.paramsRegIdOut@ = @ParamsExprLoop.paramsRegIdOut@ +1;
+
+                            @i @ParamsExpr.tree@ = createParamNode(OP_COMPLEX_FUN_PARAM, @ParamsExprLoop.tree@, @Expr.tree@, getParameterRegister(@ParamsExpr.paramsRegIdIn@), getParameterRegister(@ParamsExprLoop.paramsRegIdOut@ +1)); 
+                            
+                            @reg @ParamsExprLoop.tree@->regStor = @ParamsExpr.tree@->regStor; @Expr.tree@->regStor = getNextRegister(@ParamsExpr.tree@->regStor);
+                        @}
                         ;
 
 ParamsExprLoop          :   Expr ','
+                        @{
+                            @i @ParamsExprLoop.tree@ = @Expr.tree@;
+                            @reg @Expr.tree@->regStor = @ParamsExprLoop.tree@->regStor;
+
+                            @i @ParamsExprLoop.paramsRegIdOut@ = @ParamsExprLoop.paramsRegIdIn@;
+                        @}
                         |   ParamsExprLoop Expr ',' 
+                        @{
+
+                            @i @ParamsExprLoop.1.paramsRegIdIn@ = @ParamsExprLoop.0.paramsRegIdIn@;
+                            @i @ParamsExprLoop.0.paramsRegIdOut@ = @ParamsExprLoop.1.paramsRegIdOut@ + 1;
+
+
+                            
+                            @i @ParamsExprLoop.0.tree@ = createParamNode(OP_COMPLEX_FUN_PARAM, @ParamsExprLoop.1.tree@, @Expr.tree@, getParameterRegister(@ParamsExprLoop.0.paramsRegIdIn@), getParameterRegister(@ParamsExprLoop.1.paramsRegIdOut@ + 1));  
+                            
+                            @reg @ParamsExprLoop.1.tree@->regStor = @ParamsExprLoop.0.tree@->regStor; @Expr.tree@->regStor = getNextRegister(@ParamsExprLoop.0.tree@->regStor);
+                        @}
                         ;
 
 %%

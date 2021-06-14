@@ -1,48 +1,15 @@
 interface a:
+    main(): int
     b(int,int):int
 end;
 
 class c implements a:
-    var adiego:int;
-    var bdiego: int;
+
+    method main()
+        return this.b();
+    end;
 
     method b(e:int, f:int)
-        /* var x : int := 5; */
-        /* var x : int := ((not(5 + 5)) < 1) + e; */
-        /* var x : int := 5; */
-        /* var y : int := 6; */
-        /* var z : int := 10;  */
-        /* return y; */
-        /* var y : int := e; */
-        /* var y: int := adiego; */
-        /* return y; */
-        /* e := 5 + 5;*/
-        /* var x : int := 5; */
-        
-        /* if 1 then 
-            return 11;
-        end;
-
-        if 2 then 
-            return 22;
-        end;
-
-        if 3 then 
-            return 33;
-        end; */
-
-        /*if 1 then
-            if 2 then
-                return 1;
-            else 
-                return 2;
-            end;
-        else 
-            return 3;
-        end;*/
-
-        while 1 do
-            return 2;
-        end;
+        return e + f;
     end;
 end;

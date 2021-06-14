@@ -56,6 +56,29 @@ int getRegisterIndex(char *lastRegister)
     exit(3);
 }
 
+char *getNextParamRegister(char *lastRegister)
+{
+
+    if (lastRegister == NULL)
+    {
+        return "rsi";
+    }
+
+    char *registers[] = {"rdi", "rsi", "rdx", "rcx", "r8", "r9"};
+
+    for (int i = 0; i < 6; i++)
+    {
+        if (strcmp(registers[i], lastRegister) == 0)
+        {
+            return registers[i + 1];
+        }
+    }
+
+    fprintf(stderr, "No more param registers available or previous register not found: '%s'\n", lastRegister);
+    exit(3);
+}
+
+
 char *getParameterRegister(int index)
 {
     char *registers[] = {"rdi", "rsi", "rdx", "rcx", "r8", "r9"};
@@ -545,7 +568,6 @@ void simpleFunctionCall(char *methName, char *termReg, char *dst)
     fprintf(stdout, "\t# start function call\n");
 
     //StACK Pointer anpasssen
-    //TODO: safe register
 
     // caller saved register
     // rax,rcx,rdx,rsi,rdi,r8,r9,r10,r11
